@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,8 @@ import java.util.List;
  * interface.
  */
 public class PackFragment extends Fragment {
+
+    private static final String TAG = "PackListFragment";
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -51,6 +54,8 @@ public class PackFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Log.d(TAG, "onCreate() called");
+
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
@@ -59,6 +64,8 @@ public class PackFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView() called");
+
         View view = inflater.inflate(R.layout.fragment_pack_list, container, false);
 
         // Set the adapter
@@ -79,6 +86,9 @@ public class PackFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
+        Log.d(TAG,  "onAttach() called");
+
         if (context instanceof OnListFragmentInteractionListener) {
             mListener = (OnListFragmentInteractionListener) context;
         } else {
@@ -90,6 +100,9 @@ public class PackFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+
+        Log.d(TAG, "onDetach() called");
+
         mListener = null;
     }
 
