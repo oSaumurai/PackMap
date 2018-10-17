@@ -7,6 +7,10 @@
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -16,6 +20,18 @@
         android:theme="@style/AppTheme">
         <activity android:name=".LoginActivity">
         </activity>
+        <uses-library android:name="org.apache.http.legacy" android:required="false" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAm0quTUQfR1OHTbeLlh8oajO1Yw7E6jRw" />
+        <activity
+            android:name=".MapsActivity">
+        </activity>
+
         <activity
             android:name=".PackListActivity"
             android:label="@string/title_activity_pack_list" />

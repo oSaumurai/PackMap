@@ -21,4 +21,8 @@
     <string name="title_places">Places</string>
     <string name="title_packs">Packs</string>
     <string name="title_explore">Explore</string>
+
+    <string name="google_maps_API_key">AIzaSyAm0quTUQfR1OHTbeLlh8oajO1Yw7E6jRw</string>>
+
+
 </resources>
