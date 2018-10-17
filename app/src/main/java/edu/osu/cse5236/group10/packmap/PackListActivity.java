@@ -6,12 +6,15 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import edu.osu.cse5236.group10.packmap.dummy.DummyContent;
 
 public class PackListActivity extends AppCompatActivity implements PackFragment.OnListFragmentInteractionListener {
+
+    private static final String TAG = "PackListActivity";
 
     private TextView mTextMessage;
     private PackFragment mPackFragment;
@@ -37,8 +40,35 @@ public class PackListActivity extends AppCompatActivity implements PackFragment.
     };
 
     @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart() called");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume() called");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop() called");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy() called");
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.d(TAG, "onCreate() called");
+
         setContentView(R.layout.activity_pack_list);
 
         mTextMessage = (TextView) findViewById(R.id.message);
