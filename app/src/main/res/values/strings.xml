@@ -29,4 +29,8 @@
     <string name="sign_up_last_name">Last Name:</string>
     <string name="sign_up_password">Password:</string>
     <string name="submit">Submit</string>
+
+    <string name="title_activity_phone_auth">PhoneAuthActivity</string>
+    <string name="phone_auth_title">Enter the code you receive:</string>
+    <string name="back">Back</string>
 </resources>

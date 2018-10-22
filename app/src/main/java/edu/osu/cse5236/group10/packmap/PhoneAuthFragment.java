@@ -1,6 +1,6 @@
 package edu.osu.cse5236.group10.packmap;
 
-import android.content.Intent;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -12,14 +12,12 @@ import android.widget.Button;
 import android.widget.EditText;
 
 
-public class SignUpFragment extends Fragment implements View.OnClickListener {
+public class PhoneAuthFragment extends Fragment implements View.OnClickListener {
 
-    private EditText mPhoneNum;
-    private EditText mFirstName;
-    private EditText mLastName;
-    private EditText mPassword;
+    private EditText mAuthCode;
 
     private Button mSubmitButton;
+    private Button mBackButton;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -29,15 +27,14 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_sign_up, container, false);
+        View v = inflater.inflate(R.layout.fragment_phone_auth, container, false);
 
-        mPhoneNum = v.findViewById(R.id.sign_up_phone_number);
-        mFirstName = v.findViewById(R.id.sign_up_first_name);
-        mLastName = v.findViewById(R.id.sign_up_last_name);
-        mPassword = v.findViewById(R.id.sign_up_password);
-        mSubmitButton = v.findViewById(R.id.submit_sign_up);
+        mAuthCode = v.findViewById(R.id.phone_auth_code);
+        mSubmitButton = v.findViewById(R.id.phone_auth_submit);
+        mBackButton = v.findViewById(R.id.phone_auth_back);
 
         mSubmitButton.setOnClickListener(this);
+        mBackButton.setOnClickListener(this);
 
         return v;
     }
@@ -45,8 +42,14 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch(v.getId()) {
-            case R.id.submit_sign_up:
-                startActivity(new Intent(getActivity(), PhoneAuthActivity.class));
+            case R.id.phone_auth_submit:
+
+                break;
+
+            case R.id.phone_auth_back:
+                Activity phoneAuth = getActivity();
+                if (phoneAuth != null)
+                    phoneAuth.finish();
                 break;
         }
     }
