@@ -1,9 +1,15 @@
-package edu.osu.cse5236.group10.packmap.dummy;
+package edu.osu.cse5236.group10.packmap.data;
+
+import android.util.Log;
+
+import com.annimon.stream.Stream;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 
 /**
  * Helper class for providing sample content for user interfaces created by
@@ -12,6 +18,8 @@ import java.util.Map;
  * TODO: Replace all uses of this class before publishing your app.
  */
 public class DummyContent {
+
+    private static final String TAG = "DummyContent";
 
     /**
      * An array of sample (dummy) items.
@@ -32,13 +40,17 @@ public class DummyContent {
         }
     }
 
-    private static void addItem(DummyItem item) {
+    public static void addItem(DummyItem item) {
         ITEMS.add(item);
         ITEM_MAP.put(item.id, item);
     }
 
     private static DummyItem createDummyItem(int position) {
         return new DummyItem(String.valueOf(position), "Item " + position, makeDetails(position));
+    }
+
+    public static DummyItem createDummyItem(int position, String group) {
+        return new DummyItem(String.valueOf(position), group, makeDetails(position));
     }
 
     private static String makeDetails(int position) {

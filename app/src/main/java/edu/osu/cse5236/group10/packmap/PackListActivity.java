@@ -1,16 +1,14 @@
 package edu.osu.cse5236.group10.packmap;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import edu.osu.cse5236.group10.packmap.dummy.DummyContent;
+import edu.osu.cse5236.group10.packmap.data.DummyContent;
 
 public class PackListActivity extends AppCompatActivity implements PackFragment.OnListFragmentInteractionListener {
 

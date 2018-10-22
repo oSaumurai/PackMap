@@ -3,6 +3,7 @@ package edu.osu.cse5236.group10.packmap;
 import android.content.Context;
 import android.os.Bundle;
 
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,10 +13,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import edu.osu.cse5236.group10.packmap.dummy.DummyContent;
-import edu.osu.cse5236.group10.packmap.dummy.DummyContent.DummyItem;
+import com.annimon.stream.Stream;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import edu.osu.cse5236.group10.packmap.data.store.DummyStore;
+import edu.osu.cse5236.group10.packmap.data.DummyContent;
+import edu.osu.cse5236.group10.packmap.data.DummyContent.DummyItem;
 
 /**
  * A fragment representing a list of Items.
@@ -32,6 +41,8 @@ public class PackFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+    private PackRecyclerViewAdapter mViewAdapter;
+    private DummyStore mDummyStore;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -77,11 +88,33 @@ public class PackFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new PackRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            mViewAdapter = new PackRecyclerViewAdapter(DummyContent.ITEMS, mListener);
+            recyclerView.setAdapter(mViewAdapter);
+            mDummyStore = new DummyStore();
+            mDummyStore.updateDummies(new DummyDataOnCompleteListener());
         }
         return view;
     }
 
+    public class DummyDataOnCompleteListener implements OnCompleteListener<QuerySnapshot> {
+        @Override
+        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+            if (task.isSuccessful()) {
+                List<String> dummyGroups = new ArrayList<>();
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    Log.d(TAG, document.getId() + " => " + document.getData());
+                    String group = (String) document.get("group");
+                    dummyGroups.add(group);
+                }
+                Stream.of(dummyGroups)
+                        .mapIndexed(DummyContent::createDummyItem)
+                        .forEach(DummyContent::addItem);
+                mViewAdapter.notifyItemInserted(25);
+            } else {
+                Log.w(TAG, "Error getting documents.", task.getException());
+            }
+        }
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -105,6 +138,8 @@ public class PackFragment extends Fragment {
 
         mListener = null;
     }
+
+
 
     /**
      * This interface must be implemented by activities that contain this

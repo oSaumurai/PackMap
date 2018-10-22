@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import edu.osu.cse5236.group10.packmap.PackFragment.OnListFragmentInteractionListener;
-import edu.osu.cse5236.group10.packmap.dummy.DummyContent.DummyItem;
+import edu.osu.cse5236.group10.packmap.data.DummyContent.DummyItem;
 
 import java.util.List;
 
@@ -18,6 +18,7 @@ import java.util.List;
  */
 public class PackRecyclerViewAdapter extends RecyclerView.Adapter<PackRecyclerViewAdapter.ViewHolder> {
 
+    private static final String TAG = "PackRecyclerViewAdapter";
     private final List<DummyItem> mValues;
     private final OnListFragmentInteractionListener mListener;
 
