@@ -88,10 +88,11 @@ public class PackFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            mViewAdapter = new PackRecyclerViewAdapter(DummyContent.ITEMS, mListener);
-            recyclerView.setAdapter(mViewAdapter);
             mDummyStore = new DummyStore();
             mDummyStore.updateDummies(new DummyDataOnCompleteListener());
+            mViewAdapter = new PackRecyclerViewAdapter(DummyContent.ITEMS, mListener);
+            Log.d(TAG, "Size of items: " + DummyContent.ITEMS.size());
+            recyclerView.setAdapter(mViewAdapter);
         }
         return view;
     }
@@ -109,7 +110,7 @@ public class PackFragment extends Fragment {
                 Stream.of(dummyGroups)
                         .mapIndexed(DummyContent::createDummyItem)
                         .forEach(DummyContent::addItem);
-                mViewAdapter.notifyItemInserted(25);
+                mViewAdapter.notifyItemChanged(DummyContent.ITEMS.size()-1);
             } else {
                 Log.w(TAG, "Error getting documents.", task.getException());
             }
