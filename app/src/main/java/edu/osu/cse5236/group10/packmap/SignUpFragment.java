@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +14,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import edu.osu.cse5236.group10.packmap.data.model.User;
+
 
 public class SignUpFragment extends Fragment implements View.OnClickListener {
+    private final String TAG = "SignUpFragment";
 
     private EditText mPhoneNum;
     private EditText mFirstName;
@@ -48,18 +54,27 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     }
 
     private String getText(TextView tv) {
-        return tv.getText().toString();
+        return tv.getText().toString().trim();
     }
 
-    private void createAccount(String phoneNum, String fname, String lname, String password) {
-
+    private void createAccount(String phoneNum, String lname, String fname, String password) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        User u = new User(phoneNum, lname, fname, password);
+        db.collection("users").document(u.getPhone())
+                .set(u)
+                .addOnSuccessListener(aVoid ->
+                        Log.d(TAG, "DocumentSnapshot successfully written!")
+                )
+                .addOnFailureListener(e ->
+                        Log.w(TAG, "Error writing document", e)
+                );
     }
 
     @Override
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.submit_sign_up:
-                createAccount(getText(mPhoneNum), getText(mFirstName), getText(mLastName), getText(mPassword));
+                createAccount(getText(mPhoneNum), getText(mLastName), getText(mFirstName), getText(mPassword));
                 mSignUp.finish();
                 break;
         }
