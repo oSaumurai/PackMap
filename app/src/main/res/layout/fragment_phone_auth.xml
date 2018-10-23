@@ -7,7 +7,33 @@
     android:orientation="vertical"
     tools:context=".PhoneAuthFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        style="?android:listSeparatorTextViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/sign_up_phone"/>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/phone_auth_num"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minWidth="170dp" />
+
+        <Button
+            android:id="@+id/send_code_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:text="@string/send_code" />
+
+    </LinearLayout>
+
     <TextView
         style="?android:listSeparatorTextViewStyle"
         android:layout_width="match_parent"

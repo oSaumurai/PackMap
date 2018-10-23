@@ -33,4 +33,6 @@
     <string name="title_activity_phone_auth">PhoneAuthActivity</string>
     <string name="phone_auth_title">Enter the code you receive:</string>
     <string name="back">Back</string>
+    <string name="send_code">Send Code</string>
+    <string name="resend_code">Resend Code</string>
 </resources>

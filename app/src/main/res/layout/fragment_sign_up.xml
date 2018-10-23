@@ -14,10 +14,9 @@
         android:text="@string/sign_up_phone"/>
 
     <EditText
-        android:id="@+id/sign_up_phone_number"
+        android:id="@+id/sign_up_phone_num"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
 
     <TextView
         style="?android:listSeparatorTextViewStyle"
