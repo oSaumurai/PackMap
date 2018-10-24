@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.osu.cse5236.group10.packmap.data.model.User;
+import edu.osu.cse5236.group10.packmap.data.store.UserStore;
 
 
 public class SignUpFragment extends Fragment implements View.OnClickListener {
@@ -39,7 +40,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     private Button mSubmitButton;
 
     private Activity mSignUp;
-    private FirebaseFirestore db;
+    private UserStore userStore;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,7 +66,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
 
         mSubmitButton.setOnClickListener(this);
         mSignUp = getActivity();
-        db = FirebaseFirestore.getInstance();
+        userStore = UserStore.getInstance();
 
         return v;
     }
@@ -76,31 +77,36 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
 
     private void createAccount(String phoneNum, String lname, String fname, String password) {
         User u = new User(phoneNum, lname, fname, password);
-        DocumentReference userRef = db.collection("users").document(u.getPhone());
+        userStore.checkThenSetNewUser(u, new AddNewUserOnCompleteListener(u));
+    }
 
-        userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        Log.d(TAG, "User already exists");
-                        mPhoneNum.setError(getString(R.string.err_msg_user_exist));
-                    } else {
-                        userRef.set(u)
-                                .addOnSuccessListener(aVoid -> {
-                                    Log.d(TAG, "DocumentSnapshot successfully written!");
-                                    mSignUp.finish();
-                                })
-                                .addOnFailureListener(e ->
-                                        Log.w(TAG, "Error writing document", e)
-                                );
-                    }
+    public class AddNewUserOnCompleteListener implements OnCompleteListener<DocumentSnapshot> {
+        private User newUser;
+
+        private AddNewUserOnCompleteListener(User user) {
+            this.newUser = user;
+        }
+
+        @Override
+        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    Log.d(TAG, "User already exists");
+                    mPhoneNum.setError(getString(R.string.err_msg_user_exist));
                 } else {
-                    Log.d(TAG, "get failed with ", task.getException());
+                    userStore.setNewUser(
+                            newUser,
+                            aVoid -> {
+                                Log.d(TAG, "DocumentSnapshot successfully written!");
+                                mSignUp.finish();
+                            },
+                            e -> Log.w(TAG, "Error writing document", e));
                 }
+            } else {
+                Log.d(TAG, "get failed with ", task.getException());
             }
-        });
+        }
     }
 
     private boolean haveEmptyField() {

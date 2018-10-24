@@ -3,11 +3,19 @@ package edu.osu.cse5236.group10.packmap.data.model;
 import java.util.HashMap;
 import java.util.Map;
 
-public class User {
+public class User extends BaseDocument {
+
     private String phone;
     private String lastName;
     private String firstName;
     private String password;
+
+    public User(String phone, String lastName, String firstName, String password) {
+        this.phone = phone;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.password = password;
+    }
 
     public String getPhone() {
         return phone;
@@ -41,19 +49,16 @@ public class User {
         this.password = password;
     }
 
-    public User(String phone, String lastName, String firstName, String password) {
-        this.phone = phone;
-        this.lastName = lastName;
-        this.firstName = firstName;
-        this.password = password;
+    /*
+     * Added the methods below to make this work better with AbstractStore methods better
+     */
+    @Override
+    public String getDocumentId() {
+        return getPhone();
     }
 
-//    public Map<String, Object> getUser() {
-//        Map<String, Object> m = new HashMap<>();
-//        m.put("phone", phone);
-//        m.put("lname", lastName);
-//        m.put("fname", firstName);
-//        m.put("password", password);
-//        return m;
-//    }
+    @Override
+    public void setDocumentId(String documentId) {
+        setPhone(documentId);
+    }
 }

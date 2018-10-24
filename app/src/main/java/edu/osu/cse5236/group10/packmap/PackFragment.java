@@ -22,6 +22,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.osu.cse5236.group10.packmap.data.DataUtils;
+import edu.osu.cse5236.group10.packmap.data.model.Group;
 import edu.osu.cse5236.group10.packmap.data.store.DummyStore;
 import edu.osu.cse5236.group10.packmap.data.DummyContent;
 import edu.osu.cse5236.group10.packmap.data.DummyContent.DummyItem;
@@ -34,7 +36,7 @@ import edu.osu.cse5236.group10.packmap.data.DummyContent.DummyItem;
  */
 public class PackFragment extends Fragment {
 
-    private static final String TAG = "PackListFragment";
+    private static final String TAG = "PackFragment";
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -43,6 +45,7 @@ public class PackFragment extends Fragment {
     private OnListFragmentInteractionListener mListener;
     private PackRecyclerViewAdapter mViewAdapter;
     private DummyStore mDummyStore;
+    private RecyclerView mRecyclerView;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -82,17 +85,15 @@ public class PackFragment extends Fragment {
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
+            mRecyclerView = (RecyclerView) view;
             if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+                mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
             mDummyStore = new DummyStore();
             mDummyStore.updateDummies(new DummyDataOnCompleteListener());
-            mViewAdapter = new PackRecyclerViewAdapter(DummyContent.ITEMS, mListener);
-            Log.d(TAG, "Size of items: " + DummyContent.ITEMS.size());
-            recyclerView.setAdapter(mViewAdapter);
+//            mRecyclerView.setAdapter(mViewAdapter);
         }
         return view;
     }
@@ -101,16 +102,21 @@ public class PackFragment extends Fragment {
         @Override
         public void onComplete(@NonNull Task<QuerySnapshot> task) {
             if (task.isSuccessful()) {
-                List<String> dummyGroups = new ArrayList<>();
+                List<Group> dummyGroups = new ArrayList<>();
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     Log.d(TAG, document.getId() + " => " + document.getData());
-                    String group = (String) document.get("group");
+                    Group group = DataUtils.getObject(document, Group.class);
                     dummyGroups.add(group);
                 }
                 Stream.of(dummyGroups)
+                        .map(Group::getName)
                         .mapIndexed(DummyContent::createDummyItem)
                         .forEach(DummyContent::addItem);
-                mViewAdapter.notifyItemChanged(DummyContent.ITEMS.size()-1);
+                Log.d(TAG, "Size of items: " + DummyContent.ITEMS.size());
+                Log.d(TAG, "Last item: " + DummyContent.ITEMS.get(DummyContent.ITEMS.size() - 1));
+                mViewAdapter = new PackRecyclerViewAdapter(DummyContent.ITEMS, mListener);
+                mViewAdapter.notifyItemInserted(DummyContent.ITEMS.size() - 1);
+                mRecyclerView.setAdapter(mViewAdapter);
             } else {
                 Log.w(TAG, "Error getting documents.", task.getException());
             }

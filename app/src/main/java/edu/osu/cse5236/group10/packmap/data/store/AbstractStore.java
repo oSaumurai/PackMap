@@ -7,44 +7,66 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Map;
+
+import edu.osu.cse5236.group10.packmap.data.model.BaseDocument;
 
 
 public abstract class AbstractStore {
 
     protected FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    public void addDocument(String collection, Map<String, Object> data,
+    protected void addDocument(BaseDocument data,
                             OnSuccessListener<DocumentReference> onSuccessListener,
                             OnFailureListener onFailureListener) {
-        db.collection(collection)
+        db.collection(getCollection())
             .add(data)
             .addOnSuccessListener(onSuccessListener)
             .addOnFailureListener(onFailureListener);
     }
 
-    public void addDocument(String collection, Map<String, Object> data) {
-        addDocument(collection, data, getDocumentReferenceOnSuccessListener(), getOnFailureListener());
+    protected void addDocument(BaseDocument data) {
+        addDocument(data, getDocumentReferenceOnSuccessListener(), getOnFailureListener());
     }
 
-    public void getAllDocuments(String collection,
-                                OnCompleteListener<QuerySnapshot> onCompleteListener) {
-        getAllDocuments(collection, onCompleteListener, getOnFailureListener());
+    protected void setDocument(BaseDocument data, OnSuccessListener<Void> onSuccessListener,
+                            OnFailureListener onFailureListener) {
+        db.collection(getCollection()).document(data.getDocumentId())
+                .set(data)
+                .addOnSuccessListener(onSuccessListener)
+                .addOnFailureListener(onFailureListener);
     }
 
-    public void getAllDocuments(String collection,
-                                OnCompleteListener<QuerySnapshot> onCompleteListener,
-                                OnFailureListener onFailureListener) {
-        db.collection(collection)
+    protected void setDocument(BaseDocument data) {
+        setDocument(data, getVoidOnSuccessListener(), getOnFailureListener());
+    }
+
+    protected void getDocument(BaseDocument data,
+                               OnCompleteListener<DocumentSnapshot> onCompleteListener,
+                               OnFailureListener onFailureListener) {
+        db.collection(getCollection()).document(data.getDocumentId())
                 .get()
                 .addOnCompleteListener(onCompleteListener)
                 .addOnFailureListener(onFailureListener);
     }
 
-    private OnSuccessListener<DocumentReference> getDocumentReferenceOnSuccessListener() {
+    protected void getAllDocuments(OnCompleteListener<QuerySnapshot> onCompleteListener) {
+        getAllDocuments(onCompleteListener, getOnFailureListener());
+    }
+
+    protected void getAllDocuments(OnCompleteListener<QuerySnapshot> onCompleteListener,
+                                OnFailureListener onFailureListener) {
+        db.collection(getCollection())
+                .get()
+                .addOnCompleteListener(onCompleteListener)
+                .addOnFailureListener(onFailureListener);
+    }
+
+    protected OnSuccessListener<DocumentReference> getDocumentReferenceOnSuccessListener() {
         return new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
@@ -53,14 +75,25 @@ public abstract class AbstractStore {
         };
     }
 
-    private OnFailureListener getOnFailureListener() {
-        return new OnFailureListener() {
+    protected OnSuccessListener<Void> getVoidOnSuccessListener() {
+        return new OnSuccessListener<Void>() {
             @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.w(getTag(), "Error adding document", e);
+            public void onSuccess(Void aVoid) {
+                Log.d(getTag(), "DocumentSnapshot successfully handled");
             }
         };
     }
 
-    public abstract String getTag();
+    protected OnFailureListener getOnFailureListener() {
+        return new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w(getTag(), "Error when interacting with Firestore", e);
+            }
+        };
+    }
+
+    protected abstract String getCollection();
+
+    protected abstract String getTag();
 }
