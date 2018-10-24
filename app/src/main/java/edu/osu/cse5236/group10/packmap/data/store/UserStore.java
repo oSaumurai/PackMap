@@ -36,7 +36,11 @@ public class UserStore extends AbstractStore {
         setDocument(user, onSuccessListener, onFailureListener);
     }
 
-    public void setNewUser(User user) {
+    public void deleteUser(User user) {
+        deleteDocument(user);
+    }
+
+    public void setUser(User user) {
         setDocument(user);
     }
 

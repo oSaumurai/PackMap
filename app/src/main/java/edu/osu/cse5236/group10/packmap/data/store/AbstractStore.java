@@ -59,10 +59,22 @@ public abstract class AbstractStore {
     }
 
     protected void getAllDocuments(OnCompleteListener<QuerySnapshot> onCompleteListener,
-                                OnFailureListener onFailureListener) {
+                                   OnFailureListener onFailureListener) {
         db.collection(getCollection())
                 .get()
                 .addOnCompleteListener(onCompleteListener)
+                .addOnFailureListener(onFailureListener);
+    }
+
+    protected void deleteDocument(BaseDocument data) {
+        deleteDocument(data, getVoidOnSuccessListener(), getOnFailureListener());
+    }
+
+    protected void deleteDocument(BaseDocument data,OnSuccessListener<Void> onSuccessListener,
+                                  OnFailureListener onFailureListener) {
+        db.collection(getCollection()).document(data.getDocumentId())
+                .delete()
+                .addOnSuccessListener(onSuccessListener)
                 .addOnFailureListener(onFailureListener);
     }
 

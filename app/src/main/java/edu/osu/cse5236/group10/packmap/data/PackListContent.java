@@ -1,14 +1,9 @@
 package edu.osu.cse5236.group10.packmap.data;
 
-import android.util.Log;
-
-import com.annimon.stream.Stream;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 
 /**
@@ -17,19 +12,19 @@ import java.util.stream.Collectors;
  * <p>
  * TODO: Replace all uses of this class before publishing your app.
  */
-public class DummyContent {
+public class PackListContent {
 
-    private static final String TAG = "DummyContent";
+    private static final String TAG = "PackListContent";
 
     /**
      * An array of sample (dummy) items.
      */
-    public static final List<DummyItem> ITEMS = new ArrayList<DummyItem>();
+    public static final List<PackItem> ITEMS = new ArrayList<PackItem>();
 
     /**
      * A map of sample (dummy) items, by ID.
      */
-    public static final Map<String, DummyItem> ITEM_MAP = new HashMap<String, DummyItem>();
+    public static final Map<String, PackItem> ITEM_MAP = new HashMap<String, PackItem>();
 
     private static final int COUNT = 25;
 
@@ -40,17 +35,17 @@ public class DummyContent {
         }
     }
 
-    public static void addItem(DummyItem item) {
+    public static void addItem(PackItem item) {
         ITEMS.add(item);
         ITEM_MAP.put(item.id, item);
     }
 
-    private static DummyItem createDummyItem(int position) {
-        return new DummyItem(String.valueOf(position), "Item " + position, makeDetails(position));
+    private static PackItem createDummyItem(int position) {
+        return new PackItem(String.valueOf(position), "Item " + position, makeDetails(position));
     }
 
-    public static DummyItem createDummyItem(int position, String group) {
-        return new DummyItem(String.valueOf(position), group, makeDetails(position));
+    public static PackItem createPackItem(int position, String group) {
+        return new PackItem(String.valueOf(position), group, makeDetails(position));
     }
 
     private static String makeDetails(int position) {
@@ -65,12 +60,12 @@ public class DummyContent {
     /**
      * A dummy item representing a piece of content.
      */
-    public static class DummyItem {
+    public static class PackItem {
         public final String id;
         public final String content;
         public final String details;
 
-        public DummyItem(String id, String content, String details) {
+        public PackItem(String id, String content, String details) {
             this.id = id;
             this.content = content;
             this.details = details;

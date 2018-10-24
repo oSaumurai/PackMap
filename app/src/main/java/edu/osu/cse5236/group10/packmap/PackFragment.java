@@ -23,10 +23,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.osu.cse5236.group10.packmap.data.DataUtils;
+import edu.osu.cse5236.group10.packmap.data.PackListContent;
 import edu.osu.cse5236.group10.packmap.data.model.Group;
-import edu.osu.cse5236.group10.packmap.data.store.DummyStore;
-import edu.osu.cse5236.group10.packmap.data.DummyContent;
-import edu.osu.cse5236.group10.packmap.data.DummyContent.DummyItem;
+import edu.osu.cse5236.group10.packmap.data.store.GroupStore;
+import edu.osu.cse5236.group10.packmap.data.PackListContent.PackItem;
 
 /**
  * A fragment representing a list of Items.
@@ -44,7 +44,7 @@ public class PackFragment extends Fragment {
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
     private PackRecyclerViewAdapter mViewAdapter;
-    private DummyStore mDummyStore;
+    private GroupStore mGroupStore;
     private RecyclerView mRecyclerView;
 
     /**
@@ -91,31 +91,30 @@ public class PackFragment extends Fragment {
             } else {
                 mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            mDummyStore = new DummyStore();
-            mDummyStore.updateDummies(new DummyDataOnCompleteListener());
-//            mRecyclerView.setAdapter(mViewAdapter);
+            mGroupStore = GroupStore.getInstance();
+            mGroupStore.getGroups(new GetGroupsOnCompleteListener());
         }
         return view;
     }
 
-    public class DummyDataOnCompleteListener implements OnCompleteListener<QuerySnapshot> {
+    public class GetGroupsOnCompleteListener implements OnCompleteListener<QuerySnapshot> {
         @Override
         public void onComplete(@NonNull Task<QuerySnapshot> task) {
             if (task.isSuccessful()) {
-                List<Group> dummyGroups = new ArrayList<>();
+                List<Group> groups = new ArrayList<>();
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     Log.d(TAG, document.getId() + " => " + document.getData());
                     Group group = DataUtils.getObject(document, Group.class);
-                    dummyGroups.add(group);
+                    groups.add(group);
                 }
-                Stream.of(dummyGroups)
+                Stream.of(groups)
                         .map(Group::getName)
-                        .mapIndexed(DummyContent::createDummyItem)
-                        .forEach(DummyContent::addItem);
-                Log.d(TAG, "Size of items: " + DummyContent.ITEMS.size());
-                Log.d(TAG, "Last item: " + DummyContent.ITEMS.get(DummyContent.ITEMS.size() - 1));
-                mViewAdapter = new PackRecyclerViewAdapter(DummyContent.ITEMS, mListener);
-                mViewAdapter.notifyItemInserted(DummyContent.ITEMS.size() - 1);
+                        .mapIndexed(PackListContent::createPackItem)
+                        .forEach(PackListContent::addItem);
+                Log.d(TAG, "Size of items: " + PackListContent.ITEMS.size());
+                Log.d(TAG, "Last item: " + PackListContent.ITEMS.get(PackListContent.ITEMS.size() - 1));
+                mViewAdapter = new PackRecyclerViewAdapter(PackListContent.ITEMS, mListener);
+                mViewAdapter.notifyItemInserted(PackListContent.ITEMS.size() - 1);
                 mRecyclerView.setAdapter(mViewAdapter);
             } else {
                 Log.w(TAG, "Error getting documents.", task.getException());
@@ -160,6 +159,6 @@ public class PackFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(PackItem item);
     }
 }

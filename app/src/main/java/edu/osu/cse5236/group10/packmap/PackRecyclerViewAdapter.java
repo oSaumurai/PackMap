@@ -7,22 +7,22 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import edu.osu.cse5236.group10.packmap.PackFragment.OnListFragmentInteractionListener;
-import edu.osu.cse5236.group10.packmap.data.DummyContent.DummyItem;
+import edu.osu.cse5236.group10.packmap.data.PackListContent.PackItem;
 
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link PackItem} and makes a call to the
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
 public class PackRecyclerViewAdapter extends RecyclerView.Adapter<PackRecyclerViewAdapter.ViewHolder> {
 
     private static final String TAG = "PackRecyclerViewAdapter";
-    private final List<DummyItem> mValues;
+    private final List<PackItem> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public PackRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
+    public PackRecyclerViewAdapter(List<PackItem> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -61,7 +61,7 @@ public class PackRecyclerViewAdapter extends RecyclerView.Adapter<PackRecyclerVi
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public DummyItem mItem;
+        public PackItem mItem;
 
         public ViewHolder(View view) {
             super(view);
