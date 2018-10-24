@@ -1,7 +1,6 @@
 package edu.osu.cse5236.group10.packmap;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -13,7 +12,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import edu.osu.cse5236.group10.packmap.data.model.User;
@@ -30,6 +34,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     private Button mSubmitButton;
 
     private Activity mSignUp;
+    private FirebaseFirestore db;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,6 +54,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
 
         mSubmitButton.setOnClickListener(this);
         mSignUp = getActivity();
+        db = FirebaseFirestore.getInstance();
 
         return v;
     }
@@ -58,24 +64,40 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     }
 
     private void createAccount(String phoneNum, String lname, String fname, String password) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
         User u = new User(phoneNum, lname, fname, password);
-        db.collection("users").document(u.getPhone())
-                .set(u)
-                .addOnSuccessListener(aVoid ->
-                        Log.d(TAG, "DocumentSnapshot successfully written!")
-                )
-                .addOnFailureListener(e ->
-                        Log.w(TAG, "Error writing document", e)
-                );
+        DocumentReference userRef = db.collection("users").document(u.getPhone());
+
+        userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d(TAG, "User already exists");
+                        Toast.makeText(mSignUp, "User already exists", Toast.LENGTH_SHORT).show();
+                    } else {
+                        userRef.set(u)
+                                .addOnSuccessListener(aVoid -> {
+                                    Log.d(TAG, "DocumentSnapshot successfully written!");
+                                    mSignUp.finish();
+                                })
+                                .addOnFailureListener(e ->
+                                        Log.w(TAG, "Error writing document", e)
+                                );
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
     }
+
 
     @Override
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.submit_sign_up:
                 createAccount(getText(mPhoneNum), getText(mLastName), getText(mFirstName), getText(mPassword));
-                mSignUp.finish();
                 break;
         }
     }
