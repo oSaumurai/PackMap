@@ -1,6 +1,8 @@
 package edu.osu.cse5236.group10.packmap;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import android.os.Handler;
@@ -12,6 +14,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -47,6 +52,7 @@ public class PackFragment extends Fragment {
     private OnListFragmentInteractionListener mListener;
     private GroupStore mGroupStore;
     private RecyclerView mRecyclerView;
+    private Activity packActivity;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -70,6 +76,9 @@ public class PackFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         Log.d(TAG, "onCreate() called");
+
+        setHasOptionsMenu(true);
+        packActivity = getActivity();
 
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
@@ -97,6 +106,24 @@ public class PackFragment extends Fragment {
             mRecyclerView.setAdapter(new PackRecyclerViewAdapter(PackListContent.ITEMS, mListener));
         }
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.pack_menu, menu);
+        super.onCreateOptionsMenu(menu,inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.modify_account:
+                startActivity(new Intent(packActivity, AccountSettingActivity.class));
+                return true;
+        }
+
+        return false;
     }
 
     public class GetGroupsOnCompleteListener implements OnCompleteListener<QuerySnapshot> {

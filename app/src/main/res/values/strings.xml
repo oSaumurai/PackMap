@@ -20,6 +20,7 @@
     <string name="title_places">Places</string>
     <string name="title_packs">Packs</string>
     <string name="title_explore">Explore</string>
+    <string name="menu_account">Account Setting</string>
 
     <string name="google_maps_API_key">AIzaSyAm0quTUQfR1OHTbeLlh8oajO1Yw7E6jRw</string>
 
@@ -32,10 +33,12 @@
     <string name="sign_up_last_name">Last Name:</string>
     <string name="sign_up_password">Password:</string>
     <string name="submit">Submit</string>
+    <string name="submit_change">Submit Change</string>
 
     <string name="title_activity_phone_auth">PhoneAuthActivity</string>
     <string name="phone_auth_title">Enter the code you receive:</string>
     <string name="back">Back</string>
     <string name="send_code">Send Code</string>
     <string name="resend_code">Resend Code</string>
+
 </resources>

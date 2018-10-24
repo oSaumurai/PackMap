@@ -46,7 +46,8 @@
         <activity android:name=".SignUpActivity" />
         <activity
             android:name=".PhoneAuthActivity"
-            android:label="@string/title_activity_phone_auth"></activity>
+            android:label="@string/title_activity_phone_auth" />
+        <activity android:name=".AccountSettingActivity"></activity>
     </application>
 
 </manifest>
