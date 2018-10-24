@@ -3,6 +3,8 @@ package edu.osu.cse5236.group10.packmap;
 import android.content.Context;
 import android.os.Bundle;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -43,7 +45,6 @@ public class PackFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
-    private PackRecyclerViewAdapter mViewAdapter;
     private GroupStore mGroupStore;
     private RecyclerView mRecyclerView;
 
@@ -93,6 +94,7 @@ public class PackFragment extends Fragment {
             }
             mGroupStore = GroupStore.getInstance();
             mGroupStore.getGroups(new GetGroupsOnCompleteListener());
+            mRecyclerView.setAdapter(new PackRecyclerViewAdapter(PackListContent.ITEMS, mListener));
         }
         return view;
     }
@@ -107,15 +109,24 @@ public class PackFragment extends Fragment {
                     Group group = DataUtils.getObject(document, Group.class);
                     groups.add(group);
                 }
+                List<PackItem> temp = new ArrayList<>(PackListContent.ITEMS);
+                PackListContent.ITEMS.clear();
                 Stream.of(groups)
                         .map(Group::getName)
                         .mapIndexed(PackListContent::createPackItem)
                         .forEach(PackListContent::addItem);
+                PackListContent.ITEMS.addAll(temp);
                 Log.d(TAG, "Size of items: " + PackListContent.ITEMS.size());
                 Log.d(TAG, "Last item: " + PackListContent.ITEMS.get(PackListContent.ITEMS.size() - 1));
-                mViewAdapter = new PackRecyclerViewAdapter(PackListContent.ITEMS, mListener);
-                mViewAdapter.notifyItemInserted(PackListContent.ITEMS.size() - 1);
-                mRecyclerView.setAdapter(mViewAdapter);
+                PackRecyclerViewAdapter viewAdapter = new PackRecyclerViewAdapter(PackListContent.ITEMS, mListener);
+                // notifyDataSetChanged() must run in the main thread
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    public void run() {
+                        viewAdapter.notifyDataSetChanged();
+                        mRecyclerView.setAdapter(viewAdapter);
+                    }
+                });
+
             } else {
                 Log.w(TAG, "Error getting documents.", task.getException());
             }

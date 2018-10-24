@@ -5,13 +5,15 @@ import java.util.List;
 public class Group extends BaseDocument {
 
     private String name;
-    private List<String> activityIdList;
+    private List<String> activityList;
+    private List<String> userList;
 
     public Group() { }
 
-    public Group(String name, List<String> activityIdList) {
+    public Group(String name, List<String> activityList, List<String> userList) {
         this.name = name;
-        this.activityIdList = activityIdList;
+        this.activityList = activityList;
+        this.userList = userList;
     }
 
     public String getName() {
@@ -22,11 +24,19 @@ public class Group extends BaseDocument {
         this.name = name;
     }
 
-    public List<String> getActivityIdList() {
-        return activityIdList;
+    public List<String> getActivityList() {
+        return activityList;
     }
 
-    public void setActivityIdList(List<String> activityIdList) {
-        this.activityIdList = activityIdList;
+    public void setActivityList(List<String> activityList) {
+        this.activityList = activityList;
+    }
+
+    public List<String> getUserList() {
+        return userList;
+    }
+
+    public void setUserList(List<String> userList) {
+        this.userList = userList;
     }
 }

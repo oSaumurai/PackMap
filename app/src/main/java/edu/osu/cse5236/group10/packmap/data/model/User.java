@@ -1,7 +1,6 @@
 package edu.osu.cse5236.group10.packmap.data.model;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.google.firebase.firestore.Exclude;
 
 public class User extends BaseDocument {
 
@@ -53,6 +52,7 @@ public class User extends BaseDocument {
      * Added the methods below to make this work better with AbstractStore methods better
      */
     @Override
+    @Exclude
     public String getDocumentId() {
         return getPhone();
     }

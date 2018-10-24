@@ -2,16 +2,17 @@ package edu.osu.cse5236.group10.packmap.data.model;
 
 import com.google.firebase.firestore.GeoPoint;
 
-import java.util.List;
+import java.util.Map;
 
 public class Location extends BaseDocument {
 
     private GeoPoint coordinates;
     private String name;
-    private List<Vote> upvotes;
-    private List<Vote> downvotes;
+    // Map with key of user id (phone number) and value is any comment
+    private Map<String, String> upvotes;
+    private Map<String, String> downvotes;
 
-    public Location(GeoPoint coordinates, String name, List<Vote> upvotes, List<Vote> downvotes) {
+    public Location(GeoPoint coordinates, String name, Map<String, String> upvotes, Map<String, String> downvotes) {
         this.coordinates = coordinates;
         this.name = name;
         this.upvotes = upvotes;
@@ -34,19 +35,19 @@ public class Location extends BaseDocument {
         this.name = name;
     }
 
-    public List<Vote> getUpvotes() {
+    public Map<String, String> getUpvotes() {
         return upvotes;
     }
 
-    public void setUpvotes(List<Vote> upvotes) {
+    public void setUpvotes(Map<String, String> upvotes) {
         this.upvotes = upvotes;
     }
 
-    public List<Vote> getDownvotes() {
+    public Map<String, String> getDownvotes() {
         return downvotes;
     }
 
-    public void setDownvotes(List<Vote> downvotes) {
+    public void setDownvotes(Map<String, String> downvotes) {
         this.downvotes = downvotes;
     }
 }

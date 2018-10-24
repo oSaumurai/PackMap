@@ -70,7 +70,7 @@ public abstract class AbstractStore {
         deleteDocument(data, getVoidOnSuccessListener(), getOnFailureListener());
     }
 
-    protected void deleteDocument(BaseDocument data,OnSuccessListener<Void> onSuccessListener,
+    protected void deleteDocument(BaseDocument data, OnSuccessListener<Void> onSuccessListener,
                                   OnFailureListener onFailureListener) {
         db.collection(getCollection()).document(data.getDocumentId())
                 .delete()

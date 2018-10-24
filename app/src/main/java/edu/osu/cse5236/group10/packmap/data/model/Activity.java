@@ -7,11 +7,11 @@ public class Activity extends BaseDocument {
     private String name;
     private String info;
     private boolean isActive;
-    private List<String> selectedLocations;
+    private List<Location> selectedLocations;
 
     public Activity() {}
 
-    public Activity(String name, String info, boolean isActive, List<String> selectedLocations) {
+    public Activity(String name, String info, boolean isActive, List<Location> selectedLocations) {
         this.name = name;
         this.info = info;
         this.isActive = isActive;
@@ -42,11 +42,11 @@ public class Activity extends BaseDocument {
         isActive = active;
     }
 
-    public List<String> getSelectedLocations() {
+    public List<Location> getSelectedLocations() {
         return selectedLocations;
     }
 
-    public void setSelectedLocations(List<String> selectedLocations) {
+    public void setSelectedLocations(List<Location> selectedLocations) {
         this.selectedLocations = selectedLocations;
     }
 }
