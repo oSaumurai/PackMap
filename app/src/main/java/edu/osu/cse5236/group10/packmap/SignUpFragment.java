@@ -20,6 +20,9 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.osu.cse5236.group10.packmap.data.model.User;
 
 
@@ -30,6 +33,8 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     private EditText mFirstName;
     private EditText mLastName;
     private EditText mPassword;
+
+    private List<EditText> fieldList;
 
     private Button mSubmitButton;
 
@@ -51,6 +56,12 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         mLastName = v.findViewById(R.id.sign_up_last_name);
         mPassword = v.findViewById(R.id.sign_up_password);
         mSubmitButton = v.findViewById(R.id.submit_sign_up);
+
+        fieldList = new ArrayList<>();
+        fieldList.add(mPhoneNum);
+        fieldList.add(mFirstName);
+        fieldList.add(mLastName);
+        fieldList.add(mPassword);
 
         mSubmitButton.setOnClickListener(this);
         mSignUp = getActivity();
@@ -74,7 +85,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         Log.d(TAG, "User already exists");
-                        Toast.makeText(mSignUp, "User already exists", Toast.LENGTH_SHORT).show();
+                        mPhoneNum.setError(getString(R.string.err_msg_user_exist));
                     } else {
                         userRef.set(u)
                                 .addOnSuccessListener(aVoid -> {
@@ -92,12 +103,25 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         });
     }
 
+    private boolean haveEmptyField() {
+        boolean check = false;
+
+        for (EditText e : fieldList) {
+            if (e.getText().length() == 0) {
+                e.setError(getString(R.string.err_msg_empty));
+                check = true;
+            }
+        }
+
+        return check;
+    }
 
     @Override
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.submit_sign_up:
-                createAccount(getText(mPhoneNum), getText(mLastName), getText(mFirstName), getText(mPassword));
+                if (!haveEmptyField())
+                    createAccount(getText(mPhoneNum), getText(mLastName), getText(mFirstName), getText(mPassword));
                 break;
         }
     }

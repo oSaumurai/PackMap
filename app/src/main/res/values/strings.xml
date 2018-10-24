@@ -24,6 +24,9 @@
 
     <string name="google_maps_API_key">AIzaSyAm0quTUQfR1OHTbeLlh8oajO1Yw7E6jRw</string>
 
+    <string name="err_msg_empty">This field can\'t be empty</string>
+    <string name="err_msg_user_exist">User already exists</string>
+
     <string name="sign_up_phone">Phone Number:</string>
     <string name="sign_up_first_name">First Name:</string>
     <string name="sign_up_last_name">Last Name:</string>
