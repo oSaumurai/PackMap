@@ -53,6 +53,7 @@ public class PackFragment extends Fragment {
     private GroupStore mGroupStore;
     private RecyclerView mRecyclerView;
     private Activity packActivity;
+    private String mPhoneNum;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -79,6 +80,8 @@ public class PackFragment extends Fragment {
 
         setHasOptionsMenu(true);
         packActivity = getActivity();
+
+        mPhoneNum = getActivity().getIntent().getStringExtra("userId");
 
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
@@ -119,7 +122,11 @@ public class PackFragment extends Fragment {
         int id = item.getItemId();
         switch (id) {
             case R.id.modify_account:
-                startActivity(new Intent(packActivity, AccountSettingActivity.class));
+                Intent intent = new Intent(packActivity, AccountSettingActivity.class);
+                intent.putExtra("userId", mPhoneNum);
+
+                Log.d(TAG, "Sending: " + mPhoneNum);
+                startActivity(intent);
                 return true;
         }
 

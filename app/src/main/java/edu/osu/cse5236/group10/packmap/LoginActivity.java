@@ -96,7 +96,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 if (document.exists()) {
                     if (document.getString("password").equals(password)) {
                         Log.d(TAG, TAG + ": User Log in!");
-                        startActivity(new Intent(this, PackListActivity.class));
+                        Intent intent = new Intent(this, PackListActivity.class);
+
+                        intent.putExtra("userId", mPhoneView.getText().toString().trim());
+
+                        // Start activity and pass the phone number to it
+                        startActivity(intent);
                     } else {
                         Log.d(TAG, "Wrong password");
                         Toast.makeText(loginActivity, R.string.err_msg_user_login_failed, Toast.LENGTH_SHORT).show();

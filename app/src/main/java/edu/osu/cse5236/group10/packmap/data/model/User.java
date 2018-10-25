@@ -9,6 +9,10 @@ public class User extends BaseDocument {
     private String firstName;
     private String password;
 
+    public User(String phone) {
+        this.phone = phone;
+    }
+
     public User(String phone, String lastName, String firstName, String password) {
         this.phone = phone;
         this.lastName = lastName;

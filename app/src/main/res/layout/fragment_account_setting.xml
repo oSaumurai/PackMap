@@ -14,7 +14,7 @@
         android:text="@string/sign_up_first_name"/>
 
     <EditText
-        android:id="@+id/sign_up_first_name"
+        android:id="@+id/setting_first_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -25,12 +25,12 @@
         android:text="@string/sign_up_last_name"/>
 
     <EditText
-        android:id="@+id/sign_up_last_name"
+        android:id="@+id/setting_last_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <Button
-        android:id="@+id/submit_sign_up"
+        android:id="@+id/submit_setting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/submit_change" />

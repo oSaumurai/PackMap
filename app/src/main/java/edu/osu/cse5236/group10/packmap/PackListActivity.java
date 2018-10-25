@@ -3,6 +3,9 @@ package edu.osu.cse5236.group10.packmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
@@ -16,6 +19,7 @@ public class PackListActivity extends AppCompatActivity implements PackFragment.
 
     private TextView mTextMessage;
     private PackFragment mPackFragment;
+    private String mPhoneNum;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -70,7 +74,9 @@ public class PackListActivity extends AppCompatActivity implements PackFragment.
         setContentView(R.layout.activity_pack_list);
 
         mTextMessage = (TextView) findViewById(R.id.message);
+
         mPackFragment = (PackFragment) getSupportFragmentManager().findFragmentById(R.id.pack_list);
+
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
