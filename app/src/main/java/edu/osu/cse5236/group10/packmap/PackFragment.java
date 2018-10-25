@@ -22,7 +22,10 @@ import android.view.ViewGroup;
 
 import com.annimon.stream.Stream;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -55,6 +58,8 @@ public class PackFragment extends Fragment {
     private Activity packActivity;
     private String mPhoneNum;
 
+    private FirebaseFirestore db;
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -82,6 +87,8 @@ public class PackFragment extends Fragment {
         packActivity = getActivity();
 
         mPhoneNum = getActivity().getIntent().getStringExtra("userId");
+
+        db = FirebaseFirestore.getInstance();
 
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
@@ -127,6 +134,24 @@ public class PackFragment extends Fragment {
 
                 Log.d(TAG, "Sending: " + mPhoneNum);
                 startActivity(intent);
+                return true;
+            case R.id.delete_account:
+                db.collection("users").document(mPhoneNum)
+                        .delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(TAG, "Error deleting document", e);
+                            }
+                        });
+
+                packActivity.finish();
                 return true;
         }
 

@@ -3,6 +3,12 @@
     <item
         android:id="@+id/modify_account"
         android:icon="@drawable/ic_people_black_24dp"
-        android:title="@string/menu_account"
+        android:title="@string/menu_update_account"
+        android:orderInCategory="0"/>
+
+    <item
+        android:id="@+id/delete_account"
+        android:icon="@drawable/ic_people_black_24dp"
+        android:title="@string/menu_delete_account"
         android:orderInCategory="0"/>
 </menu>
