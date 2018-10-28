@@ -16,6 +16,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import edu.osu.cse5236.group10.packmap.data.store.UserStore;
+
 
 /**
  * A login screen that offers login via email/password.
@@ -26,7 +28,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     // UI references.
     private AutoCompleteTextView mPhoneView;
     private EditText mPasswordView;
-    private FirebaseFirestore db;
+    private UserStore userStore;
     private Activity loginActivity;
 
     @Override
@@ -67,7 +69,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mPasswordView = findViewById(R.id.password);
         Button mPhoneSignInButton = findViewById(R.id.phone_sign_in_button);
 
-        db = FirebaseFirestore.getInstance();
+        userStore = UserStore.getInstance();
 
         mPhoneSignInButton.setOnClickListener(this);
     }
@@ -88,9 +90,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void loginUser(String phone, String password) {
-        DocumentReference userRef = db.collection("users").document(phone);
-
-        userRef.get().addOnCompleteListener(task -> {
+        userStore.processUser(phone, task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {

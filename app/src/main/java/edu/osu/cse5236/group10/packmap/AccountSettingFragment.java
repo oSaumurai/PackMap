@@ -45,7 +45,7 @@ public class AccountSettingFragment extends Fragment implements View.OnClickList
     private String mLastnameCheck;
     private String mPhoneNum;
 
-    private FirebaseFirestore db;
+    private UserStore userStore;
 
     public AccountSettingFragment() {
         // Required empty public constructor
@@ -59,7 +59,7 @@ public class AccountSettingFragment extends Fragment implements View.OnClickList
 
         Log.d(TAG, mPhoneNum);
 
-        db = FirebaseFirestore.getInstance();
+        userStore = UserStore.getInstance();
 
         settingActivity = getActivity();
     }
@@ -79,8 +79,7 @@ public class AccountSettingFragment extends Fragment implements View.OnClickList
         mBackButton.setOnClickListener(this);
 
         // Get the fname and lname of the user
-        DocumentReference docRef = db.collection("users").document(mPhoneNum);
-        docRef.get().addOnCompleteListener(task -> {
+        userStore.processUser(mPhoneNum, task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
@@ -113,10 +112,7 @@ public class AccountSettingFragment extends Fragment implements View.OnClickList
 
                 if (!(tempFirstName.equals(mFirstnameCheck) &&
                         tempLastName.equals(mLastnameCheck))) {
-                    db.collection("users").document(mPhoneNum)
-                            .update("firstName", tempFirstName);
-                    db.collection("users").document(mPhoneNum)
-                            .update("lastName", tempLastName);
+                    userStore.updateUserName(mPhoneNum, tempFirstName, tempLastName);
                 }
 
                 settingActivity.finish();

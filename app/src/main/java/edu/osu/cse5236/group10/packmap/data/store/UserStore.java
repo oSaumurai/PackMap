@@ -3,6 +3,7 @@ package edu.osu.cse5236.group10.packmap.data.store;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import edu.osu.cse5236.group10.packmap.SignUpFragment;
@@ -36,8 +37,18 @@ public class UserStore extends AbstractStore {
         setDocument(user, onSuccessListener, onFailureListener);
     }
 
-    public void deleteUser(User user) {
-        deleteDocument(user);
+    public void processUser(String uid, OnCompleteListener<DocumentSnapshot> onCompleteListener) {
+        getDocument(uid, onCompleteListener, getOnFailureListener());
+    }
+
+    public void updateUserName(String uid, String newFirstName, String newLastName) {
+        DocumentReference dr = db.collection("users").document(uid);
+        dr.update("firstName", newFirstName);
+        dr.update("lastName", newLastName);
+    }
+
+    public void deleteUserById(String userId) {
+        deleteDocumentById(userId);
     }
 
     public void setUser(User user) {

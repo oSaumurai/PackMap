@@ -37,6 +37,7 @@ import edu.osu.cse5236.group10.packmap.data.PackListContent;
 import edu.osu.cse5236.group10.packmap.data.model.Group;
 import edu.osu.cse5236.group10.packmap.data.store.GroupStore;
 import edu.osu.cse5236.group10.packmap.data.PackListContent.PackItem;
+import edu.osu.cse5236.group10.packmap.data.store.UserStore;
 
 /**
  * A fragment representing a list of Items.
@@ -58,7 +59,7 @@ public class PackFragment extends Fragment {
     private Activity packActivity;
     private String mPhoneNum;
 
-    private FirebaseFirestore db;
+    private UserStore userStore;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -88,7 +89,7 @@ public class PackFragment extends Fragment {
 
         mPhoneNum = getActivity().getIntent().getStringExtra("userId");
 
-        db = FirebaseFirestore.getInstance();
+        userStore = UserStore.getInstance();
 
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
@@ -136,20 +137,7 @@ public class PackFragment extends Fragment {
                 startActivity(intent);
                 return true;
             case R.id.delete_account:
-                db.collection("users").document(mPhoneNum)
-                        .delete()
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Log.d(TAG, "DocumentSnapshot successfully deleted!");
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w(TAG, "Error deleting document", e);
-                            }
-                        });
+                userStore.deleteUserById(mPhoneNum);
 
                 packActivity.finish();
                 return true;
