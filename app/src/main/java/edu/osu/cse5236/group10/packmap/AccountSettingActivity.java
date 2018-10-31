@@ -8,16 +8,10 @@ import android.util.Log;
 
 public class AccountSettingActivity extends AppCompatActivity {
     private final String TAG = "AccountSettingActivity";
-    private static final String EXTRA_PHONE = "userId";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        String phone = getIntent().getStringExtra("userId");
-        Bundle bundle = new Bundle();
-
-        Log.d(TAG, "get: " + phone);
 
         setContentView(R.layout.activity_account_setting);
 
@@ -27,8 +21,7 @@ public class AccountSettingActivity extends AppCompatActivity {
         if (fragment == null) {
             fragment = new AccountSettingFragment();
 
-            bundle.putString(EXTRA_PHONE, phone);
-            fragment.setArguments(bundle);
+            fragment.setArguments(getIntent().getExtras());
             fm.beginTransaction()
                     .add(R.id.account_setting_fragment_container, fragment)
                     .commit();

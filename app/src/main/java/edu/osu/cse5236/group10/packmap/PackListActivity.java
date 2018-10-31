@@ -1,5 +1,6 @@
 package edu.osu.cse5236.group10.packmap;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -8,10 +9,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import edu.osu.cse5236.group10.packmap.data.PackListContent;
+import edu.osu.cse5236.group10.packmap.data.store.UserStore;
 
 public class PackListActivity extends AppCompatActivity implements PackFragment.OnListFragmentInteractionListener {
 
@@ -42,27 +46,32 @@ public class PackListActivity extends AppCompatActivity implements PackFragment.
     };
 
     @Override
-    public void onStart() {
-        super.onStart();
-        Log.d(TAG, "onStart() called");
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.pack_menu, menu);
+
+        return true;
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        Log.d(TAG, "onResume() called");
-    }
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.modify_account:
+                Intent intent = new Intent(this, AccountSettingActivity.class);
+                intent.putExtra("userId", mPhoneNum);
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.d(TAG, "onStop() called");
-    }
+                Log.d(TAG, "Sending: " + mPhoneNum);
+                startActivity(intent);
+                return true;
+            case R.id.delete_account:
+                UserStore.getInstance().deleteUserById(mPhoneNum);
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d(TAG, "onDestroy() called");
+                finish();
+                return true;
+        }
+
+        return false;
     }
 
     @Override
@@ -73,12 +82,25 @@ public class PackListActivity extends AppCompatActivity implements PackFragment.
 
         setContentView(R.layout.activity_pack_list);
 
-        mTextMessage = (TextView) findViewById(R.id.message);
+        mTextMessage = findViewById(R.id.message);
 
-        mPackFragment = (PackFragment) getSupportFragmentManager().findFragmentById(R.id.pack_list);
+        mPhoneNum = getIntent().getStringExtra("userId");
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        // Add bottom navigation bar
+        BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        // Add fragment to container
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment fragment = fm.findFragmentById(R.id.pack_list_container);
+
+        if (fragment == null) {
+            fragment = new PackFragment();
+
+            fm.beginTransaction()
+                    .add(R.id.pack_list_container, fragment)
+                    .commit();
+        }
     }
 
     @Override

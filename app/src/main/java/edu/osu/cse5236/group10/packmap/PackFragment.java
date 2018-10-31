@@ -119,33 +119,6 @@ public class PackFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.pack_menu, menu);
-        super.onCreateOptionsMenu(menu,inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        switch (id) {
-            case R.id.modify_account:
-                Intent intent = new Intent(packActivity, AccountSettingActivity.class);
-                intent.putExtra("userId", mPhoneNum);
-
-                Log.d(TAG, "Sending: " + mPhoneNum);
-                startActivity(intent);
-                return true;
-            case R.id.delete_account:
-                userStore.deleteUserById(mPhoneNum);
-
-                packActivity.finish();
-                return true;
-        }
-
-        return false;
-    }
-
     public class GetGroupsOnCompleteListener implements OnCompleteListener<QuerySnapshot> {
         @Override
         public void onComplete(@NonNull Task<QuerySnapshot> task) {
