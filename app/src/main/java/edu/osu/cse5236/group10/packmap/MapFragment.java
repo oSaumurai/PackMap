@@ -7,6 +7,8 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -18,18 +20,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.app.Activity;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.AutocompletePrediction;
+import com.google.android.gms.location.places.GeoDataClient;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceBuffer;
+import com.google.android.gms.location.places.PlaceBufferResponse;
+import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
@@ -37,45 +52,63 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.osu.cse5236.group10.packmap.data.model.Group;
+import edu.osu.cse5236.group10.packmap.data.store.GroupStore;
 
 
-public class MapFragment extends Fragment implements OnMapReadyCallback {
+public class MapFragment extends Fragment implements OnMapReadyCallback,
+ GoogleApiClient.OnConnectionFailedListener{
 
     private static final String Tag= "MapsFragment";
     private static final String FINE_LOCATION= Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COURSE_LOCAITON=Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCATION_PERMISSION_REQUESTCODE=1234;
     private static final float DEFAULT_ZOOM = 15f;
+    private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(new LatLng(-40,168), new LatLng(71,137));
     //widgets
-    private EditText mSearchText;
+    private AutoCompleteTextView mSearchText;
     private Activity mMapActivity;
     //vars
     private Boolean mLocationPermissionGranted=false;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private GoogleMap mMap;
+    private PlaceAutoCompleteAdapter mPlaceAutoCompleteAdapter;
+    private GeoDataClient mGeoDataClient;
 
-    //SupportMapFragment mapFragment;
     Context context = this.getActivity();
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mMapActivity=getActivity();
+        mMapActivity=this.getActivity();
         getLocationPermission();
     }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_map, container, false);
-        mSearchText=(EditText) v.findViewById(R.id.input_search);
+        context = this.getActivity();
+        mSearchText=(AutoCompleteTextView) v.findViewById(R.id.input_search);
+        mGeoDataClient=Places.getGeoDataClient(context);
+        mPlaceAutoCompleteAdapter=new PlaceAutoCompleteAdapter(context, mGeoDataClient, LAT_LNG_BOUNDS,null);
+        //mSearchText.setOnItemClickListener(mAutocompleteClickListener);
+        mSearchText.setAdapter(mPlaceAutoCompleteAdapter);
         if(mSearchText==null){
             Log.d(Tag, "onCreateView: null returned");
         }
-        mMapActivity=getActivity();
+
 
         initMap();
 
         return v;
     }
-
+    //Search area UI
     private void init(){
         Log.d(Tag, "init: initializing");
 
@@ -92,8 +125,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 return false;
             }
         });
-    }
 
+        hideSoftKeyboard();
+    }
+    //Search area UI
     private void geoLocate(){
         Log.d(Tag, "geoLocate: geoLocating");
 
@@ -110,7 +145,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         if(list.size()>0){
             Address address=list.get(0);
             Log.d(Tag, "geoLocate: found a location: " +  address.toString());
-            //Toast.makeText(this, address.toString(),Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this.getActivity(), address.toString(),Toast.LENGTH_SHORT).show();
+            moveCamera(new LatLng(address.getLatitude(),address.getLongitude()),DEFAULT_ZOOM,address.getAddressLine(0));
         }
     }
 
@@ -174,12 +210,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 Task task = location.addOnCompleteListener(new OnCompleteListener() {
                     @Override
                     public void onComplete(@NonNull Task task) {
-                        if (task.isSuccessful() && task != null) {
+                        if (task.isSuccessful()) {
                             Log.d(Tag, "onComplete: found locaiton");
                             Location currentLocaiton = (Location) task.getResult();
                             if (currentLocaiton != null) {
                                 moveCamera(new LatLng(currentLocaiton.getLatitude(), currentLocaiton.getLongitude()),
-                                        DEFAULT_ZOOM);
+                                        DEFAULT_ZOOM,"My Locaiton");
                             } else {
                                 Log.d(Tag, "onComplete: null returned");
                             }
@@ -197,9 +233,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
 
-    private void moveCamera(LatLng latLng, float zoom){
+    private void moveCamera(LatLng latLng, float zoom, String title){
         Log.d(Tag, "moveCamera: moving the camera to: lat: " + latLng.latitude+", lng "+ latLng.longitude);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,zoom));
+        if(!title.equals("My Locaiton")){
+            MarkerOptions options= new MarkerOptions().position(latLng).title(title);
+            mMap.addMarker(options);
+        }
+
+        hideSoftKeyboard();
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -223,5 +265,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 }
             }
         }
+    }
+
+    private void hideSoftKeyboard(){
+        View view = mMapActivity.getCurrentFocus();
+        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }
