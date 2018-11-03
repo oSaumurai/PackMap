@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -23,6 +24,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.app.Activity;
@@ -44,6 +46,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -68,14 +71,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     //widgets
     private AutoCompleteTextView mSearchText;
     private Activity mMapActivity;
+    private BottomSheetBehavior bottomSheetBehavior;
+    private TextView bottom_heading;
+    private Button upVoteButtom,downVoteButtom;
     //vars
     private Boolean mLocationPermissionGranted=false;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private GoogleMap mMap;
     private PlaceAutoCompleteAdapter mPlaceAutoCompleteAdapter;
     private GeoDataClient mGeoDataClient;
-
-    Context context = this.getActivity();
+    private Address currentSelectedAddress;
+    Context context;
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -94,16 +100,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_map, container, false);
         context = this.getActivity();
+        //register bottom sheet
+        bottomSheetBehavior=BottomSheetBehavior.from(v.findViewById(R.id.bottom_Sheet_Layout));
+        bottom_heading=v.findViewById(R.id.bottom_Sheet_Heading);
+        upVoteButtom=v.findViewById(R.id.up_vote);
+        downVoteButtom=v.findViewById(R.id.down_vote);
+        //searchText UI
         mSearchText=(AutoCompleteTextView) v.findViewById(R.id.input_search);
         mGeoDataClient=Places.getGeoDataClient(context);
         mPlaceAutoCompleteAdapter=new PlaceAutoCompleteAdapter(context, mGeoDataClient, LAT_LNG_BOUNDS,null);
-        //mSearchText.setOnItemClickListener(mAutocompleteClickListener);
         mSearchText.setAdapter(mPlaceAutoCompleteAdapter);
         if(mSearchText==null){
             Log.d(Tag, "onCreateView: null returned");
         }
-
-
         initMap();
 
         return v;
@@ -143,10 +152,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         }
 
         if(list.size()>0){
-            Address address=list.get(0);
-            Log.d(Tag, "geoLocate: found a location: " +  address.toString());
-            //Toast.makeText(this.getActivity(), address.toString(),Toast.LENGTH_SHORT).show();
-            moveCamera(new LatLng(address.getLatitude(),address.getLongitude()),DEFAULT_ZOOM,address.getAddressLine(0));
+            currentSelectedAddress = list.get(0);
+            Log.d(Tag, "geoLocate: found a location: " +  list.toString());
+            moveCamera(new LatLng(currentSelectedAddress.getLatitude(),currentSelectedAddress.getLongitude()),DEFAULT_ZOOM,currentSelectedAddress.getAddressLine(0));
         }
     }
 
@@ -174,6 +182,33 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
             }
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
+            //init and send data to BottomView
+            upVoteButtom.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                }
+            });
+
+            downVoteButtom.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                }
+            });
+
+            //marker listener
+            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(Marker marker) {
+                    //TODO set info
+                    String temp=currentSelectedAddress.getAddressLine(0);
+                    bottom_heading.setText(temp);
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    return true;
+                }
+            });
+
 
             init();
         }
@@ -240,9 +275,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
             MarkerOptions options= new MarkerOptions().position(latLng).title(title);
             mMap.addMarker(options);
         }
-
         hideSoftKeyboard();
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         Log.d(Tag,"onRequestPermissionResult: called");

@@ -20,10 +20,10 @@
     <string name="title_places">Places</string>
     <string name="title_packs">Packs</string>
     <string name="title_explore">Explore</string>
+    <string name="title_select">Select</string>
     <string name="menu_update_account">Account Setting</string>
     <string name="menu_delete_account">Delete Account</string>
 
-    <string name="google_maps_API_key">AIzaSyAm0quTUQfR1OHTbeLlh8oajO1Yw7E6jRw</string>
 
     <string name="err_msg_empty">This field can\'t be empty</string>
     <string name="err_msg_user_exist">User already exists</string>
@@ -42,4 +42,9 @@
     <string name="send_code">Send Code</string>
     <string name="resend_code">Resend Code</string>
 
+    <!-- String related to map -->
+    <string name="google_maps_API_key">AIzaSyAm0quTUQfR1OHTbeLlh8oajO1Yw7E6jRw</string>
+    <string name="up_vote">up</string>
+    <string name="down_vote">down</string>
+    <string name="content_bottom_sheet">android.support.design.widget.BottomSheetBehavior</string>>
 </resources>

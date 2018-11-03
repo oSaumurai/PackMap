@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottom_Sheet_Layout"
+    android:layout_width="match_parent"
+    android:layout_height="300dp"
+    android:background="@android:color/holo_orange_light"
+    android:padding="@dimen/activity_vertical_margin"
+    app:behavior_hideable="true"
+    app:behavior_peekHeight="115dp"
+    app:layout_behavior="@string/bottom_sheet_behavior">
+
+    <TextView
+        android:id="@+id/bottom_Sheet_Heading"
+        android:layout_width="230dp"
+        android:layout_height="wrap_content"
+        android:text="current location info"
+        android:textAppearance="@android:style/TextAppearance.Large" />
+    <Button
+        android:id="@+id/up_vote"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="15dp"
+        android:textSize="15sp"
+        android:text="@string/up_vote"/>
+
+    <Button
+        android:id="@+id/down_vote"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_alignStart="@+id/up_vote"
+        android:layout_marginTop="85dp"
+        android:text="@string/down_vote"
+        android:textSize="15sp" />
+</RelativeLayout>
