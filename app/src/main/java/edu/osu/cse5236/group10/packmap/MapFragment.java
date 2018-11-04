@@ -83,6 +83,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     private Address currentSelectedAddress;
     Context context;
 
+    private View v;
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
@@ -98,7 +99,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_map, container, false);
+        v = inflater.inflate(R.layout.fragment_map, container, false);
         context = this.getActivity();
         //register bottom sheet
         bottomSheetBehavior=BottomSheetBehavior.from(v.findViewById(R.id.bottom_Sheet_Layout));
@@ -303,8 +304,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     }
 
     private void hideSoftKeyboard(){
-        View view = mMapActivity.getCurrentFocus();
+        // view = this.getActivity().getCurrentFocus();
         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 }
