@@ -32,13 +32,15 @@ public class PackListActivity extends AppCompatActivity implements PackFragment.
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    mTextMessage.setText(R.string.title_packs);
                     return true;
                 case R.id.navigation_dashboard:
-                    mTextMessage.setText(R.string.title_places);
+                    FragmentManager fm = getSupportFragmentManager();
+                    FragmentTransaction transaction = fm.beginTransaction();
+                    transaction.replace(R.id.pack_list_container, new MapFragment());
+                    transaction.commit();
+                    Log.d(TAG, "triggered");
                     return true;
                 case R.id.navigation_notifications:
-                    mTextMessage.setText(R.string.title_explore);
                     return true;
             }
             return false;
@@ -72,6 +74,10 @@ public class PackListActivity extends AppCompatActivity implements PackFragment.
         }
 
         return false;
+    }
+
+    private void switchSegment(int fragmentId) {
+
     }
 
     @Override
