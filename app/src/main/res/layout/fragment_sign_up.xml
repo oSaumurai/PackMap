@@ -7,49 +7,65 @@
     android:orientation="vertical"
     tools:context=".SignUpFragment">
 
-    <TextView
-        style="?android:listSeparatorTextViewStyle"
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/sign_up_phone"/>
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/sign_up_phone_num"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <AutoCompleteTextView
+            android:id="@+id/sign_up_phone_num"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/prompt_phone"
+            android:inputType="phone"
+            android:maxLines="1"
+            android:singleLine="true" />
 
-    <TextView
-        style="?android:listSeparatorTextViewStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/sign_up_first_name"/>
+    </android.support.design.widget.TextInputLayout>
 
-    <EditText
-        android:id="@+id/sign_up_first_name"
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content">
 
-    <TextView
-        style="?android:listSeparatorTextViewStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/sign_up_last_name"/>
+        <AutoCompleteTextView
+            android:id="@+id/sign_up_first_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/sign_up_first_name"
+            android:inputType="textPersonName"
+            android:maxLines="1"
+            android:singleLine="true" />
 
-    <EditText
-        android:id="@+id/sign_up_last_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+    </android.support.design.widget.TextInputLayout>
 
-    <TextView
-        style="?android:listSeparatorTextViewStyle"
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/sign_up_password"/>
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/sign_up_password"
+        <AutoCompleteTextView
+            android:id="@+id/sign_up_last_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/sign_up_last_name"
+            android:inputType="textPersonName"
+            android:maxLines="1"
+            android:singleLine="true" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content">
+
+        <AutoCompleteTextView
+            android:id="@+id/sign_up_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/sign_up_password"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:singleLine="true" />
+
+    </android.support.design.widget.TextInputLayout>
 
     <Button
         android:id="@+id/submit_sign_up"

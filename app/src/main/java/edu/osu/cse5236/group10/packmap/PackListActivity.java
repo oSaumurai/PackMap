@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -12,20 +13,24 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
-
 import java.util.HashMap;
 import java.util.Map;
 
+import edu.osu.cse5236.group10.packmap.data.AddUserListContent;
 import edu.osu.cse5236.group10.packmap.data.PackListContent;
 import edu.osu.cse5236.group10.packmap.data.store.UserStore;
 
-public class PackListActivity extends AppCompatActivity implements PackFragment.OnListFragmentInteractionListener {
+public class PackListActivity extends AppCompatActivity implements
+        PackFragment.OnPackListFragmentInteractionListener,
+        AddToPackFragment.OnAddUserListFragmentInteractionListener {
 
     private static final String TAG = "PackListActivity";
 
     private TextView mTextMessage;
     private PackFragment mPackFragment;
+    private FloatingActionButton mAddButton;
     private String mPhoneNum;
     private int currNavigateId;
 
@@ -49,6 +54,7 @@ public class PackListActivity extends AppCompatActivity implements PackFragment.
                         transaction.replace(R.id.pack_list_container, new MapFragment());
                         transaction.commit();
                         currNavigateId = R.id.navigation_dashboard;
+                        mAddButton.hide();
                         Log.d(TAG, "triggered");
                         return true;
                     case R.id.navigation_notifications:
@@ -107,6 +113,25 @@ public class PackListActivity extends AppCompatActivity implements PackFragment.
 
         mPhoneNum = getIntent().getStringExtra("userId");
         Log.d(TAG, mPhoneNum);
+
+        // Get FAB button
+        mAddButton = findViewById(R.id.add_fab);
+        mAddButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fm = getSupportFragmentManager();
+                Fragment fragment = fm.findFragmentById(R.id.add_to_pack_layout);
+                if (fragment == null) {
+                    fragment = new AddToPackFragment();
+                }
+                mAddButton.hide();
+                fm.beginTransaction()
+                            .replace(R.id.pack_list_container, fragment)
+                            .commit();
+
+            }
+        });
+
         // Add bottom navigation bar
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -124,8 +149,17 @@ public class PackListActivity extends AppCompatActivity implements PackFragment.
         }
     }
 
+    public FloatingActionButton getAddButton() {
+        return mAddButton;
+    }
+
     @Override
     public void onListFragmentInteraction(PackListContent.PackItem item) {
+
+    }
+
+    @Override
+    public void onListFragmentInteraction(AddUserListContent.AddUserItem item) {
 
     }
 }

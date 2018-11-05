@@ -1,8 +1,6 @@
 package edu.osu.cse5236.group10.packmap;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 
 import android.os.Handler;
@@ -14,18 +12,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.annimon.stream.Stream;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -42,7 +34,7 @@ import edu.osu.cse5236.group10.packmap.data.store.UserStore;
 /**
  * A fragment representing a list of Items.
  * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
+ * Activities containing this fragment MUST implement the {@link OnPackListFragmentInteractionListener}
  * interface.
  */
 public class PackFragment extends Fragment {
@@ -53,10 +45,10 @@ public class PackFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
-    private OnListFragmentInteractionListener mListener;
+    private OnPackListFragmentInteractionListener mListener;
     private GroupStore mGroupStore;
     private RecyclerView mRecyclerView;
-    private Activity packActivity;
+    private PackListActivity packActivity;
     private String mPhoneNum;
 
     private UserStore userStore;
@@ -85,9 +77,9 @@ public class PackFragment extends Fragment {
         Log.d(TAG, "onCreate() called");
 
         setHasOptionsMenu(true);
-        packActivity = getActivity();
-
-        mPhoneNum = getActivity().getIntent().getStringExtra("userId");
+        packActivity = (PackListActivity) getActivity();
+        packActivity.getAddButton().show();
+        mPhoneNum = packActivity.getIntent().getStringExtra("userId");
 
         userStore = UserStore.getInstance();
 
@@ -129,20 +121,17 @@ public class PackFragment extends Fragment {
                     Group group = DataUtils.getObject(document, Group.class);
                     groups.add(group);
                 }
-                List<PackItem> temp = new ArrayList<>(PackListContent.ITEMS);
                 PackListContent.ITEMS.clear();
                 Stream.of(groups)
                         .map(Group::getName)
                         .mapIndexed(PackListContent::createPackItem)
                         .forEach(PackListContent::addItem);
-                PackListContent.ITEMS.addAll(temp);
                 Log.d(TAG, "Size of items: " + PackListContent.ITEMS.size());
                 Log.d(TAG, "Last item: " + PackListContent.ITEMS.get(PackListContent.ITEMS.size() - 1));
                 PackRecyclerViewAdapter viewAdapter = new PackRecyclerViewAdapter(PackListContent.ITEMS, mListener);
                 // notifyDataSetChanged() must run in the main thread
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     public void run() {
-                        viewAdapter.notifyDataSetChanged();
                         mRecyclerView.setAdapter(viewAdapter);
                     }
                 });
@@ -159,11 +148,11 @@ public class PackFragment extends Fragment {
 
         Log.d(TAG,  "onAttach() called");
 
-        if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
+        if (context instanceof OnPackListFragmentInteractionListener) {
+            mListener = (OnPackListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
+                    + " must implement OnPackListFragmentInteractionListener");
         }
     }
 
@@ -188,7 +177,7 @@ public class PackFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnListFragmentInteractionListener {
+    public interface OnPackListFragmentInteractionListener {
         // TODO: Update argument type and name
         void onListFragmentInteraction(PackItem item);
     }

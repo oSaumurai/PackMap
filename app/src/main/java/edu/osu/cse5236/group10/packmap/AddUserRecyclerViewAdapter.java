@@ -6,36 +6,37 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import edu.osu.cse5236.group10.packmap.PackFragment.OnPackListFragmentInteractionListener;
-import edu.osu.cse5236.group10.packmap.data.PackListContent.PackItem;
-
 import java.util.List;
+
+import edu.osu.cse5236.group10.packmap.PackFragment.OnPackListFragmentInteractionListener;
+import edu.osu.cse5236.group10.packmap.data.AddUserListContent;
+import edu.osu.cse5236.group10.packmap.data.PackListContent.PackItem;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link PackItem} and makes a call to the
- * specified {@link PackFragment.OnPackListFragmentInteractionListener}.
+ * specified {@link OnPackListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class PackRecyclerViewAdapter extends RecyclerView.Adapter<PackRecyclerViewAdapter.ViewHolder> {
+public class AddUserRecyclerViewAdapter extends RecyclerView.Adapter<AddUserRecyclerViewAdapter.AddUserViewHolder> {
 
     private static final String TAG = "PackRecyclerViewAdapter";
-    private final List<PackItem> mValues;
-    private final OnPackListFragmentInteractionListener mListener;
+    private final List<AddUserListContent.AddUserItem> mValues;
+    private final AddToPackFragment.OnAddUserListFragmentInteractionListener mListener;
 
-    public PackRecyclerViewAdapter(List<PackItem> items, OnPackListFragmentInteractionListener listener) {
+    public AddUserRecyclerViewAdapter(List<AddUserListContent.AddUserItem> items, AddToPackFragment.OnAddUserListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public AddUserViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_list_item, parent, false);
-        return new ViewHolder(view);
+        return new AddUserViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final AddUserViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mIdView.setText(mValues.get(position).id);
         holder.mContentView.setText(mValues.get(position).content);
@@ -57,13 +58,13 @@ public class PackRecyclerViewAdapter extends RecyclerView.Adapter<PackRecyclerVi
         return mValues.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class AddUserViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public PackItem mItem;
+        public AddUserListContent.AddUserItem mItem;
 
-        public ViewHolder(View view) {
+        public AddUserViewHolder(View view) {
             super(view);
             mView = view;
             mIdView = (TextView) view.findViewById(R.id.item_number);

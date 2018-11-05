@@ -12,37 +12,37 @@ import java.util.Map;
  * <p>
  * TODO: Replace all uses of this class before publishing your app.
  */
-public class PackListContent {
+public class AddUserListContent {
 
-    private static final String TAG = "PackListContent";
+    private static final String TAG = "AddUserListContent";
 
     /**
      * An array of sample (dummy) items.
      */
-    public static final List<PackItem> ITEMS = new ArrayList<PackItem>();
+    public static final List<AddUserItem> ITEMS = new ArrayList<AddUserItem>();
 
     /**
      * A map of sample (dummy) items, by ID.
      */
-    public static final Map<String, PackItem> ITEM_MAP = new HashMap<String, PackItem>();
+    public static final Map<String, AddUserItem> ITEM_MAP = new HashMap<String, AddUserItem>();
 
-    public static void addItem(PackItem item) {
+    public static void addItem(AddUserItem item) {
         ITEMS.add(item);
         ITEM_MAP.put(item.id, item);
     }
 
-    public static PackItem createPackItem(int position, String group) {
-        return new PackItem(String.valueOf(position), group);
+    public static AddUserItem createAddUserItem(int position, String group) {
+        return new AddUserItem(String.valueOf(position), group);
     }
 
     /**
      * A dummy item representing a piece of content.
      */
-    public static class PackItem {
+    public static class AddUserItem {
         public final String id;
         public final String content;
 
-        public PackItem(String id, String content) {
+        public AddUserItem(String id, String content) {
             this.id = id;
             this.content = content;
         }

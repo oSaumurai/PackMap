@@ -47,7 +47,7 @@ public class UserStore extends AbstractStore {
     }
 
     public void updateUserName(String uid, String newFirstName, String newLastName) {
-        DocumentReference dr = db.collection("users").document(uid);
+        DocumentReference dr = db.collection(COLLECTION).document(uid);
         dr.update("firstName", newFirstName);
         dr.update("lastName", newLastName);
     }
