@@ -9,4 +9,4 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     tools:context=".PackFragment"
-    tools:listitem="@layout/fragment_pack" />
+    tools:listitem="@layout/fragment_list_item" />
