@@ -3,8 +3,13 @@ package edu.osu.cse5236.group10.packmap.data.store;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
+
+import java.util.List;
+import java.util.Map;
 
 import edu.osu.cse5236.group10.packmap.SignUpFragment;
 import edu.osu.cse5236.group10.packmap.data.model.User;
@@ -45,6 +50,12 @@ public class UserStore extends AbstractStore {
         DocumentReference dr = db.collection("users").document(uid);
         dr.update("firstName", newFirstName);
         dr.update("lastName", newLastName);
+    }
+
+    public void addGroup(String uid, String groupId) {
+        DocumentReference dr = db.collection("users").document(uid);
+
+        dr.update("groups", FieldValue.arrayUnion(groupId));
     }
 
     public void deleteUserById(String userId) {

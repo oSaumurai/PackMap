@@ -2,12 +2,16 @@ package edu.osu.cse5236.group10.packmap.data.model;
 
 import com.google.firebase.firestore.Exclude;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class User extends BaseDocument {
 
     private String phone;
     private String lastName;
     private String firstName;
     private String password;
+    private List<String> groups;
 
     public User(String phone) {
         this.phone = phone;
@@ -18,6 +22,7 @@ public class User extends BaseDocument {
         this.lastName = lastName;
         this.firstName = firstName;
         this.password = password;
+        this.groups = new ArrayList<>();
     }
 
     public String getPhone() {
@@ -36,6 +41,8 @@ public class User extends BaseDocument {
         return password;
     }
 
+    public List<String> getGroups() { return groups; }
+
     public void setPhone(String phone) {
         this.phone = phone;
     }
@@ -52,6 +59,7 @@ public class User extends BaseDocument {
         this.password = password;
     }
 
+    public void setGroups(List<String> groups) { this.groups = groups; }
     /*
      * Added the methods below to make this work better with AbstractStore methods better
      */

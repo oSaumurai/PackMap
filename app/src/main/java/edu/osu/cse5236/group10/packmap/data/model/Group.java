@@ -1,5 +1,6 @@
 package edu.osu.cse5236.group10.packmap.data.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Group extends BaseDocument {
@@ -8,7 +9,10 @@ public class Group extends BaseDocument {
     private List<String> activityList;
     private List<String> userList;
 
-    public Group() { }
+    public Group() {
+        userList = new ArrayList<>();
+        activityList = new ArrayList<>();
+    }
 
     public Group(String name, List<String> activityList, List<String> userList) {
         this.name = name;

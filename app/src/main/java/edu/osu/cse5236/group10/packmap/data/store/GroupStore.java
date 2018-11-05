@@ -32,6 +32,15 @@ public class GroupStore extends AbstractStore {
         addDocument(dummy);
     }
 
+    public void addGroup(String group, String userId) {
+        Group dummy = new Group();
+        dummy.setName(group);
+        dummy.getUserList().add(userId);
+        addDocument(dummy, task -> {
+            UserStore.getInstance().addGroup(userId, task.getId());
+        }, getOnFailureListener());
+    }
+
     public void getGroups(OnCompleteListener<QuerySnapshot> listener) {
         getAllDocuments(listener);
     }

@@ -70,9 +70,16 @@ public class PackListActivity extends AppCompatActivity implements PackFragment.
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        Intent intent;
+
         switch (id) {
+            case R.id.create_group:
+                intent = new Intent(this, CreateGroupActivity.class);
+                intent.putExtra("userId", mPhoneNum);
+                startActivity(intent);
+                return true;
             case R.id.modify_account:
-                Intent intent = new Intent(this, AccountSettingActivity.class);
+                intent = new Intent(this, AccountSettingActivity.class);
                 intent.putExtra("userId", mPhoneNum);
 
                 Log.d(TAG, "Sending: " + mPhoneNum);
