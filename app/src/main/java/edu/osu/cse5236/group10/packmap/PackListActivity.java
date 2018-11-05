@@ -15,8 +15,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import java.util.HashMap;
-import java.util.Map;
 
 import edu.osu.cse5236.group10.packmap.data.AddUserListContent;
 import edu.osu.cse5236.group10.packmap.data.PackListContent;
@@ -45,20 +43,20 @@ public class PackListActivity extends AppCompatActivity implements
 
             if (id != currNavigateId)
                 switch (id) {
-                    case R.id.navigation_home:
+                    case R.id.navigation_packs:
                         transaction.replace(R.id.pack_list_container, new PackFragment());
                         transaction.commit();
-                        currNavigateId = R.id.navigation_home;
+                        currNavigateId = R.id.navigation_packs;
                         return true;
-                    case R.id.navigation_dashboard:
+                    case R.id.navigation_places:
                         transaction.replace(R.id.pack_list_container, new MapFragment());
                         transaction.commit();
-                        currNavigateId = R.id.navigation_dashboard;
+                        currNavigateId = R.id.navigation_places;
                         mAddButton.hide();
                         Log.d(TAG, "triggered");
                         return true;
-                    case R.id.navigation_notifications:
-                        currNavigateId = R.id.navigation_notifications;
+                    case R.id.navigation_explore:
+                        currNavigateId = R.id.navigation_explore;
                         return true;
                 }
                 return false;
@@ -79,11 +77,6 @@ public class PackListActivity extends AppCompatActivity implements
         Intent intent;
 
         switch (id) {
-            case R.id.create_group:
-                intent = new Intent(this, CreateGroupActivity.class);
-                intent.putExtra("userId", mPhoneNum);
-                startActivity(intent);
-                return true;
             case R.id.modify_account:
                 intent = new Intent(this, AccountSettingActivity.class);
                 intent.putExtra("userId", mPhoneNum);
@@ -115,20 +108,24 @@ public class PackListActivity extends AppCompatActivity implements
         Log.d(TAG, mPhoneNum);
 
         // Get FAB button
+        PackListActivity thisActivity = this;
         mAddButton = findViewById(R.id.add_fab);
         mAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentManager fm = getSupportFragmentManager();
-                Fragment fragment = fm.findFragmentById(R.id.add_to_pack_layout);
-                if (fragment == null) {
-                    fragment = new AddToPackFragment();
-                }
                 mAddButton.hide();
-                fm.beginTransaction()
-                            .replace(R.id.pack_list_container, fragment)
-                            .commit();
-
+                // To be implemented later
+//                FragmentManager fm = getSupportFragmentManager();
+//                Fragment fragment = fm.findFragmentById(R.id.add_to_pack_layout);
+//                if (fragment == null) {
+//                    fragment = new AddToPackFragment();
+//                }
+//                fm.beginTransaction()
+//                            .replace(R.id.pack_list_container, fragment)
+//                            .commit();
+                Intent intent = new Intent(thisActivity, CreateGroupActivity.class);
+                intent.putExtra("userId", mPhoneNum);
+                startActivity(intent);
             }
         });
 
@@ -140,12 +137,38 @@ public class PackListActivity extends AppCompatActivity implements
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.pack_list_container);
 
-        currNavigateId = R.id.navigation_home;
+        currNavigateId = R.id.navigation_packs;
 
         if (fragment == null) {
             fm.beginTransaction()
                     .add(R.id.pack_list_container, new PackFragment())
                     .commit();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction transaction = fm.beginTransaction();
+        switch (currNavigateId) {
+            case R.id.navigation_packs:
+                transaction.replace(R.id.pack_list_container, new PackFragment());
+                transaction.commit();
+                mAddButton.show();
+                currNavigateId = R.id.navigation_packs;
+                break;
+            case R.id.navigation_places:
+                transaction.replace(R.id.pack_list_container, new MapFragment());
+                transaction.commit();
+                currNavigateId = R.id.navigation_places;
+                mAddButton.hide();
+                Log.d(TAG, "triggered");
+                break;
+            case R.id.navigation_explore:
+                currNavigateId = R.id.navigation_explore;
+                mAddButton.hide();
+                break;
         }
     }
 
