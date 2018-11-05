@@ -14,6 +14,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import edu.osu.cse5236.group10.packmap.data.PackListContent;
 import edu.osu.cse5236.group10.packmap.data.store.UserStore;
 
@@ -24,27 +27,36 @@ public class PackListActivity extends AppCompatActivity implements PackFragment.
     private TextView mTextMessage;
     private PackFragment mPackFragment;
     private String mPhoneNum;
+    private int currNavigateId;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    return true;
-                case R.id.navigation_dashboard:
-                    FragmentManager fm = getSupportFragmentManager();
-                    FragmentTransaction transaction = fm.beginTransaction();
-                    transaction.replace(R.id.pack_list_container, new MapFragment());
-                    transaction.commit();
-                    Log.d(TAG, "triggered");
-                    return true;
-                case R.id.navigation_notifications:
-                    return true;
+            int id = item.getItemId();
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction transaction = fm.beginTransaction();
+
+            if (id != currNavigateId)
+                switch (id) {
+                    case R.id.navigation_home:
+                        transaction.replace(R.id.pack_list_container, new PackFragment());
+                        transaction.commit();
+                        currNavigateId = R.id.navigation_home;
+                        return true;
+                    case R.id.navigation_dashboard:
+                        transaction.replace(R.id.pack_list_container, new MapFragment());
+                        transaction.commit();
+                        currNavigateId = R.id.navigation_dashboard;
+                        Log.d(TAG, "triggered");
+                        return true;
+                    case R.id.navigation_notifications:
+                        currNavigateId = R.id.navigation_notifications;
+                        return true;
+                }
+                return false;
             }
-            return false;
-        }
     };
 
     @Override
@@ -76,10 +88,6 @@ public class PackListActivity extends AppCompatActivity implements PackFragment.
         return false;
     }
 
-    private void switchSegment(int fragmentId) {
-
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,7 +99,7 @@ public class PackListActivity extends AppCompatActivity implements PackFragment.
         mTextMessage = findViewById(R.id.message);
 
         mPhoneNum = getIntent().getStringExtra("userId");
-
+        Log.d(TAG, mPhoneNum);
         // Add bottom navigation bar
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -100,11 +108,11 @@ public class PackListActivity extends AppCompatActivity implements PackFragment.
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.pack_list_container);
 
-        if (fragment == null) {
-            fragment = new PackFragment();
+        currNavigateId = R.id.navigation_home;
 
+        if (fragment == null) {
             fm.beginTransaction()
-                    .add(R.id.pack_list_container, fragment)
+                    .add(R.id.pack_list_container, new PackFragment())
                     .commit();
         }
     }
