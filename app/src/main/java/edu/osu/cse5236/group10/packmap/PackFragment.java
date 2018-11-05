@@ -105,7 +105,7 @@ public class PackFragment extends Fragment {
                 mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
             mGroupStore = GroupStore.getInstance();
-            mGroupStore.getGroups(new GetGroupsOnCompleteListener());
+            mGroupStore.getGroupsByUserId(mPhoneNum, new GetGroupsOnCompleteListener());
             mRecyclerView.setAdapter(new PackRecyclerViewAdapter(PackListContent.ITEMS, mListener));
         }
         return view;

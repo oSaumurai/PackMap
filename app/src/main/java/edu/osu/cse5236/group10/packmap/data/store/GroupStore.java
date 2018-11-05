@@ -41,8 +41,12 @@ public class GroupStore extends AbstractStore {
         }, getOnFailureListener());
     }
 
-    public void getGroups(OnCompleteListener<QuerySnapshot> listener) {
-        getAllDocuments(listener);
+    public void getGroupsByUserId(String userPhoneNumber,
+                                  OnCompleteListener<QuerySnapshot> listener) {
+        db.collection(COLLECTION)
+                .whereArrayContains("userList", userPhoneNumber)
+                .get()
+                .addOnCompleteListener(listener);
     }
 
     @Override
