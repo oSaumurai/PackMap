@@ -7,16 +7,20 @@
     android:orientation="vertical"
     tools:context=".CreateGroupActivity">
 
-    <TextView
-        style="?android:listSeparatorTextViewStyle"
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/group_name"/>
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/group_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <AutoCompleteTextView
+            android:id="@+id/group_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/group_name"
+            android:inputType="text"
+            android:maxLines="1"
+            android:singleLine="true" />
+
+    </android.support.design.widget.TextInputLayout>
 
     <Button
         android:id="@+id/submit_group"
