@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.app.Activity;
 
+import com.annimon.stream.Stream;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -48,19 +49,28 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PointOfInterest;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.osu.cse5236.group10.packmap.data.DataUtils;
+import edu.osu.cse5236.group10.packmap.data.model.ActivityInfo;
 import edu.osu.cse5236.group10.packmap.data.model.Group;
+import edu.osu.cse5236.group10.packmap.data.model.LocationInfo;
+import edu.osu.cse5236.group10.packmap.data.store.ActivityStore;
 import edu.osu.cse5236.group10.packmap.data.store.GroupStore;
 
 
 public class MapFragment extends Fragment implements OnMapReadyCallback,
- GoogleApiClient.OnConnectionFailedListener{
+        GoogleApiClient.OnConnectionFailedListener{
 
     private static final String Tag= "MapsFragment";
     private static final String FINE_LOCATION= Manifest.permission.ACCESS_FINE_LOCATION;
@@ -81,6 +91,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     private PlaceAutoCompleteAdapter mPlaceAutoCompleteAdapter;
     private GeoDataClient mGeoDataClient;
     private Address currentSelectedAddress;
+    private ActivityStore mActivityStore;
+    private ActivityInfo mActivityInfo;
+    private LocationInfo mLocationInfo;
     Context context;
 
     private View v;
@@ -101,6 +114,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_map, container, false);
         context = this.getActivity();
+        //firebase
+        mActivityStore=ActivityStore.getInstance();
+        //TODO might need change
+        mActivityInfo=new ActivityInfo();
+        mLocationInfo=new LocationInfo();
         //register bottom sheet
         bottomSheetBehavior=BottomSheetBehavior.from(v.findViewById(R.id.bottom_Sheet_Layout));
         bottom_heading=v.findViewById(R.id.bottom_Sheet_Heading);
@@ -183,6 +201,38 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
             }
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
+
+            mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                @Override
+                public void onMapClick(LatLng latLng) {
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                }
+            });
+
+            mMap.setOnPoiClickListener(new GoogleMap.OnPoiClickListener() {
+                @Override
+                public void onPoiClick(PointOfInterest poi) {
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    String info=poi.name+"\nLatitude"+poi.latLng.latitude+"\nLongtitude"+poi.latLng.longitude;
+                    bottom_heading.setText(info);
+                    mLocationInfo.setName(poi.name);
+                    mLocationInfo.setCoordinates(new GeoPoint(poi.latLng.latitude,poi.latLng.longitude));
+                    //add new Activity
+                    //mLocationInfo.s
+                    /*List<LocationInfo> locationList=new ArrayList<>();
+                    locationList.add(mLocationInfo);
+                    mActivityInfo.setName("ccc");
+                    mActivityInfo.setInfo("1232143");
+                    mActivityInfo.setSelectedLocations(locationList);
+                    addActivity(mActivityInfo);*/
+
+                    //add new location
+                    //addPositionToActivity("ccc",mLocationInfo);
+                    addNewLocationToCurrentActivity();
+
+                }
+            });
+
             //init and send data to BottomView
             upVoteButtom.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -308,4 +358,64 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
+    ////////// Down here is for database test/////////////
+    public class AddNewActitivityOnCompleteListener implements OnCompleteListener<DocumentSnapshot> {
+        private ActivityInfo activity;
+
+        private AddNewActitivityOnCompleteListener(ActivityInfo newActivity) {
+            this.activity = newActivity;
+        }
+
+        @Override
+        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    Log.d(Tag, "User already exists");
+                    //mPhoneNum.setError(getString(R.string.err_msg_user_exist));
+                } else {
+                    mActivityStore.setNewActivity(
+                            activity,
+                            aVoid -> {
+                                Log.d(Tag, "DocumentSnapshot successfully written!");
+                                //mSignUp.finish();
+                            },
+                            e -> Log.w(Tag, "Error writing document", e));
+                }
+            } else {
+                Log.d(Tag, "get failed with ", task.getException());
+            }
+        }
+    }
+
+    private void addPositionToActivity(String activityName, LocationInfo newLocation){
+        ActivityStore.getInstance().getActivityById("ccc", new GetActivityOnCompleteListener());
+        List<LocationInfo> mLocaitonInfo=mActivityInfo.getSelectedLocations();
+        Log.d(Tag, "addPositionToActivity: "+ mLocaitonInfo);
+        mLocaitonInfo.add(newLocation);
+
+
+    }
+
+    public class GetActivityOnCompleteListener implements OnCompleteListener<QuerySnapshot> {
+        @Override
+        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    Log.d(Tag, document.getId() + " => " + document.getData());
+                    mActivityInfo = DataUtils.getObject(document, ActivityInfo.class);
+                }
+            }
+        }
+    }
+
+    private void addNewLocationToCurrentActivity(){
+        mActivityStore.addLocation("ccc", mLocationInfo);
+    }
+
+    private void addActivity(ActivityInfo newActivity){
+        mActivityStore.checkThenAddNewActivity(newActivity,new AddNewActitivityOnCompleteListener(newActivity));
+    }
+
+
 }

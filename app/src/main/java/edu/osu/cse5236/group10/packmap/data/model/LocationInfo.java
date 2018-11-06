@@ -1,10 +1,13 @@
 package edu.osu.cse5236.group10.packmap.data.model;
 
+import android.location.Location;
+
 import com.google.firebase.firestore.GeoPoint;
 
+import java.util.HashMap;
 import java.util.Map;
 
-public class Location extends BaseDocument {
+public class LocationInfo extends BaseDocument {
 
     private GeoPoint coordinates;
     private String name;
@@ -12,13 +15,18 @@ public class Location extends BaseDocument {
     private Map<String, String> upvotes;
     private Map<String, String> downvotes;
 
-    public Location(GeoPoint coordinates, String name, Map<String, String> upvotes, Map<String, String> downvotes) {
+    public LocationInfo (){
+        this.coordinates = new GeoPoint(40,-82);
+        this.name = "";
+        this.upvotes = new HashMap<>();
+        this.downvotes = new HashMap<>();;
+    }
+    public LocationInfo(GeoPoint coordinates, String name, Map<String, String> upvotes, Map<String, String> downvotes) {
         this.coordinates = coordinates;
         this.name = name;
         this.upvotes = upvotes;
         this.downvotes = downvotes;
     }
-
     public GeoPoint getCoordinates() {
         return coordinates;
     }

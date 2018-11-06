@@ -1,17 +1,25 @@
 package edu.osu.cse5236.group10.packmap.data.model;
 
+import com.google.firebase.firestore.Exclude;
+
+import java.util.ArrayList;
 import java.util.List;
 
-public class Activity extends BaseDocument {
+public class ActivityInfo extends BaseDocument {
 
     private String name;
     private String info;
     private boolean isActive;
-    private List<Location> selectedLocations;
+    private List<LocationInfo> selectedLocations;
 
-    public Activity() {}
+    public ActivityInfo() {
+        name="";
+        info="";
+        isActive=false;
+        selectedLocations=new ArrayList<>();
+    }
 
-    public Activity(String name, String info, boolean isActive, List<Location> selectedLocations) {
+    public ActivityInfo(String name, String info, boolean isActive, List<LocationInfo> selectedLocations) {
         this.name = name;
         this.info = info;
         this.isActive = isActive;
@@ -42,11 +50,22 @@ public class Activity extends BaseDocument {
         isActive = active;
     }
 
-    public List<Location> getSelectedLocations() {
+    public List<LocationInfo> getSelectedLocations() {
         return selectedLocations;
     }
 
-    public void setSelectedLocations(List<Location> selectedLocations) {
+    public void setSelectedLocations(List<LocationInfo> selectedLocations) {
         this.selectedLocations = selectedLocations;
+    }
+
+    @Override
+    @Exclude
+    public String getDocumentId() {
+        return getName();
+    }
+
+    @Override
+    public void setDocumentId(String documentId) {
+        setName(documentId);
     }
 }
