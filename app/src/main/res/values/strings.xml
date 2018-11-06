@@ -54,6 +54,6 @@
     <!-- Creating new group -->
     <string name="add_phone_numbers">Add Users by Phone Number</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>>
+    <string name="navigation_pack_activities">Activities</string>
+    <string name="navigation_pack_members">Members</string>
 </resources>

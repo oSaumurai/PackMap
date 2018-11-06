@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_pack_activities"
+        android:icon="@drawable/ic_people_black_24dp"
+        android:title="@string/navigation_pack_activities" />
+
+    <item
+        android:id="@+id/navigation_pack_members"
+        android:icon="@drawable/ic_star_black_24dp"
+        android:title="@string/navigation_pack_members" />
+
+</menu>
