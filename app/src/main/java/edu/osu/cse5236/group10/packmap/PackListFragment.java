@@ -116,11 +116,13 @@ public class PackListFragment extends Fragment {
         public void onComplete(@NonNull Task<QuerySnapshot> task) {
             if (task.isSuccessful()) {
                 PackListContent.clear();
-                for (QueryDocumentSnapshot document : task.getResult()) {
-                    Log.d(TAG, document.getId() + " => " + document.getData());
-                    Group group = DataUtils.getObject(document, Group.class);
-                    PackListContent.addItemWithIndex("" + document.getId(), group.getName());
-                }
+//                for (QueryDocumentSnapshot document : task.getResult()) {
+//                    Log.d(TAG, document.getId() + " => " + document.getData());
+//                    Group group = DataUtils.getObject(document, Group.class);
+//                    PackListContent.addItemWithIndex("" + document.getId(), group.getName());
+//                }
+                Stream.of(DataUtils.getObjectList(task.getResult(), Group.class))
+                        .forEach(PackListContent::addItemWithIndex);
 
                 Log.d(TAG, "Size of items: " + PackListContent.ITEMS.size());
                 Log.d(TAG, "Last item: " + PackListContent.ITEMS.get(PackListContent.ITEMS.size() - 1));

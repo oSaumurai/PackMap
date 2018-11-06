@@ -180,7 +180,7 @@ public class PackListActivity extends AppCompatActivity implements
     public void onListFragmentInteraction(PackListContent.PackItem item) {
         Intent intent = new Intent(this, PackActivity.class);
         intent.putExtra("userId", mPhoneNum);
-        intent.putExtra("groupId", item.groupId);
+        intent.putExtra("groupId", item.group.getDocumentId());
         startActivity(intent);
     }
 
