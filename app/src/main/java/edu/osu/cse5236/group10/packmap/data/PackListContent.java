@@ -43,6 +43,11 @@ public class PackListContent {
         ITEM_MAP.put(temp.id, temp);
     }
 
+    public static void clear() {
+        ITEMS.clear();
+        count = 0;
+    }
+
     /**
      * A dummy item representing a piece of content.
      */
