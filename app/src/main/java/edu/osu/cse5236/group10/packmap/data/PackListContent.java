@@ -16,6 +16,8 @@ public class PackListContent {
 
     private static final String TAG = "PackListContent";
 
+    private static int count = 0;
+
     /**
      * An array of sample (dummy) items.
      */
@@ -31,8 +33,14 @@ public class PackListContent {
         ITEM_MAP.put(item.id, item);
     }
 
-    public static PackItem createPackItem(int position, String group) {
-        return new PackItem(String.valueOf(position), group);
+    public static PackItem createPackItem(int position, String groupId, String group) {
+        return new PackItem(String.valueOf(position), groupId, group);
+    }
+
+    public static void addItemWithIndex(String groupId, String group) {
+        PackItem temp = new PackItem(String.valueOf(count++), groupId, group);
+        ITEMS.add(temp);
+        ITEM_MAP.put(temp.id, temp);
     }
 
     /**
@@ -41,10 +49,12 @@ public class PackListContent {
     public static class PackItem {
         public final String id;
         public final String content;
+        public final String groupId;
 
-        public PackItem(String id, String content) {
+        public PackItem(String id, String groupId, String content) {
             this.id = id;
             this.content = content;
+            this.groupId = groupId;
         }
 
         @Override

@@ -115,17 +115,13 @@ public class PackListFragment extends Fragment {
         @Override
         public void onComplete(@NonNull Task<QuerySnapshot> task) {
             if (task.isSuccessful()) {
-                List<Group> groups = new ArrayList<>();
+                PackListContent.ITEMS.clear();
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     Log.d(TAG, document.getId() + " => " + document.getData());
                     Group group = DataUtils.getObject(document, Group.class);
-                    groups.add(group);
+                    PackListContent.addItemWithIndex("" + document.getId(), group.getName());
                 }
-                PackListContent.ITEMS.clear();
-                Stream.of(groups)
-                        .map(Group::getName)
-                        .mapIndexed(PackListContent::createPackItem)
-                        .forEach(PackListContent::addItem);
+
                 Log.d(TAG, "Size of items: " + PackListContent.ITEMS.size());
                 Log.d(TAG, "Last item: " + PackListContent.ITEMS.get(PackListContent.ITEMS.size() - 1));
                 PackRecyclerViewAdapter viewAdapter = new PackRecyclerViewAdapter(PackListContent.ITEMS, mListener);
