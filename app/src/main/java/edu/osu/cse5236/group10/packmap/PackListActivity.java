@@ -21,13 +21,13 @@ import edu.osu.cse5236.group10.packmap.data.PackListContent;
 import edu.osu.cse5236.group10.packmap.data.store.UserStore;
 
 public class PackListActivity extends AppCompatActivity implements
-        PackFragment.OnPackListFragmentInteractionListener,
+        PackListFragment.OnPackListFragmentInteractionListener,
         AddToPackFragment.OnAddUserListFragmentInteractionListener {
 
     private static final String TAG = "PackListActivity";
 
     private TextView mTextMessage;
-    private PackFragment mPackFragment;
+    private PackListFragment mPackListFragment;
     private FloatingActionButton mAddButton;
     private String mPhoneNum;
     private int currNavigateId;
@@ -44,7 +44,7 @@ public class PackListActivity extends AppCompatActivity implements
             if (id != currNavigateId)
                 switch (id) {
                     case R.id.navigation_packs:
-                        transaction.replace(R.id.pack_list_container, new PackFragment());
+                        transaction.replace(R.id.pack_list_container, new PackListFragment());
                         transaction.commit();
                         currNavigateId = R.id.navigation_packs;
                         return true;
@@ -141,7 +141,7 @@ public class PackListActivity extends AppCompatActivity implements
 
         if (fragment == null) {
             fm.beginTransaction()
-                    .add(R.id.pack_list_container, new PackFragment())
+                    .add(R.id.pack_list_container, new PackListFragment())
                     .commit();
         }
     }
@@ -153,7 +153,7 @@ public class PackListActivity extends AppCompatActivity implements
         FragmentTransaction transaction = fm.beginTransaction();
         switch (currNavigateId) {
             case R.id.navigation_packs:
-                transaction.replace(R.id.pack_list_container, new PackFragment());
+                transaction.replace(R.id.pack_list_container, new PackListFragment());
                 transaction.commit();
                 mAddButton.show();
                 currNavigateId = R.id.navigation_packs;
@@ -178,7 +178,8 @@ public class PackListActivity extends AppCompatActivity implements
 
     @Override
     public void onListFragmentInteraction(PackListContent.PackItem item) {
-
+        Intent intent = new Intent(this, PackActivity.class);
+        startActivity(intent);
     }
 
     @Override

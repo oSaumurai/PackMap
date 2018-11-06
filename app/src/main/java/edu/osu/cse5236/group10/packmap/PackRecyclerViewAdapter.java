@@ -6,14 +6,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import edu.osu.cse5236.group10.packmap.PackFragment.OnPackListFragmentInteractionListener;
+import edu.osu.cse5236.group10.packmap.PackListFragment.OnPackListFragmentInteractionListener;
 import edu.osu.cse5236.group10.packmap.data.PackListContent.PackItem;
 
 import java.util.List;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link PackItem} and makes a call to the
- * specified {@link PackFragment.OnPackListFragmentInteractionListener}.
+ * specified {@link PackListFragment.OnPackListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
 public class PackRecyclerViewAdapter extends RecyclerView.Adapter<PackRecyclerViewAdapter.ViewHolder> {

@@ -48,7 +48,8 @@
             android:name=".PhoneAuthActivity"
             android:label="@string/title_activity_phone_auth" />
         <activity android:name=".AccountSettingActivity" />
-        <activity android:name=".CreateGroupActivity"></activity>
+        <activity android:name=".CreateGroupActivity" />
+        <activity android:name=".PackActivity"></activity>
     </application>
 
 </manifest>

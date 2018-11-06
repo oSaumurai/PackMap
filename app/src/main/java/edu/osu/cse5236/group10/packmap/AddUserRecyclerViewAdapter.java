@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import edu.osu.cse5236.group10.packmap.PackFragment.OnPackListFragmentInteractionListener;
+import edu.osu.cse5236.group10.packmap.PackListFragment.OnPackListFragmentInteractionListener;
 import edu.osu.cse5236.group10.packmap.data.AddUserListContent;
 import edu.osu.cse5236.group10.packmap.data.PackListContent.PackItem;
 
