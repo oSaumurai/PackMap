@@ -34,11 +34,9 @@ public class GroupStore extends AbstractStore {
         dummy.setName(group);
         addDocument(dummy);
     }
-    public void addActivity(String name, String uid){
-
-
-
-
+    public void addActivity(String groupUid, String activityUid){
+        DocumentReference dr = db.collection("groups").document(groupUid);
+        dr.update("activityList", FieldValue.arrayUnion(activityUid));
     }
 
     public void addGroup(Group group, String userId) {

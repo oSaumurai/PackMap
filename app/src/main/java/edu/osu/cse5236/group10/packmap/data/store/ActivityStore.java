@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.osu.cse5236.group10.packmap.MapFragment;
+import edu.osu.cse5236.group10.packmap.PackFragment;
 import edu.osu.cse5236.group10.packmap.data.model.ActivityInfo;
 import edu.osu.cse5236.group10.packmap.data.model.LocationInfo;
 
@@ -69,7 +70,7 @@ public class ActivityStore extends AbstractStore {
 
 
     public void checkThenAddNewActivity(ActivityInfo newActivity,
-                                        MapFragment.AddNewActitivityOnCompleteListener onCompleteListener) {
+                                        PackFragment.AddNewActitivityOnCompleteListener onCompleteListener) {
         getDocument(newActivity, onCompleteListener, getOnFailureListener());
     }
 
@@ -78,13 +79,12 @@ public class ActivityStore extends AbstractStore {
         setDocument(newActivity, onSuccessListener, onFailureListener);
     }
 
-    public void addNewActivity(String newActivity, LocationInfo locationInfo,String userId) {
+    public void addNewActivity(String newActivity, String groupUID) {
         List<LocationInfo> list=new ArrayList<>();
-        list.add(locationInfo);
-        ActivityInfo newAct=new ActivityInfo(newActivity,"nfwqhfuierhoafuierhwquiofnhewqui",false,list);
+        ActivityInfo newAct=new ActivityInfo(newActivity,"nfwqui",false, list);
 
         addDocument(newAct, task->{
-            GroupStore.getInstance().addActivity(newAct.getName(),task.getId());},
+            GroupStore.getInstance().addActivity(groupUID,task.getId());},
                 getOnFailureListener());
     }
     @Override

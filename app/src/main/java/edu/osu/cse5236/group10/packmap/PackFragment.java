@@ -1,6 +1,7 @@
 package edu.osu.cse5236.group10.packmap;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -11,12 +12,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.annimon.stream.Stream;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -28,26 +31,25 @@ import edu.osu.cse5236.group10.packmap.data.DataUtils;
 import edu.osu.cse5236.group10.packmap.data.model.ActivityInfo;
 import edu.osu.cse5236.group10.packmap.data.store.ActivityStore;
 
-public class PackFragment extends Fragment{
+public class PackFragment extends Fragment implements View.OnClickListener{
     private static final String TAG = "PackFragment";
     //var
     private String mUserId;
     private String mGroupId;
     private ListView mlistView;
     private List<String> activityInfoList;
-    private ActivityInfo activityInfo;
+    private ActivityInfo newActivityInfo;
     private FirebaseFirestore db;
     //FireStore
     private ActivityStore mActivityStore;
-
     //listener
     private OnPackFragmentInteractionListener mListener;
-
     //adapter
     private ActivityListAdapter activityListAdapter;
-
     //recyclerview
     private RecyclerView mRecyclerView;
+    //botton
+    private Button addActivityButton;
 
     public PackFragment() {
         // Required empty public constructor
@@ -79,11 +81,13 @@ public class PackFragment extends Fragment{
         activityInfoList=new ArrayList<>();
         activityListAdapter= new ActivityListAdapter(activityInfoList);
 
+        newActivityInfo=new ActivityInfo();
+        mActivityStore=ActivityStore.getInstance();
         mRecyclerView = v.findViewById(R.id.pack_activity_list);
+        addActivityButton=v.findViewById(R.id.add_activity);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(activityListAdapter);
-
         db = FirebaseFirestore.getInstance();
 
         db.collection("groups").document(mGroupId).addSnapshotListener((querySnapshot, e) -> {
@@ -100,7 +104,21 @@ public class PackFragment extends Fragment{
             }
         });
 
+
+        addActivityButton.setOnClickListener(this);
         return v;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()) {
+            case R.id.add_activity:
+                Log.d(TAG, "Add Activity");
+                Intent intent = new Intent(getActivity(), CreateActivityActivity.class);
+                intent.putExtra("groupId", mGroupId);
+                startActivity(intent);
+                break;
+        }
     }
 
     @Override
@@ -122,6 +140,41 @@ public class PackFragment extends Fragment{
         Log.d(TAG, "onDetach() called");
 
         mListener = null;
+    }
+
+
+    public class AddNewActitivityOnCompleteListener implements OnCompleteListener<DocumentSnapshot> {
+        private ActivityInfo activity;
+
+        private AddNewActitivityOnCompleteListener(ActivityInfo newActivity) {
+            this.activity = newActivity;
+        }
+
+        @Override
+        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    Log.d(TAG, "User already exists");
+                    //mPhoneNum.setError(getString(R.string.err_msg_user_exist));
+                } else {
+                    mActivityStore.setNewActivity(
+                            activity,
+                            aVoid -> {
+                                Log.d(TAG, "DocumentSnapshot successfully written!");
+                                //mSignUp.finish();
+                            },
+                            e -> Log.w(TAG, "Error writing document", e));
+                }
+            } else {
+                Log.d(TAG, "get failed with ", task.getException());
+            }
+        }
+    }
+
+
+    private void addActivity(ActivityInfo newActivity){
+        mActivityStore.checkThenAddNewActivity(newActivity,new AddNewActitivityOnCompleteListener(newActivity));
     }
 
 

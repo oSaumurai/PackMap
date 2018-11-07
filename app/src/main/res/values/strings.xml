@@ -63,4 +63,7 @@
 
     <string name="list_item_name">Name</string>
     <string name="menu_add_member">Add Member</string>
+
+    <!-- Creating new activity -->
+    <string name="menu_add_activity">Add Activity</string>
 </resources>

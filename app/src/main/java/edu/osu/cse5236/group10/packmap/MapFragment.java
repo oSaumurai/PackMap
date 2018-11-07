@@ -217,9 +217,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                     bottom_heading.setText(info);
                     mLocationInfo.setName(poi.name);
                     mLocationInfo.setCoordinates(new GeoPoint(poi.latLng.latitude,poi.latLng.longitude));
-
-
-                    mActivityStore.addNewActivity(mActivityInfo.getName(),mLocationInfo,"233");
+                    mActivityInfo.setName("233");
+                    mActivityInfo.setInfo("sadwa");
+                    //addActivity(mActivityInfo);
+                    //mActivityStore.addNewActivity(mActivityInfo.getName(),mLocationInfo,"233");
                 }
             });
 
@@ -349,34 +350,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
     ////////// Down here is for database test/////////////
-    public class AddNewActitivityOnCompleteListener implements OnCompleteListener<DocumentSnapshot> {
-        private ActivityInfo activity;
 
-        private AddNewActitivityOnCompleteListener(ActivityInfo newActivity) {
-            this.activity = newActivity;
-        }
-
-        @Override
-        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-                if (document.exists()) {
-                    Log.d(Tag, "User already exists");
-                    //mPhoneNum.setError(getString(R.string.err_msg_user_exist));
-                } else {
-                    mActivityStore.setNewActivity(
-                            activity,
-                            aVoid -> {
-                                Log.d(Tag, "DocumentSnapshot successfully written!");
-                                //mSignUp.finish();
-                            },
-                            e -> Log.w(Tag, "Error writing document", e));
-                }
-            } else {
-                Log.d(Tag, "get failed with ", task.getException());
-            }
-        }
-    }
 
     private void addPositionToActivity(String activityName, LocationInfo newLocation){
         ActivityStore.getInstance().getActivityById("ccc", new GetActivityOnCompleteListener());
@@ -401,9 +375,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         mActivityStore.addLocation("ccc", mLocationInfo);
     }
 
-    private void addActivity(ActivityInfo newActivity){
-        mActivityStore.checkThenAddNewActivity(newActivity,new AddNewActitivityOnCompleteListener(newActivity));
-    }
+
 
     private void checkAndUpdateVote(){
 
