@@ -8,12 +8,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Map;
 
 public class ActivityListAdapter extends RecyclerView.Adapter<ActivityListAdapter.ViewHolder> {
     public List<String> memberList;
+    private final PackFragment.OnPackFragmentInteractionListener mListener;
 
-    public ActivityListAdapter(List<String> memberList) {
+
+    public ActivityListAdapter(List<String> memberList, PackFragment.OnPackFragmentInteractionListener listener){
         this.memberList = memberList;
+        this.mListener=listener;
     }
 
     @NonNull
@@ -27,6 +31,17 @@ public class ActivityListAdapter extends RecyclerView.Adapter<ActivityListAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.memberName.setText(memberList.get(position));
+
+        holder.mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != mListener) {
+                    // Notify the active callbacks interface (the activity, if the
+                    // fragment is attached to one) that an item has been selected.
+                    mListener.onListFragmentInteraction(holder.mItem.get(position));
+                }
+            }
+        });
     }
 
     @Override
@@ -37,13 +52,11 @@ public class ActivityListAdapter extends RecyclerView.Adapter<ActivityListAdapte
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         View mView;
-
         public TextView memberName;
-
+        public List<String> mItem;
         public ViewHolder(View itemView) {
             super(itemView);
             mView = itemView;
-
             memberName = itemView.findViewById(R.id.list_activity_name);
         }
     }

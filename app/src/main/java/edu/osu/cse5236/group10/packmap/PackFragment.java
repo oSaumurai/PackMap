@@ -79,7 +79,7 @@ public class PackFragment extends Fragment implements View.OnClickListener{
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_pack, container, false);
         activityInfoList=new ArrayList<>();
-        activityListAdapter= new ActivityListAdapter(activityInfoList);
+        activityListAdapter= new ActivityListAdapter(activityInfoList,mListener);
 
         newActivityInfo=new ActivityInfo();
         mActivityStore=ActivityStore.getInstance();
@@ -143,44 +143,9 @@ public class PackFragment extends Fragment implements View.OnClickListener{
     }
 
 
-    public class AddNewActitivityOnCompleteListener implements OnCompleteListener<DocumentSnapshot> {
-        private ActivityInfo activity;
-
-        private AddNewActitivityOnCompleteListener(ActivityInfo newActivity) {
-            this.activity = newActivity;
-        }
-
-        @Override
-        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-                if (document.exists()) {
-                    Log.d(TAG, "User already exists");
-                    //mPhoneNum.setError(getString(R.string.err_msg_user_exist));
-                } else {
-                    mActivityStore.setNewActivity(
-                            activity,
-                            aVoid -> {
-                                Log.d(TAG, "DocumentSnapshot successfully written!");
-                                //mSignUp.finish();
-                            },
-                            e -> Log.w(TAG, "Error writing document", e));
-                }
-            } else {
-                Log.d(TAG, "get failed with ", task.getException());
-            }
-        }
-    }
-
-
-    private void addActivity(ActivityInfo newActivity){
-        mActivityStore.checkThenAddNewActivity(newActivity,new AddNewActitivityOnCompleteListener(newActivity));
-    }
-
-
     public interface OnPackFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(ActivityInfo activityInfo);
+        void onListFragmentInteraction(String name);
     }
 
 }

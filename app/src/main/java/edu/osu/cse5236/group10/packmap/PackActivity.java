@@ -57,6 +57,9 @@ public class PackActivity extends AppCompatActivity implements PackFragment.OnPa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pack);
 
+        GroupId=this.getIntent().getStringExtra("groupId");
+        mPhoneNum=this.getIntent().getStringExtra("userId");
+
         currNavigateId = R.id.navigation_pack_activities;
         BottomNavigationView navigation = findViewById(R.id.navigation_packs);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -75,10 +78,10 @@ public class PackActivity extends AppCompatActivity implements PackFragment.OnPa
     }
 
     @Override
-    public void onListFragmentInteraction(ActivityInfo item) {
+    public void onListFragmentInteraction(String item) {
         Intent intent = new Intent(this, MapsActivity.class);
-        //intent.putExtra("userId", mPhoneNum);
-        //intent.putExtra("groupId", item.group.getDocumentId());
+        intent.putExtra("userId", mPhoneNum);
+        intent.putExtra("groupId", GroupId);
         startActivity(intent);
     }
 

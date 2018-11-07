@@ -94,6 +94,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     private ActivityStore mActivityStore;
     private ActivityInfo mActivityInfo;
     private LocationInfo mLocationInfo;
+    private String mGroupId;
+    private String mActivityId;
+    private String userId;
+
     Context context;
 
     private View v;
@@ -107,6 +111,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mMapActivity=this.getActivity();
+
+        mGroupId=getActivity().getIntent().getStringExtra("groupId");
+        mActivityId=getActivity().getIntent().getStringExtra("activityId");
+        userId=getActivity().getIntent().getStringExtra("userId");
         getLocationPermission();
     }
 
@@ -219,6 +227,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                     mLocationInfo.setCoordinates(new GeoPoint(poi.latLng.latitude,poi.latLng.longitude));
                     mActivityInfo.setName("233");
                     mActivityInfo.setInfo("sadwa");
+
+                    mActivityStore.addLocation(mActivityId,mLocationInfo);
                     //addActivity(mActivityInfo);
                     //mActivityStore.addNewActivity(mActivityInfo.getName(),mLocationInfo,"233");
                 }

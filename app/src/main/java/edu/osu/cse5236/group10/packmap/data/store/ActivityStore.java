@@ -38,8 +38,8 @@ public class ActivityStore extends AbstractStore {
     }
 
 
-    public void addLocation(String name, LocationInfo newlocation){
-        DocumentReference dr = db.collection("activities").document(name);
+    public void addLocation(String activityId, LocationInfo newlocation){
+        DocumentReference dr = db.collection("activities").document("Jokkny4pQxxH91iK7bCi");
         Map map=new HashMap<>();
         map.put("name",newlocation.getName());
         map.put("Coordinates",newlocation.getCoordinates());
@@ -69,16 +69,6 @@ public class ActivityStore extends AbstractStore {
     }
 
 
-    public void checkThenAddNewActivity(ActivityInfo newActivity,
-                                        PackFragment.AddNewActitivityOnCompleteListener onCompleteListener) {
-        getDocument(newActivity, onCompleteListener, getOnFailureListener());
-    }
-
-    public void setNewActivity(ActivityInfo newActivity, OnSuccessListener<Void> onSuccessListener,
-                               OnFailureListener onFailureListener) {
-        setDocument(newActivity, onSuccessListener, onFailureListener);
-    }
-
     public void addNewActivity(String newActivity, String groupUID) {
         List<LocationInfo> list=new ArrayList<>();
         ActivityInfo newAct=new ActivityInfo(newActivity,"nfwqui",false, list);
@@ -87,10 +77,14 @@ public class ActivityStore extends AbstractStore {
             GroupStore.getInstance().addActivity(groupUID,task.getId());},
                 getOnFailureListener());
     }
+
+
+
     @Override
     protected String getCollection() {
         return COLLECTION;
     }
+
 
     @Override
     protected String getTag() {
