@@ -22,6 +22,12 @@
 
     </android.support.design.widget.TextInputLayout>
 
+    <FrameLayout
+        android:id="@+id/add_user_list_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
     <Button
         android:id="@+id/submit_group"
         android:layout_width="match_parent"

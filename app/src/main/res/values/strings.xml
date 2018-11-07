@@ -53,7 +53,10 @@
     <string name="content_bottom_sheet">android.support.design.widget.BottomSheetBehavior</string>
 
     <!-- Creating new group -->
+    <string name="add_users_below">Add users below by searching and checking their box</string>
     <string name="add_phone_numbers">Add Users by Phone Number</string>
+    <string name="not_valid_user">Invalid User Phone Number</string>
+    <string name="need_more_users">Need At Least 1 Other User</string>
 
     <string name="navigation_pack_activities">Activities</string>
     <string name="navigation_pack_members">Members</string>

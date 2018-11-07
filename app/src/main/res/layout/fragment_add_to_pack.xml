@@ -8,7 +8,13 @@
     android:name="edu.osu.cse5236.group10.packmap.AddToPackFragment"
     tools:context=".AddToPackFragment">
 
-    <android.support.v7.widget.SearchView
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/text_margin"
+        android:text="@string/add_users_below"/>
+
+    <SearchView
         android:id="@+id/add_user_search"
         android:layout_width="match_parent"
         android:layout_height="@dimen/place_autocomplete_prediction_height"

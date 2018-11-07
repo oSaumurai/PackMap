@@ -13,6 +13,8 @@ public class User extends BaseDocument {
     private String password;
     private List<String> groups;
 
+    public User() {}
+
     public User(String phone) {
         this.phone = phone;
     }

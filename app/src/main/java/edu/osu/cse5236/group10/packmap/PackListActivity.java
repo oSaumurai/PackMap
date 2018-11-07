@@ -21,8 +21,7 @@ import edu.osu.cse5236.group10.packmap.data.PackListContent;
 import edu.osu.cse5236.group10.packmap.data.store.UserStore;
 
 public class PackListActivity extends AppCompatActivity implements
-        PackListFragment.OnPackListFragmentInteractionListener,
-        AddToPackFragment.OnAddUserListFragmentInteractionListener {
+        PackListFragment.OnPackListFragmentInteractionListener {
 
     private static final String TAG = "PackListActivity";
 
@@ -114,15 +113,6 @@ public class PackListActivity extends AppCompatActivity implements
             @Override
             public void onClick(View view) {
                 mAddButton.hide();
-                // To be implemented later
-//                FragmentManager fm = getSupportFragmentManager();
-//                Fragment fragment = fm.findFragmentById(R.id.add_to_pack_layout);
-//                if (fragment == null) {
-//                    fragment = new AddToPackFragment();
-//                }
-//                fm.beginTransaction()
-//                            .replace(R.id.pack_list_container, fragment)
-//                            .commit();
                 Intent intent = new Intent(thisActivity, CreateGroupActivity.class);
                 intent.putExtra("userId", mPhoneNum);
                 startActivity(intent);
@@ -182,10 +172,5 @@ public class PackListActivity extends AppCompatActivity implements
         intent.putExtra("userId", mPhoneNum);
         intent.putExtra("groupId", item.group.getDocumentId());
         startActivity(intent);
-    }
-
-    @Override
-    public void onListFragmentInteraction(AddUserListContent.AddUserItem item) {
-
     }
 }

@@ -35,8 +35,7 @@ public class PackListContent {
     }
 
     public static void addItemWithIndex(Group group) {
-        PackItem temp = new PackItem(String.valueOf(count++), group);
-        addItem(temp);
+        addItem(new PackItem(String.valueOf(count++), group));
     }
 
     public static void clear() {
