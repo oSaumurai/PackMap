@@ -20,12 +20,26 @@ public class PackActivity extends AppCompatActivity {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             int id = item.getItemId();
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction transaction = fm.beginTransaction();
+            Fragment fragment;
 
             if (id != currNavigateId)
                 switch (id) {
                     case R.id.navigation_pack_activities:
+                        fragment = new PackFragment();
+                        fragment.setArguments(getIntent().getExtras());
+                        transaction.replace(R.id.pack_fragment_container, fragment);
+                        transaction.commit();
+                        currNavigateId = R.id.navigation_pack_activities;
                         return true;
+
                     case R.id.navigation_pack_members:
+                        fragment = new PackMemberFragment();
+                        fragment.setArguments(getIntent().getExtras());
+                        transaction.replace(R.id.pack_fragment_container, fragment);
+                        transaction.commit();
+                        currNavigateId = R.id.navigation_pack_members;
                         return true;
                 }
             return false;

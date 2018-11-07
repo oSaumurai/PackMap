@@ -56,4 +56,6 @@
 
     <string name="navigation_pack_activities">Activities</string>
     <string name="navigation_pack_members">Members</string>
+
+    <string name="list_item_name">Name</string>
 </resources>

@@ -1,6 +1,7 @@
 package edu.osu.cse5236.group10.packmap.data.store;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
@@ -47,6 +48,11 @@ public class GroupStore extends AbstractStore {
                 .whereArrayContains("userList", userPhoneNumber)
                 .get()
                 .addOnCompleteListener(listener);
+    }
+
+    public void getGroup(String groupId,
+                         OnCompleteListener<DocumentSnapshot> listener) {
+        getDocument(groupId, listener, getOnFailureListener());
     }
 
     @Override
