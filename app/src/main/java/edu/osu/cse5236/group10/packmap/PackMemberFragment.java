@@ -9,67 +9,29 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PackMemberFragment extends Fragment {
+public class PackMemberFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = "PackMemberFragment";
 
     private RecyclerView mRecyclerView;
     private ArrayList<String> mUsers;
     private MemberListAdapter memberAdapter;
     private FirebaseFirestore db;
+    private Button mAddGroupButton;
 
     private String mUserId;
     private String mGroupId;
 
     public PackMemberFragment() {
         // Required empty public constructor
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.member_menu, menu);
-        super.onCreateOptionsMenu(menu,inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        Intent intent;
-
-        switch (id) {
-            case R.id.add_member:
-                Log.d(TAG, "Add member");
-                FragmentManager fm = getActivity().getSupportFragmentManager();
-                FragmentTransaction transaction = fm.beginTransaction();
-                Fragment fragment = new InviteMemberFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("groupId", mGroupId);
-                bundle.putStringArrayList("users", mUsers);
-                fragment.setArguments(bundle);
-                transaction.replace(R.id.pack_fragment_container, fragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
-                return true;
-        }
-
-        return false;
-    }
-
-    // TODO: Rename and change types and number of parameters
-    public static PackFragment newInstance() {
-        PackFragment fragment = new PackFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
@@ -80,8 +42,6 @@ public class PackMemberFragment extends Fragment {
             mGroupId = getArguments().getString("groupId");
             Log.d(TAG, "" + mUserId + " - " + mGroupId);
         }
-
-        setHasOptionsMenu(true);
     }
 
     @Override
@@ -115,6 +75,22 @@ public class PackMemberFragment extends Fragment {
             }
         });
 
+        mAddGroupButton = v.findViewById(R.id.add_member);
+        mAddGroupButton.setOnClickListener(this);
+
         return v;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()) {
+            case R.id.add_member:
+                Log.d(TAG, "Add member");
+                Intent intent = new Intent(getActivity(), InviteMemberActivity.class);
+                intent.putExtra("users", mUsers);
+                intent.putExtra("groupId", mGroupId);
+                startActivity(intent);
+                break;
+        }
     }
 }

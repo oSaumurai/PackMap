@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:layout_margin="16dp"
     android:orientation="vertical"
-    tools:context=".InviteMemberFragment">
+    tools:context=".InviteMemberActivity">
 
     <TextView
         android:layout_width="match_parent"

@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/add_member"
-        android:icon="@drawable/ic_people_black_24dp"
-        android:title="@string/menu_add_member"
-        android:orderInCategory="0"/>
-</menu>
