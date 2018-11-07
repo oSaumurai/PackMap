@@ -35,14 +35,14 @@ public class InviteMemberActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_group);
+        setContentView(R.layout.activity_invite_member);
 
         mGroupId = getIntent().getStringExtra("groupId");
         userList = getIntent().getStringArrayListExtra("users");
 
         mMemberId = findViewById(R.id.member_id);
         mSubmitButton = findViewById(R.id.submit_invite_member);
-        mBackButton = findViewById(R.id.back);
+        mBackButton = findViewById(R.id.invite_member_back);
 
         mSubmitButton.setOnClickListener(this);
         mBackButton.setOnClickListener(this);
