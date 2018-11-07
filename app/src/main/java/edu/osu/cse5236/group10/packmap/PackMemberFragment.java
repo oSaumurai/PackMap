@@ -14,8 +14,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -109,8 +107,7 @@ public class PackMemberFragment extends Fragment {
             } else {
                 List<String> temp = (List<String>) querySnapshot.get("userList");
                 mUsers.clear();
-                for (String str: temp)
-                    mUsers.add(str);
+                mUsers.addAll(temp);
 
                 memberAdapter.notifyDataSetChanged();
 
