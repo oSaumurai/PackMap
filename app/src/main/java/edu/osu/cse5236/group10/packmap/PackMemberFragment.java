@@ -18,6 +18,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.osu.cse5236.group10.packmap.data.store.GroupStore;
+import edu.osu.cse5236.group10.packmap.data.store.UserStore;
+
 public class PackMemberFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = "PackMemberFragment";
 
@@ -26,6 +29,7 @@ public class PackMemberFragment extends Fragment implements View.OnClickListener
     private MemberListAdapter memberAdapter;
     private FirebaseFirestore db;
     private Button mAddGroupButton;
+    private Button mQuitButton;
 
     private String mUserId;
     private String mGroupId;
@@ -76,7 +80,9 @@ public class PackMemberFragment extends Fragment implements View.OnClickListener
         });
 
         mAddGroupButton = v.findViewById(R.id.add_member);
+        mQuitButton = v.findViewById(R.id.quit_group);
         mAddGroupButton.setOnClickListener(this);
+        mQuitButton.setOnClickListener(this);
 
         return v;
     }
@@ -90,6 +96,12 @@ public class PackMemberFragment extends Fragment implements View.OnClickListener
                 intent.putExtra("users", mUsers);
                 intent.putExtra("groupId", mGroupId);
                 startActivity(intent);
+                break;
+
+            case R.id.quit_group:
+                GroupStore.getInstance().deleteUserFromGroup(mGroupId, mUserId);
+                UserStore.getInstance().deleteGroup(mUserId, mGroupId);
+                getActivity().finish();
                 break;
         }
     }

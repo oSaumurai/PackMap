@@ -58,6 +58,12 @@ public class UserStore extends AbstractStore {
         dr.update("groups", FieldValue.arrayUnion(groupId));
     }
 
+    public void deleteGroup(String uid, String groupId) {
+        DocumentReference dr = db.collection("users").document(uid);
+
+        dr.update("groups", FieldValue.arrayRemove(groupId));
+    }
+
     public void deleteUserById(String userId) {
         deleteDocumentById(userId);
     }
