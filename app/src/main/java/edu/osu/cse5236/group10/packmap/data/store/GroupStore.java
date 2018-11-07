@@ -1,5 +1,6 @@
 package edu.osu.cse5236.group10.packmap.data.store;
 
+import com.annimon.stream.Stream;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -39,9 +40,10 @@ public class GroupStore extends AbstractStore {
         dr.update("activityList", FieldValue.arrayUnion(activityUid));
     }
 
-    public void addGroup(Group group, String userId) {
+    public void addGroup(Group group) {
         addDocument(group, task -> {
-            UserStore.getInstance().addGroup(userId, task.getId());
+            Stream.of(group.getUserList())
+                    .forEach(userId -> UserStore.getInstance().addGroup(userId, task.getId()));
         }, getOnFailureListener());
     }
 

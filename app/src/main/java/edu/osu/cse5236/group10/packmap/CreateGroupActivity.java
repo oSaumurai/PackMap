@@ -64,7 +64,7 @@ public class CreateGroupActivity extends AppCompatActivity implements View.OnCli
                     newGroup.setName(mGroupName.getText().toString().trim());
                     groupUsers.add(mUserId);
                     newGroup.setUserList(groupUsers);
-                    GroupStore.getInstance().addGroup(newGroup, mUserId);
+                    GroupStore.getInstance().addGroup(newGroup);
                     finish();
                 }
                 break;
