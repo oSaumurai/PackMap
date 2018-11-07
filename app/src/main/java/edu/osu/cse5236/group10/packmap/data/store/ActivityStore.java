@@ -48,9 +48,21 @@ public class ActivityStore extends AbstractStore {
         Log.d(TAG, "addLocation: updated");
     }
 
+
+    public void removeFromlist(int index){
+        DocumentReference dr = db.collection("activities").document("ccc");
+        dr.update("selectedLocations", FieldValue.arrayRemove(index));
+    }
+
     public void getActivityById(String activityId,OnCompleteListener<QuerySnapshot> listener){
         db.collection(COLLECTION)
                 .whereEqualTo("name", activityId)
+                .get()
+                .addOnCompleteListener(listener);
+    }
+
+    public void getAllActivity(OnCompleteListener<QuerySnapshot> listener){
+        db.collection(COLLECTION)
                 .get()
                 .addOnCompleteListener(listener);
     }
@@ -66,6 +78,15 @@ public class ActivityStore extends AbstractStore {
         setDocument(newActivity, onSuccessListener, onFailureListener);
     }
 
+    public void addNewActivity(String newActivity, LocationInfo locationInfo,String userId) {
+        List<LocationInfo> list=new ArrayList<>();
+        list.add(locationInfo);
+        ActivityInfo newAct=new ActivityInfo(newActivity,"nfwqhfuierhoafuierhwquiofnhewqui",false,list);
+
+        addDocument(newAct, task->{
+            GroupStore.getInstance().addActivity(newAct.getName(),task.getId());},
+                getOnFailureListener());
+    }
     @Override
     protected String getCollection() {
         return COLLECTION;

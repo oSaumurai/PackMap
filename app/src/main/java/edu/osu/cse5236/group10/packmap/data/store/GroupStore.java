@@ -34,6 +34,12 @@ public class GroupStore extends AbstractStore {
         dummy.setName(group);
         addDocument(dummy);
     }
+    public void addActivity(String name, String uid){
+
+
+
+
+    }
 
     public void addGroup(String group, String userId) {
         Group dummy = new Group();

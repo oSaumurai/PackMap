@@ -217,19 +217,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                     bottom_heading.setText(info);
                     mLocationInfo.setName(poi.name);
                     mLocationInfo.setCoordinates(new GeoPoint(poi.latLng.latitude,poi.latLng.longitude));
-                    //add new Activity
-                    //mLocationInfo.s
-                    /*List<LocationInfo> locationList=new ArrayList<>();
-                    locationList.add(mLocationInfo);
-                    mActivityInfo.setName("ccc");
-                    mActivityInfo.setInfo("1232143");
-                    mActivityInfo.setSelectedLocations(locationList);
-                    addActivity(mActivityInfo);*/
 
-                    //add new location
-                    //addPositionToActivity("ccc",mLocationInfo);
-                    addNewLocationToCurrentActivity();
 
+                    mActivityStore.addNewActivity(mActivityInfo.getName(),mLocationInfo,"233");
                 }
             });
 
@@ -237,14 +227,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
             upVoteButtom.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+
                 }
             });
 
             downVoteButtom.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                    mActivityStore.removeFromlist(0);
                 }
             });
 
@@ -393,12 +383,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         List<LocationInfo> mLocaitonInfo=mActivityInfo.getSelectedLocations();
         Log.d(Tag, "addPositionToActivity: "+ mLocaitonInfo);
         mLocaitonInfo.add(newLocation);
-
-
     }
 
-    public class GetActivityOnCompleteListener implements OnCompleteListener<QuerySnapshot> {
-        @Override
+   public class GetActivityOnCompleteListener implements OnCompleteListener<QuerySnapshot> {
+         @Override
         public void onComplete(@NonNull Task<QuerySnapshot> task) {
             if (task.isSuccessful()) {
                 for (QueryDocumentSnapshot document : task.getResult()) {
@@ -415,6 +403,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
 
     private void addActivity(ActivityInfo newActivity){
         mActivityStore.checkThenAddNewActivity(newActivity,new AddNewActitivityOnCompleteListener(newActivity));
+    }
+
+    private void checkAndUpdateVote(){
+
+
     }
 
 

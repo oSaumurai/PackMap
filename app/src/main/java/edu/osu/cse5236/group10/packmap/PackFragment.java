@@ -1,19 +1,53 @@
 package edu.osu.cse5236.group10.packmap;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
-public class PackFragment extends Fragment {
+import com.annimon.stream.Stream;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import edu.osu.cse5236.group10.packmap.data.DataUtils;
+import edu.osu.cse5236.group10.packmap.data.model.ActivityInfo;
+import edu.osu.cse5236.group10.packmap.data.store.ActivityStore;
+
+public class PackFragment extends Fragment{
     private static final String TAG = "PackFragment";
-
+    //var
     private String mUserId;
     private String mGroupId;
+    private ListView mlistView;
+    private List<String> activityInfoList;
+    private ActivityInfo activityInfo;
+    private FirebaseFirestore db;
+    //FireStore
+    private ActivityStore mActivityStore;
+
+    //listener
+    private OnPackFragmentInteractionListener mListener;
+
+    //adapter
+    private ActivityListAdapter activityListAdapter;
+
+    //recyclerview
+    private RecyclerView mRecyclerView;
 
     public PackFragment() {
         // Required empty public constructor
@@ -42,7 +76,58 @@ public class PackFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_pack, container, false);
+        activityInfoList=new ArrayList<>();
+        activityListAdapter= new ActivityListAdapter(activityInfoList);
+
+        mRecyclerView = v.findViewById(R.id.pack_activity_list);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setAdapter(activityListAdapter);
+
+        db = FirebaseFirestore.getInstance();
+
+        db.collection("groups").document(mGroupId).addSnapshotListener((querySnapshot, e) -> {
+            if (e != null) {
+                Log.d(TAG, "error: " + e.getMessage());
+            } else {
+                List<String> temp = (List<String>) querySnapshot.get("activityList");
+                activityInfoList.clear();
+                for (String str: temp)
+                    activityInfoList.add(str);
+
+                activityListAdapter.notifyDataSetChanged();
+                Log.d(TAG, "" + activityInfoList.size());
+            }
+        });
 
         return v;
     }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        if (context instanceof OnPackFragmentInteractionListener) {
+            mListener = (OnPackFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnPackFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+        Log.d(TAG, "onDetach() called");
+
+        mListener = null;
+    }
+
+
+    public interface OnPackFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onListFragmentInteraction(ActivityInfo activityInfo);
+    }
+
 }
