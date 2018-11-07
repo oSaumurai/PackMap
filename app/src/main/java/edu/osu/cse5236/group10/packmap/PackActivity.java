@@ -1,5 +1,7 @@
 package edu.osu.cse5236.group10.packmap;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -10,9 +12,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
-public class PackActivity extends AppCompatActivity {
+import edu.osu.cse5236.group10.packmap.data.model.ActivityInfo;
+
+public class PackActivity extends AppCompatActivity implements PackFragment.OnPackFragmentInteractionListener{
 
     private int currNavigateId;
+    private String mPhoneNum;
+    private String GroupId;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -67,4 +73,13 @@ public class PackActivity extends AppCompatActivity {
                     .commit();
         }
     }
+
+    @Override
+    public void onListFragmentInteraction(ActivityInfo item) {
+        Intent intent = new Intent(this, MapsActivity.class);
+        //intent.putExtra("userId", mPhoneNum);
+        //intent.putExtra("groupId", item.group.getDocumentId());
+        startActivity(intent);
+    }
+
 }
