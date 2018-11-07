@@ -49,7 +49,8 @@
             android:label="@string/title_activity_phone_auth" />
         <activity android:name=".AccountSettingActivity" />
         <activity android:name=".CreateGroupActivity" />
-        <activity android:name=".PackActivity"></activity>
+        <activity android:name=".PackActivity" />
+        <activity android:name=".InviteMemberActivity" />
     </application>
 
 </manifest>
