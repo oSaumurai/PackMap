@@ -76,7 +76,6 @@ public class PackListFragment extends Fragment {
 
         Log.d(TAG, "onCreate() called");
 
-        setHasOptionsMenu(true);
         packActivity = (PackListActivity) getActivity();
         packActivity.getAddButton().show();
         mPhoneNum = packActivity.getIntent().getStringExtra("userId");
@@ -125,7 +124,7 @@ public class PackListFragment extends Fragment {
                         .forEach(PackListContent::addItemWithIndex);
 
                 Log.d(TAG, "Size of items: " + PackListContent.ITEMS.size());
-                Log.d(TAG, "Last item: " + PackListContent.ITEMS.get(PackListContent.ITEMS.size() - 1));
+                //Log.d(TAG, "Last item: " + PackListContent.ITEMS.get(PackListContent.ITEMS.size() - 1));
                 PackRecyclerViewAdapter viewAdapter = new PackRecyclerViewAdapter(PackListContent.ITEMS, mListener);
                 // notifyDataSetChanged() must run in the main thread
                 new Handler(Looper.getMainLooper()).post(new Runnable() {

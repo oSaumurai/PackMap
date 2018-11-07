@@ -26,6 +26,7 @@
     <string name="menu_create_group">Create Group</string>
 
     <string name="group_name">Group Name:</string>
+    <string name="Invite_phone_num">Phone Number:</string>
 
 
     <string name="err_msg_empty">This field can\'t be empty</string>
@@ -58,4 +59,5 @@
     <string name="navigation_pack_members">Members</string>
 
     <string name="list_item_name">Name</string>
+    <string name="menu_add_member">Add Member</string>
 </resources>
