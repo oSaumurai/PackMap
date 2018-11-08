@@ -25,7 +25,9 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import edu.osu.cse5236.group10.packmap.data.DataUtils;
 import edu.osu.cse5236.group10.packmap.data.model.ActivityInfo;
@@ -37,7 +39,7 @@ public class PackFragment extends Fragment implements View.OnClickListener{
     private String mUserId;
     private String mGroupId;
     private ListView mlistView;
-    private List<String> activityInfoList;
+    private List<ActivityInfo> activityInfoList;
     private ActivityInfo newActivityInfo;
     private FirebaseFirestore db;
     //FireStore
@@ -90,20 +92,32 @@ public class PackFragment extends Fragment implements View.OnClickListener{
         mRecyclerView.setAdapter(activityListAdapter);
         db = FirebaseFirestore.getInstance();
 
-        db.collection("groups").document(mGroupId).addSnapshotListener((querySnapshot, e) -> {
-            if (e != null) {
-                Log.d(TAG, "error: " + e.getMessage());
+        db.collection("groups").document(mGroupId).addSnapshotListener((groupQuery, e1) -> {
+            if (e1 != null) {
+                Log.d(TAG, "error: " + e1.getMessage());
             } else {
-                List<String> temp = (List<String>) querySnapshot.get("activityList");
+                List<String> temp = (List<String>) groupQuery.get("activityList");
+                Set<String> s = new HashSet<>(temp);
                 activityInfoList.clear();
-                for (String str: temp)
-                    activityInfoList.add(str);
 
-                activityListAdapter.notifyDataSetChanged();
-                Log.d(TAG, "" + activityInfoList.size());
+                db.collection("activities").addSnapshotListener((activityQuery, e2) -> {
+                    if (e2 != null)
+                        Log.d(TAG, "error" + e2.getMessage());
+                    else {
+                        for (DocumentSnapshot ds: activityQuery.getDocuments()) {
+                            if (s.contains(ds.getId()))
+                                activityInfoList.add(ds.toObject(ActivityInfo.class));
+                        }
+
+                        activityListAdapter.notifyDataSetChanged();
+                        Log.d(TAG, "" + activityInfoList.size());
+                        for (ActivityInfo ac: activityInfoList) {
+                            Log.d(TAG, ac.getName());
+                        }
+                    }
+                });
             }
         });
-
 
         addActivityButton.setOnClickListener(this);
         return v;

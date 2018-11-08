@@ -10,12 +10,14 @@ import android.widget.TextView;
 import java.util.List;
 import java.util.Map;
 
+import edu.osu.cse5236.group10.packmap.data.model.ActivityInfo;
+
 public class ActivityListAdapter extends RecyclerView.Adapter<ActivityListAdapter.ViewHolder> {
-    public List<String> memberList;
+    public List<ActivityInfo> memberList;
     private final PackFragment.OnPackFragmentInteractionListener mListener;
 
 
-    public ActivityListAdapter(List<String> memberList, PackFragment.OnPackFragmentInteractionListener listener){
+    public ActivityListAdapter(List<ActivityInfo> memberList, PackFragment.OnPackFragmentInteractionListener listener){
         this.memberList = memberList;
         this.mListener=listener;
     }
@@ -30,7 +32,7 @@ public class ActivityListAdapter extends RecyclerView.Adapter<ActivityListAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.memberName.setText(memberList.get(position));
+        holder.memberName.setText(memberList.get(position).getName());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
