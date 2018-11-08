@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="wrap_content"
-android:layout_height="wrap_content"
-android:layout_margin="2dp">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="2dp">
 
     <TextView
-        android:id="@+id/list_item_name"
+        android:id="@+id/list_location_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/list_item_name" />

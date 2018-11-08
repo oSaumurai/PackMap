@@ -2,6 +2,7 @@ package edu.osu.cse5236.group10.packmap;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.Set;
 
 import edu.osu.cse5236.group10.packmap.data.model.ActivityInfo;
+import edu.osu.cse5236.group10.packmap.data.model.LocationInfo;
 import edu.osu.cse5236.group10.packmap.data.store.ActivityStore;
 
 public class LocationListFragment extends Fragment {
@@ -30,25 +32,17 @@ public class LocationListFragment extends Fragment {
     private String mUserId;
     private String mGroupId;
     private String mActivityId;
-    private List<ActivityInfo> activityInfoList;
+    private List<LocationInfo> locationInfoList;
     private FirebaseFirestore db;
+    //adapter
+    private LocationListAdapter locationListAdapter;
     //listener
-    private PackFragment.OnPackFragmentInteractionListener mListener;
+    private OnLocationListFragmentInteractionListener mListener;
     //recyclerview
     private RecyclerView mRecyclerView;
-    //botton
-    private Button addActivityButton;
 
     public LocationListFragment() {
         // Required empty public constructor
-    }
-
-    // TODO: Rename and change types and number of parameters
-    public static PackFragment newInstance() {
-        PackFragment fragment = new PackFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
@@ -68,48 +62,32 @@ public class LocationListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_location_list, container, false);
+        locationInfoList = new ArrayList<>();
+        locationListAdapter = new LocationListAdapter(locationInfoList, mListener);
+
         mRecyclerView = v.findViewById(R.id.location_list);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         db = FirebaseFirestore.getInstance();
 
-        db.collection("groups").document(mGroupId).addSnapshotListener((groupQuery, e1) -> {
+        db.collection("activities").document(mActivityId).addSnapshotListener((groupQuery, e1) -> {
             if (e1 != null) {
                 Log.d(TAG, "error: " + e1.getMessage());
             } else {
-                List<String> temp = (List<String>) groupQuery.get("activityList");
-                Set<String> s = new HashSet<>(temp);
-                activityInfoList.clear();
+                List<LocationInfo> temp = (List<LocationInfo>) groupQuery.get("selectedLocations");
+                locationInfoList.clear();
+                locationInfoList.addAll(temp);
 
-                db.collection("activities").addSnapshotListener((activityQuery, e2) -> {
-                    if (e2 != null)
-                        Log.d(TAG, "error" + e2.getMessage());
-                    else {
-                        for (DocumentSnapshot ds: activityQuery.getDocuments()) {
-                            if (s.contains(ds.getId())) {
-                                ActivityInfo temp1 = ds.toObject(ActivityInfo.class);
-                                temp1.setUid(ds.getId());
-                                activityInfoList.add(temp1);
-                            }
-                        }
+                locationListAdapter.notifyDataSetChanged();
 
-                        //activityListAdapter.notifyDataSetChanged();
-                        Log.d(TAG, "" + activityInfoList.size());
-                        for (ActivityInfo ac: activityInfoList) {
-                            Log.d(TAG, ac.getName());
-                        }
-                    }
-                });
+                Log.d(TAG, "" + locationInfoList.size());
+                for (int i = 0; i < locationInfoList.size(); ++i) {
+                    Log.d(TAG, locationInfoList.get(i).getName());
+                }
             }
         });
 
         return v;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
     }
 
     @Override
@@ -122,9 +100,9 @@ public class LocationListFragment extends Fragment {
     }
 
 
-    public interface OnPackFragmentInteractionListener {
+    public interface OnLocationListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(ActivityInfo ai);
+        void onListFragmentInteraction(LocationInfo li);
     }
 
 

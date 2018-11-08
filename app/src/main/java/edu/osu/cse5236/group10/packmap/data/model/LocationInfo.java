@@ -4,7 +4,9 @@ import android.location.Location;
 
 import com.google.firebase.firestore.GeoPoint;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class LocationInfo extends BaseDocument {
@@ -12,16 +14,16 @@ public class LocationInfo extends BaseDocument {
     private GeoPoint coordinates;
     private String name;
     // Map with key of user id (phone number) and value is any comment
-    private Map<String, String> upvotes;
-    private Map<String, String> downvotes;
+    private List<String> upvotes;
+    private List<String> downvotes;
 
     public LocationInfo (){
         this.coordinates = new GeoPoint(40,-82);
         this.name = "";
-        this.upvotes = new HashMap<>();
-        this.downvotes = new HashMap<>();;
+        this.upvotes = new ArrayList<>();
+        this.downvotes = new ArrayList<>();
     }
-    public LocationInfo(GeoPoint coordinates, String name, Map<String, String> upvotes, Map<String, String> downvotes) {
+    public LocationInfo(GeoPoint coordinates, String name, List<String> upvotes, List<String> downvotes) {
         this.coordinates = coordinates;
         this.name = name;
         this.upvotes = upvotes;
@@ -43,19 +45,19 @@ public class LocationInfo extends BaseDocument {
         this.name = name;
     }
 
-    public Map<String, String> getUpvotes() {
+    public List<String> getUpvotes() {
         return upvotes;
     }
 
-    public void setUpvotes(Map<String, String> upvotes) {
+    public void setUpvotes(List<String> upvotes) {
         this.upvotes = upvotes;
     }
 
-    public Map<String, String> getDownvotes() {
+    public List<String> getDownvotes() {
         return downvotes;
     }
 
-    public void setDownvotes(Map<String, String> downvotes) {
+    public void setDownvotes(List<String> downvotes) {
         this.downvotes = downvotes;
     }
 }
