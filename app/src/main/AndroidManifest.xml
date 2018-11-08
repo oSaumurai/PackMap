@@ -30,6 +30,18 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAm0quTUQfR1OHTbeLlh8oajO1Yw7E6jRw" />
 
+        <service android:name=".FirebaseNotificationService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_map_black_24dp" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
+
         <activity android:name=".MapsActivity" />
         <activity
             android:name=".PackListActivity"
@@ -50,8 +62,9 @@
         <activity android:name=".AccountSettingActivity" />
         <activity android:name=".CreateActivityActivity" />
         <activity android:name=".CreateGroupActivity">
-            <meta-data android:name="android.app.searchable"
-                android:resource="@xml/searchable"/>
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
         </activity>
         <activity android:name=".PackActivity" />
         <activity android:name=".InviteMemberActivity" />

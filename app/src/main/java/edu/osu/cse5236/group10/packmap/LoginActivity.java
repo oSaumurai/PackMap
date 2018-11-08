@@ -100,6 +100,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                         intent.putExtra("userId", mPhoneView.getText().toString().trim());
 
+                        FirebaseNotificationService
+                                .subscribeToTopic(mPhoneView.getText().toString().trim());
+
                         // Start activity and pass the phone number to it
                         startActivity(intent);
                     } else {

@@ -49,11 +49,6 @@ public class AddUserRecyclerViewAdapter extends RecyclerView.Adapter<AddUserRecy
             public void onClick(View v) {
                 mValues.get(position).selected = !mValues.get(position).selected;
                 holder.mCheckBox.setChecked(mValues.get(position).selected);
-//                new Handler(Looper.getMainLooper()).post(new Runnable() {
-//                    public void run() {
-//                        notifyDataSetChanged();
-//                    }
-//                });
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.

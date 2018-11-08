@@ -59,6 +59,11 @@
     <string name="not_valid_user">Invalid User Phone Number</string>
     <string name="need_more_users">Need At Least 1 Other User</string>
 
+    <!-- New Group Notifications -->
+    <string name="notification_channel_new_group_id">new_group</string>
+    <string name="notification_channel_new_group_name">New group</string>
+    <string name="notification_added_to_group">New Group Created!</string>
+
     <string name="navigation_pack_activities">Activities</string>
     <string name="navigation_pack_members">Members</string>
     <string name="navigation_activity_map">Map</string>
