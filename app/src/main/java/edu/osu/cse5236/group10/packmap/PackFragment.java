@@ -38,7 +38,6 @@ public class PackFragment extends Fragment implements View.OnClickListener{
     //var
     private String mUserId;
     private String mGroupId;
-    private ListView mlistView;
     private List<ActivityInfo> activityInfoList;
     private ActivityInfo newActivityInfo;
     private FirebaseFirestore db;
@@ -153,7 +152,9 @@ public class PackFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onDetach() {
         super.onDetach();
+
         Log.d(TAG, "onDetach() called");
+
         mListener = null;
     }
 

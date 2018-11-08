@@ -45,9 +45,9 @@ public class MapsActivity extends FragmentActivity {
                         return true;
 
                     case R.id.navigation_activity_vote:
-                        //fragment = new LocationListFragment();
-                        //fragment.setArguments(getIntent().getExtras());
-                        //transaction.replace(R.id.map_fragment_container, fragment);
+                        fragment = new LocationListFragment();
+                        fragment.setArguments(getIntent().getExtras());
+                        transaction.replace(R.id.map_fragment_container, fragment);
                         transaction.commit();
                         currNavigateId = R.id.navigation_activity_vote;
                         return true;

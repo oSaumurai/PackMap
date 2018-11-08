@@ -51,6 +51,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PointOfInterest;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -62,8 +63,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import edu.osu.cse5236.group10.packmap.data.DataUtils;
 import edu.osu.cse5236.group10.packmap.data.model.ActivityInfo;
@@ -391,9 +394,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     private void showAllLocations(){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference dr = db.collection("activities").document("cEsA1ro73MXwX7osMWTu");
-        //mActivityInfo=mActivityStore.getActivityById("cEsA1ro73MXwX7osMWTu",);
+        mActivityStore.getActivityById("cEsA1ro73MXwX7osMWTu", task -> {
+        });
+
         mLocationInfoList=mActivityInfo.getSelectedLocations();
         Log.d(Tag, "showAllLocations: " + mLocationInfoList);
+
+
+
 
 
 
