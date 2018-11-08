@@ -27,6 +27,7 @@ public class CreateGroupActivity extends AppCompatActivity implements View.OnCli
     private Button mSubmitButton;
     private Button mBackButton;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

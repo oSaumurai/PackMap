@@ -88,9 +88,9 @@ public class ActivityStore extends AbstractStore {
     }
 
 
-    public void addNewActivity(String newActivity, String groupUID) {
+    public void addNewActivity(String newActivity,String info ,String groupUID) {
         List<LocationInfo> list=new ArrayList<>();
-        ActivityInfo newAct=new ActivityInfo(newActivity,"nfwqui",false, list);
+        ActivityInfo newAct=new ActivityInfo(newActivity,info,false, list);
 
         addDocument(newAct, task->{
             GroupStore.getInstance().addActivity(groupUID,task.getId());},

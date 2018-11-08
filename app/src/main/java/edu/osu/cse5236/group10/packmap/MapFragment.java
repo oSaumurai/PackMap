@@ -32,14 +32,9 @@ import android.app.Activity;
 import com.annimon.stream.Stream;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.AutocompletePrediction;
 import com.google.android.gms.location.places.GeoDataClient;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.PlaceBuffer;
-import com.google.android.gms.location.places.PlaceBufferResponse;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -51,29 +46,16 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PointOfInterest;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import edu.osu.cse5236.group10.packmap.data.DataUtils;
 import edu.osu.cse5236.group10.packmap.data.model.ActivityInfo;
-import edu.osu.cse5236.group10.packmap.data.model.Group;
 import edu.osu.cse5236.group10.packmap.data.model.LocationInfo;
 import edu.osu.cse5236.group10.packmap.data.store.ActivityStore;
-import edu.osu.cse5236.group10.packmap.data.store.GroupStore;
 
 
 public class MapFragment extends Fragment implements OnMapReadyCallback,
@@ -243,7 +225,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
             selectButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mActivityStore.addLocation(mActivityId,mLocationInfo);
+                    if(mActivityId==null){
+                        Toast.makeText(mMapActivity, "Need add activity to put location", Toast.LENGTH_SHORT).show();
+                    }else {
+                        mActivityStore.addLocation(mActivityId, mLocationInfo);
+                    }
 
                 }
             });
@@ -357,41 +343,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         // view = this.getActivity().getCurrentFocus();
         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
-    }
-    ////////// Down here is for database test/////////////
-
-
-
-    public class GetActivityOnCompleteListener implements OnCompleteListener<QuerySnapshot> {
-         @Override
-        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-            if (task.isSuccessful()) {
-                for (QueryDocumentSnapshot document : task.getResult()) {
-                    Log.d(Tag, document.getId() + " => " + document.getData());
-                    mActivityInfo = DataUtils.getObject(document, ActivityInfo.class);
-                }
-            }
-        }
-    }
-
-    private void showAllLocations(){
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference dr = db.collection("activities").document("cEsA1ro73MXwX7osMWTu");
-        mActivityStore.getActivityById("cEsA1ro73MXwX7osMWTu", task -> {
-        });
-
-        mLocationInfoList=mActivityInfo.getSelectedLocations();
-        Log.d(Tag, "showAllLocations: " + mLocationInfoList);
-
-
-
-
-
-
-        //MarkerOptions options= new MarkerOptions().position(latLng).title(title);
-        //mMap.addMarker(options);
-
-
     }
 
 }

@@ -16,6 +16,7 @@ public class CreateActivityActivity extends AppCompatActivity implements View.On
 
     private String mGroupId;
     private TextView mActivityName;
+    private TextView mActivityInfo;
     private Button mSubmitButton;
     private Button mBackButton;
 
@@ -27,6 +28,7 @@ public class CreateActivityActivity extends AppCompatActivity implements View.On
         mGroupId = getIntent().getStringExtra("groupId");
         Log.d(TAG, "onCreate: GroupId:" + mGroupId);
         mActivityName = findViewById(R.id.activity_name);
+        mActivityInfo=findViewById(R.id.activity_info);
         mSubmitButton = findViewById(R.id.submit_activity);
         mBackButton = findViewById(R.id.back);
 
@@ -41,7 +43,7 @@ public class CreateActivityActivity extends AppCompatActivity implements View.On
                 if (mActivityName.getText().length() == 0)
                     mActivityName.setError(getString(R.string.err_msg_empty));
                 else {
-                    ActivityStore.getInstance().addNewActivity(mActivityName.getText().toString().trim(), mGroupId);
+                    ActivityStore.getInstance().addNewActivity(mActivityName.getText().toString().trim(),mActivityInfo.getText().toString().trim(), mGroupId);
                     finish();
                 }
                 break;
