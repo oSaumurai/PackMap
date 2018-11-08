@@ -11,12 +11,19 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:orientation="horizontal">
-        
+
         <TextView
             android:id="@+id/list_location_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/list_item_name" />
+
+        <TextView
+            android:id="@+id/list_score"
+            android:textColor="@color/design_default_color_primary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/init_score" />
 
         <Button
             android:id="@+id/upvote_location"
@@ -29,5 +36,5 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/downvote" />
-    </LinearLayout>>
+    </LinearLayout>
 </RelativeLayout>

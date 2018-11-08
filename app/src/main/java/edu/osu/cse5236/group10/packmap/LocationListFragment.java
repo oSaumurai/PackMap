@@ -19,6 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -65,7 +66,7 @@ public class LocationListFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_location_list, container, false);
         locationInfoList = new ArrayList<>();
-        locationListAdapter = new LocationListAdapter(locationInfoList, mListener);
+        locationListAdapter = new LocationListAdapter(mUserId, locationInfoList, mListener);
 
         mRecyclerView = v.findViewById(R.id.location_list);
         mRecyclerView.setHasFixedSize(true);
@@ -86,8 +87,13 @@ public class LocationListFragment extends Fragment {
                     li.setName((String) m.get("name"));
                     li.setUpvotes((List<String>) m.get("upVote"));
                     li.setUpvotes((List<String>) m.get("downVote"));
+                    li.updateScore();
                     locationInfoList.add(li);
                 }
+
+                Collections.sort(locationInfoList, (a, b) -> {
+                    return a.getIntScore() - b.getIntScore();
+                });
 
                 locationListAdapter.notifyDataSetChanged();
 
