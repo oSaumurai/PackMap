@@ -16,17 +16,20 @@ import java.util.Map;
 
 import edu.osu.cse5236.group10.packmap.data.model.ActivityInfo;
 import edu.osu.cse5236.group10.packmap.data.model.LocationInfo;
+import edu.osu.cse5236.group10.packmap.data.store.ActivityStore;
 
 public class LocationListAdapter extends RecyclerView.Adapter<LocationListAdapter.ViewHolder> {
     private String userId;
+    private String activityId;
     public List<LocationInfo> locationList;
     private final LocationListFragment.OnLocationListFragmentInteractionListener mListener;
 
 
-    public LocationListAdapter(String userId, List<LocationInfo> locationList, LocationListFragment.OnLocationListFragmentInteractionListener listener){
+    public LocationListAdapter(String activityId, String userId, List<LocationInfo> locationList, LocationListFragment.OnLocationListFragmentInteractionListener listener){
         this.locationList = locationList;
         this.mListener=listener;
         this.userId = userId;
+        this.activityId = activityId;
     }
 
     @NonNull
@@ -44,7 +47,7 @@ public class LocationListAdapter extends RecyclerView.Adapter<LocationListAdapte
     }
 
     private void update() {
-        
+        ActivityStore.getInstance().updateList(activityId, locationList);
     }
 
     @Override

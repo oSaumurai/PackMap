@@ -51,6 +51,23 @@ public class ActivityStore extends AbstractStore {
         Log.d(TAG, "addLocation: updated");
     }
 
+    public void updateList(String activityId, List<LocationInfo> newlocations) {
+        DocumentReference dr = db.collection("activities").document(activityId);
+        List<Map<String, Object>> map = new ArrayList<>();
+
+        for (int i = 0; i < newlocations.size(); ++i) {
+            LocationInfo li = newlocations.get(i);
+            Map<String, Object> temp = new HashMap<>();
+
+            temp.put("name",li.getName());
+            temp.put("Coordinates",li.getCoordinates());
+            temp.put("upVote",li.getUpvotes());
+            temp.put("downVote",li.getDownvotes());
+            map.add(temp);
+        }
+
+        dr.update("selectedLocations", map);
+    }
 
     public void removeFromlist(int index){
         DocumentReference dr = db.collection("activities").document("ccc");

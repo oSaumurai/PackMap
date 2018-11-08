@@ -66,7 +66,7 @@ public class LocationListFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_location_list, container, false);
         locationInfoList = new ArrayList<>();
-        locationListAdapter = new LocationListAdapter(mUserId, locationInfoList, mListener);
+        locationListAdapter = new LocationListAdapter(mActivityId, mUserId, locationInfoList, mListener);
 
         mRecyclerView = v.findViewById(R.id.location_list);
         mRecyclerView.setHasFixedSize(true);
