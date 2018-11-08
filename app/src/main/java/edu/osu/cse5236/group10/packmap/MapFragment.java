@@ -90,7 +90,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     private Activity mMapActivity;
     private BottomSheetBehavior bottomSheetBehavior;
     private TextView bottom_heading;
-    private Button upVoteButtom,downVoteButtom;
+    private Button selectButton;
     //vars
     private Boolean mLocationPermissionGranted=false;
     private FusedLocationProviderClient mFusedLocationProviderClient;
@@ -123,6 +123,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         mGroupId=getActivity().getIntent().getStringExtra("groupId");
         mActivityId=getActivity().getIntent().getStringExtra("activityId");
         userId=getActivity().getIntent().getStringExtra("userId");
+        //Log.d(Tag, "onCreate: id    +++++" + mActivityId);
         getLocationPermission();
     }
 
@@ -139,8 +140,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         //register bottom sheet
         bottomSheetBehavior=BottomSheetBehavior.from(v.findViewById(R.id.bottom_Sheet_Layout));
         bottom_heading=v.findViewById(R.id.bottom_Sheet_Heading);
-        upVoteButtom=v.findViewById(R.id.up_vote);
-        downVoteButtom=v.findViewById(R.id.down_vote);
+        selectButton=v.findViewById(R.id.select_button);
         //searchText UI
         mSearchText=(AutoCompleteTextView) v.findViewById(R.id.input_search);
         mGeoDataClient=Places.getGeoDataClient(context);
@@ -234,28 +234,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                     bottom_heading.setText(info);
                     mLocationInfo.setName(poi.name);
                     mLocationInfo.setCoordinates(new GeoPoint(poi.latLng.latitude,poi.latLng.longitude));
-                    mActivityInfo.setName("233");
-                    mActivityInfo.setInfo("sadwa");
 
+
+                    //mActivityStore.addLocation(mActivityId,mLocationInfo);
+                }
+            });
+            //add current selected location
+            selectButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     mActivityStore.addLocation(mActivityId,mLocationInfo);
-                    //addActivity(mActivityInfo);
-                    //mActivityStore.addNewActivity(mActivityInfo.getName(),mLocationInfo,"233");
-                }
-            });
 
-            //init and send data to BottomView
-            upVoteButtom.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showAllLocations();
-                }
-
-            });
-
-            downVoteButtom.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mActivityStore.removeFromlist(0);
                 }
             });
 
@@ -372,12 +361,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     ////////// Down here is for database test/////////////
 
 
-    private void addPositionToActivity(String activityName, LocationInfo newLocation){
-        ActivityStore.getInstance().getActivityById("ccc", new GetActivityOnCompleteListener());
-        List<LocationInfo> mLocaitonInfo=mActivityInfo.getSelectedLocations();
-        Log.d(Tag, "addPositionToActivity: "+ mLocaitonInfo);
-        mLocaitonInfo.add(newLocation);
-    }
 
     public class GetActivityOnCompleteListener implements OnCompleteListener<QuerySnapshot> {
          @Override

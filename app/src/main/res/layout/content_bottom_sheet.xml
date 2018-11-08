@@ -14,24 +14,15 @@
         android:id="@+id/bottom_Sheet_Heading"
         android:layout_width="230dp"
         android:layout_height="wrap_content"
-        android:text="current location info"
+        android:text="Address Info"
         android:textAppearance="@android:style/TextAppearance.Large" />
     <Button
-        android:id="@+id/up_vote"
+        android:id="@+id/select_button"
         android:layout_width="100dp"
         android:layout_height="50dp"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="40dp"
         android:layout_marginEnd="15dp"
         android:textSize="15sp"
-        android:text="@string/up_vote"/>
-
-    <Button
-        android:id="@+id/down_vote"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:layout_alignStart="@+id/up_vote"
-        android:layout_marginTop="85dp"
-        android:text="@string/down_vote"
-        android:textSize="15sp" />
+        android:text="@string/add_to_location"/>
 </RelativeLayout>

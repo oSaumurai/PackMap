@@ -39,7 +39,7 @@ public class ActivityStore extends AbstractStore {
 
 
     public void addLocation(String activityId, LocationInfo newlocation){
-        DocumentReference dr = db.collection("activities").document("cEsA1ro73MXwX7osMWTu");
+        DocumentReference dr = db.collection("activities").document(activityId);
         Map map=new HashMap<>();
         map.put("name",newlocation.getName());
         map.put("Coordinates",newlocation.getCoordinates());
