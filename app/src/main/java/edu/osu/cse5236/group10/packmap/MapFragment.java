@@ -52,7 +52,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PointOfInterest;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -60,6 +63,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import edu.osu.cse5236.group10.packmap.data.DataUtils;
 import edu.osu.cse5236.group10.packmap.data.model.ActivityInfo;
@@ -94,6 +98,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     private ActivityStore mActivityStore;
     private ActivityInfo mActivityInfo;
     private LocationInfo mLocationInfo;
+    private List<LocationInfo> mLocationInfoList;
     private String mGroupId;
     private String mActivityId;
     private String userId;
@@ -127,6 +132,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         //TODO might need change
         mActivityInfo=new ActivityInfo();
         mLocationInfo=new LocationInfo();
+        mLocationInfoList=new ArrayList<>();
         //register bottom sheet
         bottomSheetBehavior=BottomSheetBehavior.from(v.findViewById(R.id.bottom_Sheet_Layout));
         bottom_heading=v.findViewById(R.id.bottom_Sheet_Heading);
@@ -238,8 +244,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
             upVoteButtom.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    showAllLocations();
                 }
+
             });
 
             downVoteButtom.setOnClickListener(new View.OnClickListener() {
@@ -369,7 +376,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         mLocaitonInfo.add(newLocation);
     }
 
-   public class GetActivityOnCompleteListener implements OnCompleteListener<QuerySnapshot> {
+    public class GetActivityOnCompleteListener implements OnCompleteListener<QuerySnapshot> {
          @Override
         public void onComplete(@NonNull Task<QuerySnapshot> task) {
             if (task.isSuccessful()) {
@@ -381,16 +388,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-    private void addNewLocationToCurrentActivity(){
-        mActivityStore.addLocation("ccc", mLocationInfo);
+    private void showAllLocations(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference dr = db.collection("activities").document("cEsA1ro73MXwX7osMWTu");
+        //mActivityInfo=mActivityStore.getActivityById("cEsA1ro73MXwX7osMWTu",);
+        mLocationInfoList=mActivityInfo.getSelectedLocations();
+        Log.d(Tag, "showAllLocations: " + mLocationInfoList);
+
+
+
+        //MarkerOptions options= new MarkerOptions().position(latLng).title(title);
+        //mMap.addMarker(options);
+
+
     }
-
-
-
-    private void checkAndUpdateVote(){
-
-
-    }
-
 
 }

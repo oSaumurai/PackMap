@@ -150,16 +150,14 @@ public class PackFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onDetach() {
         super.onDetach();
-
         Log.d(TAG, "onDetach() called");
-
         mListener = null;
     }
 
 
     public interface OnPackFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(String name);
+        void onListFragmentInteraction();
     }
 
 }

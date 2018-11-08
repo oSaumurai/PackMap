@@ -39,12 +39,14 @@ public class ActivityStore extends AbstractStore {
 
 
     public void addLocation(String activityId, LocationInfo newlocation){
-        DocumentReference dr = db.collection("activities").document("Jokkny4pQxxH91iK7bCi");
+        DocumentReference dr = db.collection("activities").document("cEsA1ro73MXwX7osMWTu");
         Map map=new HashMap<>();
         map.put("name",newlocation.getName());
         map.put("Coordinates",newlocation.getCoordinates());
         map.put("upVote",newlocation.getUpvotes());
         map.put("downVote",newlocation.getDownvotes());
+        Map<String, Map<String, Object>> temp=new HashMap<>();
+        temp.put(activityId, map);
         dr.update("selectedLocations", FieldValue.arrayUnion(map));
         Log.d(TAG, "addLocation: updated");
     }
@@ -57,7 +59,7 @@ public class ActivityStore extends AbstractStore {
 
     public void getActivityById(String activityId,OnCompleteListener<QuerySnapshot> listener){
         db.collection(COLLECTION)
-                .whereEqualTo("name", activityId)
+                .whereEqualTo("selectedLocations", activityId)
                 .get()
                 .addOnCompleteListener(listener);
     }

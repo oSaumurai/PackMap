@@ -40,7 +40,7 @@ public class ActivityListAdapter extends RecyclerView.Adapter<ActivityListAdapte
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem.get(position));
+                    mListener.onListFragmentInteraction();
                 }
             }
         });
@@ -55,7 +55,7 @@ public class ActivityListAdapter extends RecyclerView.Adapter<ActivityListAdapte
 
         View mView;
         public TextView memberName;
-        public List<String> mItem;
+        //public List<String> mItem;
         public ViewHolder(View itemView) {
             super(itemView);
             mView = itemView;

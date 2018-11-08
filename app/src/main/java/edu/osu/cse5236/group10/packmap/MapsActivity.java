@@ -15,7 +15,6 @@ public class MapsActivity extends FragmentActivity {
     private String mActivityId;
     private String userId;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,17 +35,7 @@ public class MapsActivity extends FragmentActivity {
                     .commit();
         }
 
-
         mAddButton = findViewById(R.id.add_fab);
-        mAddButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mAddButton.hide();
-                Intent intent = new Intent(MapsActivity.this, CreateGroupActivity.class);
-                //intent.putExtra("userId", mPhoneNum);
-                startActivity(intent);
-            }
-        });
     }
 
 
