@@ -1,5 +1,6 @@
 package edu.osu.cse5236.group10.packmap;
 
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -54,13 +55,27 @@ public class LocationListAdapter extends RecyclerView.Adapter<LocationListAdapte
         holder.locationName.setText(li.getName());
         holder.score.setText(li.getScore());
 
+        List<String> dv = li.getDownvotes();
+        List<String> uv = li.getUpvotes();
+
+        if (uv.contains(userId))
+            holder.btnUpvote.setBackgroundColor(Color.GREEN);
+        else
+            holder.btnUpvote.setBackgroundColor(Color.GRAY);
+
+        if (dv.contains(userId))
+            holder.btnDownVote.setBackgroundColor(Color.RED);
+        else
+            holder.btnDownVote.setBackgroundColor(Color.GRAY);
+
         holder.btnDownVote.setOnClickListener(view -> {
-            List<String> dv = li.getDownvotes();
-            List<String> uv = li.getUpvotes();
-            if (uv.contains(userId))
+            if (uv.contains(userId)) {
                 uv.remove(userId);
-            else if (!dv.contains(userId))
+                holder.btnUpvote.setBackgroundColor(Color.GRAY);
+            } else if (!dv.contains(userId)) {
                 dv.add(userId);
+                holder.btnDownVote.setBackgroundColor(Color.RED);
+            }
 
             li.updateScore();
             update();
@@ -69,12 +84,13 @@ public class LocationListAdapter extends RecyclerView.Adapter<LocationListAdapte
         });
 
         holder.btnUpvote.setOnClickListener(view -> {
-            List<String> uv = li.getUpvotes();
-            List<String> dv = li.getDownvotes();
-            if (dv.contains(userId))
+            if (dv.contains(userId)) {
                 dv.remove(userId);
-            else if (!uv.contains(userId))
+                holder.btnDownVote.setBackgroundColor(Color.GRAY);
+            } else if (!uv.contains(userId)) {
                 uv.add(userId);
+                holder.btnUpvote.setBackgroundColor(Color.GREEN);
+            }
 
             li.updateScore();
             update();
