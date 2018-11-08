@@ -50,7 +50,7 @@
     <string name="google_maps_API_key">AIzaSyAm0quTUQfR1OHTbeLlh8oajO1Yw7E6jRw</string>
     <string name="up_vote">up</string>
     <string name="down_vote">down</string>
-    <string name="add_to_location">select</string>
+    <string name="add_to_location">Add</string>
     <string name="content_bottom_sheet">android.support.design.widget.BottomSheetBehavior</string>
 
     <!-- Creating new group -->

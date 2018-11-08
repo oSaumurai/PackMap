@@ -23,18 +23,21 @@
             android:textColor="@color/design_default_color_primary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
             android:text="@string/init_score" />
 
         <Button
             android:id="@+id/upvote_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
             android:text="@string/upvote" />
 
         <Button
             android:id="@+id/downvote_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
             android:text="@string/downvote" />
     </LinearLayout>
 </RelativeLayout>
