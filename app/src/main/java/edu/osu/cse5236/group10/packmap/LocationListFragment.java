@@ -16,10 +16,12 @@ import android.widget.ListView;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import edu.osu.cse5236.group10.packmap.data.model.ActivityInfo;
@@ -74,9 +76,17 @@ public class LocationListFragment extends Fragment {
             if (e1 != null) {
                 Log.d(TAG, "error: " + e1.getMessage());
             } else {
-                List<LocationInfo> temp = (List<LocationInfo>) groupQuery.get("selectedLocations");
+                List<Map<String, Object>> temp = (List<Map<String, Object>>) groupQuery.get("selectedLocations");
                 locationInfoList.clear();
-                locationInfoList.addAll(temp);
+                for (int i = 0; i < temp.size(); ++i) {
+                    LocationInfo li = new LocationInfo();
+                    Map<String, Object> m = temp.get(i);
+                    li.setCoordinates((GeoPoint) m.get("Coordinates"));
+                    li.setName((String) m.get("name"));
+                    li.setUpvotes((List<String>) m.get("upVote"));
+                    li.setUpvotes((List<String>) m.get("downVote"));
+                    locationInfoList.add(li);
+                }
 
                 locationListAdapter.notifyDataSetChanged();
 
