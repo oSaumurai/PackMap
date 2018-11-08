@@ -92,7 +92,7 @@ public class LocationListFragment extends Fragment {
                 }
 
                 Collections.sort(locationInfoList, (a, b) -> {
-                    return a.getIntScore() - b.getIntScore();
+                    return b.getIntScore() - a.getIntScore();
                 });
 
                 locationListAdapter.notifyDataSetChanged();
