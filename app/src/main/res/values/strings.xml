@@ -60,6 +60,8 @@
 
     <string name="navigation_pack_activities">Activities</string>
     <string name="navigation_pack_members">Members</string>
+    <string name="navigation_activity_map">Map</string>
+    <string name="navigation_activity_vote">Votes</string>
 
     <string name="list_item_name">Name</string>
     <string name="menu_add_member">Add Member</string>
