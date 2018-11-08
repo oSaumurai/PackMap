@@ -11,6 +11,7 @@ public class ActivityInfo extends BaseDocument {
     private String info;
     private boolean isActive;
     private List<LocationInfo> selectedLocations;
+    private String uid;
 
     public ActivityInfo() {
         name="";
@@ -58,10 +59,14 @@ public class ActivityInfo extends BaseDocument {
         this.selectedLocations = selectedLocations;
     }
 
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
     @Override
     @Exclude
     public String getDocumentId() {
-        return getName();
+        return this.uid;
     }
 
     @Override

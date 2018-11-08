@@ -78,10 +78,11 @@ public class PackActivity extends AppCompatActivity implements PackFragment.OnPa
     }
 
     @Override
-    public void onListFragmentInteraction() {
+    public void onListFragmentInteraction(ActivityInfo ai) {
         Intent intent = new Intent(this, MapsActivity.class);
         intent.putExtra("userId", mPhoneNum);
         intent.putExtra("groupId", GroupId);
+        intent.putExtra("activityId", ai.getDocumentId());
         startActivity(intent);
     }
 

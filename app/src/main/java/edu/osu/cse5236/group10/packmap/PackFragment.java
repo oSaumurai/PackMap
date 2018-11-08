@@ -105,8 +105,11 @@ public class PackFragment extends Fragment implements View.OnClickListener{
                         Log.d(TAG, "error" + e2.getMessage());
                     else {
                         for (DocumentSnapshot ds: activityQuery.getDocuments()) {
-                            if (s.contains(ds.getId()))
-                                activityInfoList.add(ds.toObject(ActivityInfo.class));
+                            if (s.contains(ds.getId())) {
+                                ActivityInfo temp1 = ds.toObject(ActivityInfo.class);
+                                temp1.setUid(ds.getId());
+                                activityInfoList.add(temp1);
+                            }
                         }
 
                         activityListAdapter.notifyDataSetChanged();
@@ -157,7 +160,7 @@ public class PackFragment extends Fragment implements View.OnClickListener{
 
     public interface OnPackFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction();
+        void onListFragmentInteraction(ActivityInfo ai);
     }
 
 }

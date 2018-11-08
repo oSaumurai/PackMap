@@ -6,10 +6,13 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.View;
 
 
 public class MapsActivity extends FragmentActivity {
+    private static final String TAG = "MapsActivity";
+
     private FloatingActionButton mAddButton;
     private String mGroupId;
     private String mActivityId;
@@ -24,6 +27,8 @@ public class MapsActivity extends FragmentActivity {
         mGroupId=this.getIntent().getStringExtra("groupId");
         mActivityId=this.getIntent().getStringExtra("activityId");
         userId=this.getIntent().getStringExtra("userId");
+
+        Log.d(TAG, userId + " - " + mGroupId + " - " + mActivityId);
 
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.map_fragment_container);
