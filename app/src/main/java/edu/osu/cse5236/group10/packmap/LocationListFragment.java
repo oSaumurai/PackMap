@@ -86,7 +86,7 @@ public class LocationListFragment extends Fragment {
                     li.setCoordinates((GeoPoint) m.get("Coordinates"));
                     li.setName((String) m.get("name"));
                     li.setUpvotes((List<String>) m.get("upVote"));
-                    li.setUpvotes((List<String>) m.get("downVote"));
+                    li.setDownvotes((List<String>) m.get("downVote"));
                     li.updateScore();
                     locationInfoList.add(li);
                 }

@@ -45,7 +45,7 @@ public class LocationListAdapter extends RecyclerView.Adapter<LocationListAdapte
 
     private void sortList() {
         Collections.sort(locationList, (a, b) -> {
-            return a.getIntScore() - b.getIntScore();
+            return b.getIntScore() - a.getIntScore();
         });
     }
 
@@ -72,6 +72,7 @@ public class LocationListAdapter extends RecyclerView.Adapter<LocationListAdapte
             sortList();
             update();
             holder.score.setText(li.getScore());
+            notifyDataSetChanged();
         });
 
         holder.btnUpvote.setOnClickListener(view -> {
@@ -86,6 +87,7 @@ public class LocationListAdapter extends RecyclerView.Adapter<LocationListAdapte
             sortList();
             update();
             holder.score.setText(li.getScore());
+            notifyDataSetChanged();
         });
     }
 
