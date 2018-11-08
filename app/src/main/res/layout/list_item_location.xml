@@ -5,9 +5,29 @@
     android:layout_height="wrap_content"
     android:layout_margin="2dp">
 
-    <TextView
-        android:id="@+id/list_location_name"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/list_item_name" />
+        android:layout_margin="16dp"
+        android:orientation="horizontal">
+        
+        <TextView
+            android:id="@+id/list_location_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/list_item_name" />
+
+        <Button
+            android:id="@+id/upvote_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/upvote" />
+
+        <Button
+            android:id="@+id/downvote_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/downvote" />
+    </LinearLayout>>
 </RelativeLayout>
