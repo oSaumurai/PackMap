@@ -70,6 +70,7 @@ public class LocationListFragment extends Fragment {
         mRecyclerView = v.findViewById(R.id.location_list);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setAdapter(locationListAdapter);
         db = FirebaseFirestore.getInstance();
 
         db.collection("activities").document(mActivityId).addSnapshotListener((groupQuery, e1) -> {
