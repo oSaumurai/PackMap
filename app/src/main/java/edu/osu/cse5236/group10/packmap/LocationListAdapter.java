@@ -2,6 +2,7 @@ package edu.osu.cse5236.group10.packmap;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,8 @@ import edu.osu.cse5236.group10.packmap.data.model.LocationInfo;
 import edu.osu.cse5236.group10.packmap.data.store.ActivityStore;
 
 public class LocationListAdapter extends RecyclerView.Adapter<LocationListAdapter.ViewHolder> {
+    private static final String TAG = "LocationListAdapter";
+
     private String userId;
     private String activityId;
     public List<LocationInfo> locationList;
@@ -59,20 +62,30 @@ public class LocationListAdapter extends RecyclerView.Adapter<LocationListAdapte
 
         holder.btnDownVote.setOnClickListener(view -> {
             List<String> dv = li.getDownvotes();
-            if (!dv.contains(userId)) {
+            List<String> uv = li.getUpvotes();
+            if (uv.contains(userId))
+                uv.remove(userId);
+            else if (!dv.contains(userId))
                 dv.add(userId);
-                sortList();
-                update();
-            }
+
+            li.updateScore();
+            sortList();
+            update();
+            holder.score.setText(li.getScore());
         });
 
         holder.btnUpvote.setOnClickListener(view -> {
             List<String> uv = li.getUpvotes();
-            if (!uv.contains(userId)) {
+            List<String> dv = li.getDownvotes();
+            if (dv.contains(userId))
+                dv.remove(userId);
+            else if (!uv.contains(userId))
                 uv.add(userId);
-                sortList();
-                update();
-            }
+
+            li.updateScore();
+            sortList();
+            update();
+            holder.score.setText(li.getScore());
         });
     }
 

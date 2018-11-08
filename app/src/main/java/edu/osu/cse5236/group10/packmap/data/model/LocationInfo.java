@@ -1,6 +1,7 @@
 package edu.osu.cse5236.group10.packmap.data.model;
 
 import android.location.Location;
+import android.util.Log;
 
 import com.google.firebase.firestore.GeoPoint;
 
@@ -23,7 +24,6 @@ public class LocationInfo extends BaseDocument {
         this.name = "";
         this.upvotes = new ArrayList<>();
         this.downvotes = new ArrayList<>();
-        score = 0;
     }
     public LocationInfo(GeoPoint coordinates, String name, List<String> upvotes, List<String> downvotes) {
         this.coordinates = coordinates;
@@ -61,6 +61,7 @@ public class LocationInfo extends BaseDocument {
 
     public void updateScore() {
         score = upvotes.size() - downvotes.size();
+        Log.d("LocationListAdapter", "ls " + Integer.toString(score));
     }
 
     public int getIntScore() {
@@ -68,7 +69,7 @@ public class LocationInfo extends BaseDocument {
     }
 
     public String getScore() {
-        return "" + score;
+        return Integer.toString(score);
     }
 
     public void setDownvotes(List<String> downvotes) {
