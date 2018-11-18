@@ -97,12 +97,13 @@ public class PackFragment extends Fragment implements View.OnClickListener{
             } else {
                 List<String> temp = (List<String>) groupQuery.get("activityList");
                 Set<String> s = new HashSet<>(temp);
-                activityInfoList.clear();
 
                 db.collection("activities").addSnapshotListener((activityQuery, e2) -> {
                     if (e2 != null)
                         Log.d(TAG, "error" + e2.getMessage());
                     else {
+                        activityInfoList.clear();
+
                         for (DocumentSnapshot ds: activityQuery.getDocuments()) {
                             if (s.contains(ds.getId())) {
                                 ActivityInfo temp1 = ds.toObject(ActivityInfo.class);
