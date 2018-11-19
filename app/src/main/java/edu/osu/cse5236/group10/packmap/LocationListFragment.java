@@ -52,7 +52,6 @@ public class LocationListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-
             mUserId = getArguments().getString("userId");
             mGroupId = getArguments().getString("groupId");
             mActivityId=getArguments().getString("activityId");
@@ -78,26 +77,29 @@ public class LocationListFragment extends Fragment {
             if (e1 != null) {
                 Log.d(TAG, "error: " + e1.getMessage());
             } else {
-                List<Map<String, Object>> temp = (List<Map<String, Object>>) groupQuery.get("selectedLocations");
+                List<String> locationUidList= (List<String>) groupQuery.get("selectedLocations");
                 locationInfoList.clear();
-                for (int i = 0; i < temp.size(); ++i) {
-                    LocationInfo li = new LocationInfo();
-                    Map<String, Object> m = temp.get(i);
-                    li.setCoordinates((GeoPoint) m.get("Coordinates"));
-                    li.setName((String) m.get("name"));
-                    li.setUpvotes((List<String>) m.get("upVote"));
-                    li.setDownvotes((List<String>) m.get("downVote"));
-                    li.updateScore();
-                    locationInfoList.add(li);
+
+                for (int i = 0; i < locationUidList.size(); i++) {
+                    String locationUid=locationUidList.get(i);
+                    db.collection("locations").document(locationUid).addSnapshotListener((locationQuery, e2)->{
+                        if (e2!= null) {
+                            Log.d(TAG, "error: " + e1.getMessage());
+                        }else {
+                            String name=(String) locationQuery.get("name");
+                            GeoPoint geoPoint=locationQuery.getGeoPoint("coordinates");
+                            List<String> upVote= (List<String>) locationQuery.get("upVotes");
+                            List<String> downVote= (List<String>) locationQuery.get("downVotes");
+
+
+                            LocationInfo locationInfo=new LocationInfo(geoPoint,name,upVote,downVote);
+                            locationInfoList.add(locationInfo);
+                            Log.d(TAG, "onCreateView: "+ locationInfoList.size());
+                        }
+                    });
+                    locationListAdapter.notifyDataSetChanged();
                 }
-
-                Collections.sort(locationInfoList, (a, b) -> {
-                    return b.getIntScore() - a.getIntScore();
-                });
-
-                locationListAdapter.notifyDataSetChanged();
-
-                Log.d(TAG, "" + locationInfoList.size());
+                Log.d(TAG, "listSize" + locationInfoList.size());
                 for (int i = 0; i < locationInfoList.size(); ++i) {
                     Log.d(TAG, locationInfoList.get(i).getName());
                 }

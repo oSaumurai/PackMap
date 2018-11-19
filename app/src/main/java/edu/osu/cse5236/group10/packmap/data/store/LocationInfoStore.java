@@ -7,8 +7,10 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import edu.osu.cse5236.group10.packmap.data.model.LocationInfo;
@@ -31,14 +33,10 @@ public class LocationInfoStore extends AbstractStore {
         return _instance;
     }
 
-    public void addNewLocation(LocationInfo newlocation){
-        CollectionReference cr = db.collection(COLLECTION);
-        Map map = new HashMap<>();
-        map.put("name",newlocation.getName());
-        map.put("Coordinates",newlocation.getCoordinates());
-        map.put("upVote",newlocation.getUpvotes());
-        map.put("downVote",newlocation.getDownvotes());
-        cr.add(map);
+    public void addNewLocation(LocationInfo newlocation,String activityId){
+        addDocument(newlocation, task->{
+                    ActivityStore.getInstance().addLocation(activityId,task.getId());},
+                getOnFailureListener());
         Log.d(TAG, "addLocation: updated");
     }
 

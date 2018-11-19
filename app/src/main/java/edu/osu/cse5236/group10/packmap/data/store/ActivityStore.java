@@ -38,16 +38,9 @@ public class ActivityStore extends AbstractStore {
     }
 
 
-    public void addLocation(String activityId, LocationInfo newlocation){
-        DocumentReference dr = db.collection("activities").document(activityId);
-        Map map=new HashMap<>();
-        map.put("name",newlocation.getName());
-        map.put("Coordinates",newlocation.getCoordinates());
-        map.put("upVote",newlocation.getUpvotes());
-        map.put("downVote",newlocation.getDownvotes());
-        Map<String, Map<String, Object>> temp=new HashMap<>();
-        temp.put(activityId, map);
-        dr.update("selectedLocations", FieldValue.arrayUnion(map));
+    public void addLocation(String activityUId, String locationUId){
+        DocumentReference dr = db.collection("activities").document(activityUId);
+        dr.update("selectedLocations", FieldValue.arrayUnion(locationUId));
         Log.d(TAG, "addLocation: updated");
     }
 
@@ -86,10 +79,16 @@ public class ActivityStore extends AbstractStore {
                 .get()
                 .addOnCompleteListener(listener);
     }
-
+    public void getLocationsByGroupID(String activityId,
+                                  OnCompleteListener<QuerySnapshot> listener) {
+        db.collection(COLLECTION)
+                .whereArrayContains("selectedLocations", activityId)
+                .get()
+                .addOnCompleteListener(listener);
+    }
 
     public void addNewActivity(String newActivity,String info ,String groupUID) {
-        List<LocationInfo> list=new ArrayList<>();
+        List<String> list=new ArrayList<>();
         ActivityInfo newAct=new ActivityInfo(newActivity,info,false, list);
 
         addDocument(newAct, task->{

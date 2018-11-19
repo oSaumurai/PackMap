@@ -10,7 +10,7 @@ public class ActivityInfo extends BaseDocument {
     private String name;
     private String info;
     private boolean isActive;
-    private List<LocationInfo> selectedLocations;
+    private List<String> selectedLocations;
     private String uid;
 
     public ActivityInfo() {
@@ -20,7 +20,7 @@ public class ActivityInfo extends BaseDocument {
         selectedLocations=new ArrayList<>();
     }
 
-    public ActivityInfo(String name, String info, boolean isActive, List<LocationInfo> selectedLocations) {
+    public ActivityInfo(String name, String info, boolean isActive, List<String> selectedLocations) {
         this.name = name;
         this.info = info;
         this.isActive = isActive;
@@ -51,11 +51,11 @@ public class ActivityInfo extends BaseDocument {
         isActive = active;
     }
 
-    public List<LocationInfo> getSelectedLocations() {
+    public List<String> getSelectedLocations() {
         return selectedLocations;
     }
 
-    public void setSelectedLocations(List<LocationInfo> selectedLocations) {
+    public void setSelectedLocations(List<String> selectedLocations) {
         this.selectedLocations = selectedLocations;
     }
 

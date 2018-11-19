@@ -76,8 +76,7 @@ public class LocationListAdapter extends RecyclerView.Adapter<LocationListAdapte
                 dv.add(userId);
                 holder.btnDownVote.setBackgroundColor(Color.RED);
             }
-
-            li.updateScore();
+            //li.updateScore();
             update();
             holder.score.setText(li.getScore());
             notifyDataSetChanged();
@@ -91,8 +90,6 @@ public class LocationListAdapter extends RecyclerView.Adapter<LocationListAdapte
                 uv.add(userId);
                 holder.btnUpvote.setBackgroundColor(Color.GREEN);
             }
-
-            li.updateScore();
             update();
             holder.score.setText(li.getScore());
             notifyDataSetChanged();
@@ -101,6 +98,7 @@ public class LocationListAdapter extends RecyclerView.Adapter<LocationListAdapte
 
     @Override
     public int getItemCount() {
+        Log.d(TAG, "getItemCount: "+ locationList.size());
         return locationList.size();
     }
 

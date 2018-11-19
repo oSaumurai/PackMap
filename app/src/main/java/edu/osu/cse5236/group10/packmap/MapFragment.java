@@ -56,6 +56,7 @@ import java.util.List;
 import edu.osu.cse5236.group10.packmap.data.model.ActivityInfo;
 import edu.osu.cse5236.group10.packmap.data.model.LocationInfo;
 import edu.osu.cse5236.group10.packmap.data.store.ActivityStore;
+import edu.osu.cse5236.group10.packmap.data.store.LocationInfoStore;
 
 
 public class MapFragment extends Fragment implements OnMapReadyCallback,
@@ -81,6 +82,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     private GeoDataClient mGeoDataClient;
     private Address currentSelectedAddress;
     private ActivityStore mActivityStore;
+    private LocationInfoStore mLocationStore;
     private ActivityInfo mActivityInfo;
     private LocationInfo mLocationInfo;
     private List<LocationInfo> mLocationInfoList;
@@ -115,6 +117,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         context = this.getActivity();
         //firebase
         mActivityStore=ActivityStore.getInstance();
+        mLocationStore=mLocationStore.getInstance();
         //TODO might need change
         mActivityInfo=new ActivityInfo();
         mLocationInfo=new LocationInfo();
@@ -216,9 +219,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                     bottom_heading.setText(info);
                     mLocationInfo.setName(poi.name);
                     mLocationInfo.setCoordinates(new GeoPoint(poi.latLng.latitude,poi.latLng.longitude));
-
-
-                    //mActivityStore.addLocation(mActivityId,mLocationInfo);
                 }
             });
             //add current selected location
@@ -228,7 +228,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                     if(mActivityId==null){
                         Toast.makeText(mMapActivity, "Need add activity to put location", Toast.LENGTH_SHORT).show();
                     }else {
-                        mActivityStore.addLocation(mActivityId, mLocationInfo);
+                        mLocationStore.addNewLocation(mLocationInfo,mActivityId);
                     }
 
                 }

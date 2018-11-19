@@ -17,7 +17,6 @@ public class LocationInfo extends BaseDocument {
     // Map with key of user id (phone number) and value is any comment
     private List<String> upvotes;
     private List<String> downvotes;
-    private int score;
 
     public LocationInfo (){
         this.coordinates = new GeoPoint(40,-82);
@@ -59,17 +58,17 @@ public class LocationInfo extends BaseDocument {
         return downvotes;
     }
 
-    public void updateScore() {
-        score = upvotes.size() - downvotes.size();
-        Log.d("LocationListAdapter", "ls " + Integer.toString(score));
-    }
-
     public int getIntScore() {
-        return score;
+        return upvotes.size()-downvotes.size();
     }
 
-    public String getScore() {
-        return Integer.toString(score);
+    /*public void updateScore() {
+        int score = upvotes.size() - downvotes.size();
+        Log.d("LocationListAdapter", "ls " + Integer.toString(score));
+    }*/
+
+    public String getScore(){
+        return Integer.toString(getIntScore());
     }
 
     public void setDownvotes(List<String> downvotes) {
