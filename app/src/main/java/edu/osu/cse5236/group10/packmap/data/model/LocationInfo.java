@@ -59,7 +59,7 @@ public class LocationInfo extends BaseDocument {
     }
 
     public int getIntScore() {
-        return upvotes.size()-downvotes.size();
+        return getUpvotes().size()-getDownvotes().size();
     }
 
     /*public void updateScore() {

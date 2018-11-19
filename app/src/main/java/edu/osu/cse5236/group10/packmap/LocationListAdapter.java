@@ -45,7 +45,7 @@ public class LocationListAdapter extends RecyclerView.Adapter<LocationListAdapte
     }
 
     private void update() {
-        ActivityStore.getInstance().updateList(activityId, locationList);
+        //ActivityStore.getInstance().updateList(activityId, locationList);
     }
 
     @Override

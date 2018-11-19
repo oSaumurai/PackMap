@@ -88,16 +88,16 @@ public class LocationListFragment extends Fragment {
                         }else {
                             String name=(String) locationQuery.get("name");
                             GeoPoint geoPoint=locationQuery.getGeoPoint("coordinates");
-                            List<String> upVote= (List<String>) locationQuery.get("upVotes");
-                            List<String> downVote= (List<String>) locationQuery.get("downVotes");
-
-
+                            List<String> upVote= new ArrayList<>();
+                            upVote= (List<String>) locationQuery.get("upvotes");
+                            List<String> downVote= new ArrayList<>();
+                            downVote= (List<String>) locationQuery.get("downvotes");
                             LocationInfo locationInfo=new LocationInfo(geoPoint,name,upVote,downVote);
                             locationInfoList.add(locationInfo);
                             Log.d(TAG, "onCreateView: "+ locationInfoList.size());
+                            locationListAdapter.notifyDataSetChanged();
                         }
                     });
-                    locationListAdapter.notifyDataSetChanged();
                 }
                 Log.d(TAG, "listSize" + locationInfoList.size());
                 for (int i = 0; i < locationInfoList.size(); ++i) {
