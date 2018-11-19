@@ -95,10 +95,15 @@ public class LocationListFragment extends Fragment {
                             LocationInfo locationInfo=new LocationInfo(geoPoint,name,upVote,downVote);
                             locationInfoList.add(locationInfo);
                             Log.d(TAG, "onCreateView: "+ locationInfoList.size());
+
+                            Collections.sort(locationInfoList, (a, b) -> {
+                                return b.getIntScore() - a.getIntScore();
+                            });
                             locationListAdapter.notifyDataSetChanged();
                         }
                     });
                 }
+
                 Log.d(TAG, "listSize" + locationInfoList.size());
                 for (int i = 0; i < locationInfoList.size(); ++i) {
                     Log.d(TAG, locationInfoList.get(i).getName());
