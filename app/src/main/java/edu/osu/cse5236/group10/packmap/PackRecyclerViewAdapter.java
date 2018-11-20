@@ -1,10 +1,16 @@
 package edu.osu.cse5236.group10.packmap;
 
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
 
 import edu.osu.cse5236.group10.packmap.PackListFragment.OnPackListFragmentInteractionListener;
 import edu.osu.cse5236.group10.packmap.data.PackListContent.PackItem;
@@ -19,6 +25,7 @@ import java.util.List;
 public class PackRecyclerViewAdapter extends RecyclerView.Adapter<PackRecyclerViewAdapter.ViewHolder> {
 
     private static final String TAG = "PackRecyclerViewAdapter";
+    private static final ColorGenerator COLOR_GENERATOR = ColorGenerator.MATERIAL;
     private final List<PackItem> mValues;
     private final OnPackListFragmentInteractionListener mListener;
 
@@ -37,8 +44,13 @@ public class PackRecyclerViewAdapter extends RecyclerView.Adapter<PackRecyclerVi
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        String content = mValues.get(position).content;
+        int color = COLOR_GENERATOR.getColor(content);
+        TextDrawable image = TextDrawable.builder()
+                .beginConfig().bold().toUpperCase().endConfig()
+                .buildRound("" + content.charAt(0), color);
+        holder.mImage.setImageDrawable(image);
+        holder.mContentView.setText(content);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,14 +71,14 @@ public class PackRecyclerViewAdapter extends RecyclerView.Adapter<PackRecyclerVi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
+        public final ImageView mImage;
         public final TextView mContentView;
         public PackItem mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.item_number);
+            mImage = (ImageView) view.findViewById(R.id.item_image);
             mContentView = (TextView) view.findViewById(R.id.content);
         }
 
