@@ -37,6 +37,12 @@ public class LogInSignUpActivity extends AppCompatActivity implements View.OnCli
         l1=findViewById(R.id.login_frame_1);
         l2=findViewById(R.id.login_frame_2);
 
+        if (UserSharedPreference.getLoggedStatus(getApplicationContext())) {
+            Intent intent = new Intent(getApplicationContext(), PackListActivity.class);
+            intent.putExtra("userId", UserSharedPreference.getUserId(getApplicationContext()));
+            startActivity(intent);
+        }
+
         //
         uptodown=AnimationUtils.loadAnimation(this,R.anim.up_to_down);
         downtoup=AnimationUtils.loadAnimation(this,R.anim.down_to_up);

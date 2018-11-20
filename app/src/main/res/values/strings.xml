@@ -24,6 +24,7 @@
     <string name="title_select">Select</string>
     <string name="menu_update_account">Account Setting</string>
     <string name="menu_delete_account">Delete Account</string>
+    <string name="menu_log_out_account">Log Out</string>
     <string name="menu_create_group">Create Group</string>
 
     <string name="group_name">Group Name:</string>

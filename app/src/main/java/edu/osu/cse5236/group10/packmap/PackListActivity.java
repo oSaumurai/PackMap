@@ -88,6 +88,13 @@ public class PackListActivity extends AppCompatActivity implements
 
                 finish();
                 return true;
+            case R.id.logout_account:
+                UserSharedPreference.setLoggedIn(this, false, null);
+                intent = new Intent(this, LogInSignUpActivity.class);
+
+                Log.d(TAG, "Logging out: " + mPhoneNum);
+                startActivity(intent);
+                return true;
         }
 
         return false;

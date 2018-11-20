@@ -1,6 +1,7 @@
 package edu.osu.cse5236.group10.packmap;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 
@@ -93,7 +94,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void loginUser(String phone, String password) {
-        userStore.processUser(phone, task -> {
+        Context context = this;
+        userStore.processUser(phone.trim(), task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
@@ -106,12 +108,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     }
                     if (d3crypt != null && d3crypt.equals(password)) {
                         Log.d(TAG, TAG + ": User Log in!");
-                        Intent intent = new Intent(this, PackListActivity.class);
 
-                        intent.putExtra("userId", mPhoneView.getText().toString().trim());
+                        UserSharedPreference.setLoggedIn(context, true, phone.trim());
+
+                        Intent intent = new Intent(this, PackListActivity.class);
+                        intent.putExtra("userId", phone.trim());
 
                         // TODO: Move this to initial start point after login
-                        FirebaseNotificationService.subscribeToTopic("user_" + phone);
+                        FirebaseNotificationService.subscribeToTopic("user_" + phone.trim());
                         Stream.of(user.getGroups())
                                 .forEach(group -> FirebaseNotificationService.subscribeToTopic("group_" + group));
 
