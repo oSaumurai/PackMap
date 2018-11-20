@@ -76,8 +76,13 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     }
 
     private void createAccount(String phoneNum, String lname, String fname, String password) {
-        User u = new User(phoneNum, lname, fname, password);
-        userStore.checkThenSetNewUser(u, new AddNewUserOnCompleteListener(u));
+        try {
+            User u = new User(phoneNum, lname, fname, AESCrypt.encrypt(password));
+            userStore.checkThenSetNewUser(u, new AddNewUserOnCompleteListener(u));
+        } catch (Exception e) {
+            Log.d(TAG, "Unable to encrypt password");
+
+        }
     }
 
     public class AddNewUserOnCompleteListener implements OnCompleteListener<DocumentSnapshot> {

@@ -98,7 +98,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
                     User user = DataUtils.getObject(document, User.class);
-                    if (user.getPassword().equals(password)) {
+                    String d3crypt = null;
+                    try {
+                        d3crypt = AESCrypt.decrypt(user.getPassword());
+                    } catch (Exception e) {
+                        Log.d(TAG, "Unable to decrypt password");
+                    }
+                    if (d3crypt != null && d3crypt.equals(password)) {
                         Log.d(TAG, TAG + ": User Log in!");
                         Intent intent = new Intent(this, PackListActivity.class);
 
