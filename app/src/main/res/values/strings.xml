@@ -65,6 +65,11 @@
     <string name="notification_channel_new_group_name">New group</string>
     <string name="notification_added_to_group">New Group Created!</string>
 
+    <!-- New Activity Notifications -->
+    <string name="notification_channel_new_activity_id">new_activity</string>
+    <string name="notification_channel_new_activity_name">New activity</string>
+    <string name="notification_activity_created">New Activity Started!</string>
+
     <string name="navigation_pack_activities">Activities</string>
     <string name="navigation_pack_members">Members</string>
     <string name="navigation_activity_map">Map</string>

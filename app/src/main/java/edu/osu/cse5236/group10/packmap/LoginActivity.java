@@ -12,10 +12,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.annimon.stream.Stream;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import edu.osu.cse5236.group10.packmap.data.DataUtils;
+import edu.osu.cse5236.group10.packmap.data.model.User;
 import edu.osu.cse5236.group10.packmap.data.store.UserStore;
 
 
@@ -94,14 +97,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
-                    if (document.getString("password").equals(password)) {
+                    User user = DataUtils.getObject(document, User.class);
+                    if (user.getPassword().equals(password)) {
                         Log.d(TAG, TAG + ": User Log in!");
                         Intent intent = new Intent(this, PackListActivity.class);
 
                         intent.putExtra("userId", mPhoneView.getText().toString().trim());
 
-                        FirebaseNotificationService
-                                .subscribeToTopic(mPhoneView.getText().toString().trim());
+                        // TODO: Move this to initial start point after login
+                        FirebaseNotificationService.subscribeToTopic("user_" + phone);
+                        Stream.of(user.getGroups())
+                                .forEach(group -> FirebaseNotificationService.subscribeToTopic("group_" + group));
 
                         // Start activity and pass the phone number to it
                         startActivity(intent);

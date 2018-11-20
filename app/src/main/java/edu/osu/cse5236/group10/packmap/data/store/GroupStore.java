@@ -1,5 +1,7 @@
 package edu.osu.cse5236.group10.packmap.data.store;
 
+import android.util.Log;
+
 import com.annimon.stream.Stream;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.firestore.DocumentReference;
@@ -10,6 +12,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.HashMap;
 import java.util.Map;
 
+import edu.osu.cse5236.group10.packmap.FirebaseNotificationService;
 import edu.osu.cse5236.group10.packmap.data.model.Group;
 
 public class GroupStore extends AbstractStore {
@@ -42,6 +45,8 @@ public class GroupStore extends AbstractStore {
 
     public void addGroup(Group group) {
         addDocument(group, task -> {
+            String topic = "group_" + task.getId();
+            FirebaseNotificationService.subscribeToTopic(topic);
             Stream.of(group.getUserList())
                     .forEach(userId -> UserStore.getInstance().addGroup(userId, task.getId()));
         }, getOnFailureListener());

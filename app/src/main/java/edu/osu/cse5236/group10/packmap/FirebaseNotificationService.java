@@ -11,6 +11,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -24,9 +25,9 @@ public class FirebaseNotificationService extends FirebaseMessagingService {
 
     public FirebaseNotificationService() { }
 
-    public static void subscribeToTopic(String userId) {
-        FirebaseMessaging.getInstance().subscribeToTopic("user_" + userId);
-        Log.d(TAG, "Subscribed to topic: user_" + userId);
+    public static void subscribeToTopic(String topic) {
+        FirebaseMessaging.getInstance().subscribeToTopic(topic);
+        Log.d(TAG, "Subscribed to topic: " + topic);
     }
 
     @Override
@@ -36,16 +37,19 @@ public class FirebaseNotificationService extends FirebaseMessagingService {
             String id = getString(R.string.notification_channel_new_group_id);
             CharSequence name = getString(R.string.notification_channel_new_group_name);
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            // String description = getString(R.string.channel_description);
-
-            NotificationChannel channel = new NotificationChannel(id, name, importance);
-            channel.setLightColor(Color.MAGENTA);
-            // channel.setDescription(description);
-
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            if (!notificationManager.getNotificationChannels().contains(channel))
-                notificationManager.createNotificationChannel(channel);
+            createNotificationChannel(new NotificationChannel(id, name, importance));
+            id = getString(R.string.notification_channel_new_activity_id);
+            name = getString(R.string.notification_channel_new_activity_name);
+            createNotificationChannel(new NotificationChannel(id, name, importance));
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void createNotificationChannel(NotificationChannel channel) {
+        channel.setLightColor(Color.MAGENTA);
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        if (!notificationManager.getNotificationChannels().contains(channel))
+            notificationManager.createNotificationChannel(channel);
     }
 
     @Override
@@ -55,9 +59,19 @@ public class FirebaseNotificationService extends FirebaseMessagingService {
 
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
+            boolean isUserTopic = remoteMessage.getFrom().contains("user_");
+            String title;
             String message = remoteMessage.getNotification().getBody();
+            String channelId;
             Log.d(TAG, "Message Notification Body: " + message);
-            sendNotification(message, getString(R.string.notification_channel_new_group_id));
+            if (isUserTopic) {
+                title = getString(R.string.notification_added_to_group);
+                channelId = getString(R.string.notification_channel_new_group_id);
+            } else {
+                title = getString(R.string.notification_activity_created);
+                channelId = getString(R.string.notification_channel_new_activity_id);
+            }
+            sendNotification(title, message, channelId);
         }
     }
 
@@ -71,7 +85,7 @@ public class FirebaseNotificationService extends FirebaseMessagingService {
      *
      * @param messageBody FCM message body received.
      */
-    private void sendNotification(String messageBody, String channelId) {
+    private void sendNotification(String title, String messageBody, String channelId) {
         Intent intent = new Intent(this, LogInSignUpActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
@@ -84,7 +98,7 @@ public class FirebaseNotificationService extends FirebaseMessagingService {
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, channelId)
                         .setSmallIcon(R.drawable.ic_map_black_24dp)
-                        .setContentTitle(getString(R.string.notification_added_to_group))
+                        .setContentTitle(title)
                         .setContentText(messageBody)
                         .setAutoCancel(true)
                         .setSound(defaultSoundUri)
