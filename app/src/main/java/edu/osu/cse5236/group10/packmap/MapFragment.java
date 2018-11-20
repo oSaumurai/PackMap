@@ -215,7 +215,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                 @Override
                 public void onPoiClick(PointOfInterest poi) {
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                    String info=poi.name+"\nLatitude"+poi.latLng.latitude+"\nLongtitude"+poi.latLng.longitude;
+                    String info=poi.name;
                     bottom_heading.setText(info);
                     mLocationInfo.setName(poi.name);
                     mLocationInfo.setCoordinates(new GeoPoint(poi.latLng.latitude,poi.latLng.longitude));

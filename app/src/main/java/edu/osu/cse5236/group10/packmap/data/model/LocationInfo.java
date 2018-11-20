@@ -72,8 +72,12 @@ public class LocationInfo extends BaseDocument {
         return getUpvotes().size()-getDownvotes().size();
     }
 
-    public String getScore(){
-        return Integer.toString(getIntScore());
+    public String getUpVote(){
+        return Integer.toString(getUpvotes().size());
+    }
+    
+    public String getDownVote(){
+        return Integer.toString(getDownvotes().size());
     }
 
     public void setDownvotes(List<String> downvotes) {

@@ -39,10 +39,8 @@ public class PackFragment extends Fragment implements View.OnClickListener{
     private String mUserId;
     private String mGroupId;
     private List<ActivityInfo> activityInfoList;
-    private ActivityInfo newActivityInfo;
+    private Set<String> s;
     private FirebaseFirestore db;
-    //FireStore
-    private ActivityStore mActivityStore;
     //listener
     private OnPackFragmentInteractionListener mListener;
     //adapter
@@ -81,9 +79,6 @@ public class PackFragment extends Fragment implements View.OnClickListener{
         View v = inflater.inflate(R.layout.fragment_pack, container, false);
         activityInfoList=new ArrayList<>();
         activityListAdapter= new ActivityListAdapter(activityInfoList,mListener);
-
-        newActivityInfo=new ActivityInfo();
-        mActivityStore=ActivityStore.getInstance();
         mRecyclerView = v.findViewById(R.id.pack_activity_list);
         addActivityButton=v.findViewById(R.id.add_activity);
         mRecyclerView.setHasFixedSize(true);
@@ -96,8 +91,9 @@ public class PackFragment extends Fragment implements View.OnClickListener{
                 Log.d(TAG, "error: " + e1.getMessage());
             } else {
                 List<String> temp = (List<String>) groupQuery.get("activityList");
-                Set<String> s = new HashSet<>(temp);
-
+                if(temp!=null) {
+                     s = new HashSet<>(temp);
+                }
                 db.collection("activities").addSnapshotListener((activityQuery, e2) -> {
                     if (e2 != null)
                         Log.d(TAG, "error" + e2.getMessage());
