@@ -14,22 +14,32 @@ public class LocationInfo extends BaseDocument {
 
     private GeoPoint coordinates;
     private String name;
-    // Map with key of user id (phone number) and value is any comment
     private List<String> upvotes;
     private List<String> downvotes;
+    private String Uid;
 
     public LocationInfo (){
         this.coordinates = new GeoPoint(40,-82);
         this.name = "";
+        this.Uid="";
         this.upvotes = new ArrayList<>();
         this.downvotes = new ArrayList<>();
     }
-    public LocationInfo(GeoPoint coordinates, String name, List<String> upvotes, List<String> downvotes) {
+    public LocationInfo(GeoPoint coordinates,String name, List<String> upvotes, List<String> downvotes) {
         this.coordinates = coordinates;
         this.name = name;
+        this.Uid="";
         this.upvotes = upvotes;
         this.downvotes = downvotes;
     }
+    public String getUid(){
+        return Uid;
+    }
+
+    public void setUid(String Uid){
+        this.Uid=Uid;
+    }
+
     public GeoPoint getCoordinates() {
         return coordinates;
     }
@@ -61,11 +71,6 @@ public class LocationInfo extends BaseDocument {
     public int getIntScore() {
         return getUpvotes().size()-getDownvotes().size();
     }
-
-    /*public void updateScore() {
-        int score = upvotes.size() - downvotes.size();
-        Log.d("LocationListAdapter", "ls " + Integer.toString(score));
-    }*/
 
     public String getScore(){
         return Integer.toString(getIntScore());

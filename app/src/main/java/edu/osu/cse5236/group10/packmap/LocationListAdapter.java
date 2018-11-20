@@ -18,22 +18,20 @@ import java.util.Map;
 
 import edu.osu.cse5236.group10.packmap.data.model.ActivityInfo;
 import edu.osu.cse5236.group10.packmap.data.model.LocationInfo;
-import edu.osu.cse5236.group10.packmap.data.store.ActivityStore;
+import edu.osu.cse5236.group10.packmap.data.store.LocationInfoStore;
 
 public class LocationListAdapter extends RecyclerView.Adapter<LocationListAdapter.ViewHolder> {
     private static final String TAG = "LocationListAdapter";
 
     private String userId;
-    private String activityId;
     public List<LocationInfo> locationList;
     private final LocationListFragment.OnLocationListFragmentInteractionListener mListener;
 
 
-    public LocationListAdapter(String activityId, String userId, List<LocationInfo> locationList, LocationListFragment.OnLocationListFragmentInteractionListener listener){
+    public LocationListAdapter(String userId, List<LocationInfo> locationList, LocationListFragment.OnLocationListFragmentInteractionListener listener){
         this.locationList = locationList;
         this.mListener=listener;
         this.userId = userId;
-        this.activityId = activityId;
     }
 
     @NonNull
@@ -42,10 +40,6 @@ public class LocationListAdapter extends RecyclerView.Adapter<LocationListAdapte
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_location, parent, false);
 
         return new ViewHolder(v);
-    }
-
-    private void update() {
-        //ActivityStore.getInstance().updateList(activityId, locationList);
     }
 
     @Override
@@ -72,12 +66,12 @@ public class LocationListAdapter extends RecyclerView.Adapter<LocationListAdapte
             if (uv.contains(userId)) {
                 uv.remove(userId);
                 holder.btnUpvote.setBackgroundColor(Color.GRAY);
+                LocationInfoStore.getInstance().updateUpVote(li.getUid(),uv);
             } else if (!dv.contains(userId)) {
                 dv.add(userId);
                 holder.btnDownVote.setBackgroundColor(Color.RED);
+                LocationInfoStore.getInstance().updateDownVote(li.getUid(),dv);
             }
-            //li.updateScore();
-            update();
             holder.score.setText(li.getScore());
             notifyDataSetChanged();
         });
@@ -86,11 +80,12 @@ public class LocationListAdapter extends RecyclerView.Adapter<LocationListAdapte
             if (dv.contains(userId)) {
                 dv.remove(userId);
                 holder.btnDownVote.setBackgroundColor(Color.GRAY);
+                LocationInfoStore.getInstance().updateDownVote(li.getUid(),dv);
             } else if (!uv.contains(userId)) {
                 uv.add(userId);
                 holder.btnUpvote.setBackgroundColor(Color.GREEN);
+                LocationInfoStore.getInstance().updateUpVote(li.getUid(),uv);
             }
-            update();
             holder.score.setText(li.getScore());
             notifyDataSetChanged();
         });

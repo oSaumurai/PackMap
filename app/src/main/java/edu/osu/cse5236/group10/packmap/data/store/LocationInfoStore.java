@@ -9,6 +9,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.GeoPoint;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,16 @@ public class LocationInfoStore extends AbstractStore {
             _instance = new LocationInfoStore();
         }
         return _instance;
+    }
+
+    public void updateUpVote(String locationId, List<String> upVote) {
+        DocumentReference dr = db.collection("locations").document(locationId);
+        dr.update("upvotes", upVote);
+
+    }
+    public void updateDownVote(String locationId, List<String> downVote){
+        DocumentReference dr = db.collection("locations").document(locationId);
+        dr.update("downvotes",downVote);
     }
 
     public void addNewLocation(LocationInfo newlocation,String activityId){

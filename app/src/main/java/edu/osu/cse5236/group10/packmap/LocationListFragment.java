@@ -36,6 +36,7 @@ public class LocationListFragment extends Fragment {
     private String mGroupId;
     private String mActivityId;
     private List<LocationInfo> locationInfoList;
+    private List<String> locaitonUidList;
     private FirebaseFirestore db;
     //adapter
     private LocationListAdapter locationListAdapter;
@@ -65,7 +66,8 @@ public class LocationListFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_location_list, container, false);
         locationInfoList = new ArrayList<>();
-        locationListAdapter = new LocationListAdapter(mActivityId, mUserId, locationInfoList, mListener);
+        locaitonUidList=new ArrayList<>();
+        locationListAdapter = new LocationListAdapter(mUserId, locationInfoList, mListener);
 
         mRecyclerView = v.findViewById(R.id.location_list);
         mRecyclerView.setHasFixedSize(true);
@@ -77,22 +79,27 @@ public class LocationListFragment extends Fragment {
             if (e1 != null) {
                 Log.d(TAG, "error: " + e1.getMessage());
             } else {
-                List<String> locationUidList= (List<String>) groupQuery.get("selectedLocations");
-                locationInfoList.clear();
-
-                for (int i = 0; i < locationUidList.size(); i++) {
-                    String locationUid=locationUidList.get(i);
+                locaitonUidList.clear();
+                locaitonUidList= (List<String>) groupQuery.get("selectedLocations");
+                for (int i = 0; i < locaitonUidList.size(); i++) {
+                    String locationUid=locaitonUidList.get(i);
                     db.collection("locations").document(locationUid).addSnapshotListener((locationQuery, e2)->{
                         if (e2!= null) {
                             Log.d(TAG, "error: " + e1.getMessage());
                         }else {
                             String name=(String) locationQuery.get("name");
+                            for (int j=0;j<locationInfoList.size();j++){
+                                if(name.equals(locationInfoList.get(j).getName())){
+                                    locationInfoList.remove(j);
+                                }
+                            }
                             GeoPoint geoPoint=locationQuery.getGeoPoint("coordinates");
                             List<String> upVote= new ArrayList<>();
                             upVote= (List<String>) locationQuery.get("upvotes");
                             List<String> downVote= new ArrayList<>();
                             downVote= (List<String>) locationQuery.get("downvotes");
                             LocationInfo locationInfo=new LocationInfo(geoPoint,name,upVote,downVote);
+                            locationInfo.setUid(locationUid);
                             locationInfoList.add(locationInfo);
                             Log.d(TAG, "onCreateView: "+ locationInfoList.size());
 
