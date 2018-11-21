@@ -7,7 +7,15 @@ android:layout_margin="2dp">
 
     <TextView
         android:id="@+id/list_item_name"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:textAlignment="center"
+        android:textSize="35sp"
+        android:textStyle="bold"
+        android:typeface="monospace"
+        android:textColor="#111"
+        android:fontFamily="@font/lo"
         android:text="@string/list_item_name" />
 </RelativeLayout>

@@ -1,12 +1,15 @@
 package edu.osu.cse5236.group10.packmap;
 
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +18,6 @@ import edu.osu.cse5236.group10.packmap.data.model.ActivityInfo;
 public class ActivityListAdapter extends RecyclerView.Adapter<ActivityListAdapter.ViewHolder> {
     public List<ActivityInfo> memberList;
     private final PackFragment.OnPackFragmentInteractionListener mListener;
-
 
     public ActivityListAdapter(List<ActivityInfo> memberList, PackFragment.OnPackFragmentInteractionListener listener){
         this.memberList = memberList;
@@ -26,12 +28,13 @@ public class ActivityListAdapter extends RecyclerView.Adapter<ActivityListAdapte
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_activity, parent, false);
-
         return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        int color=generateColor();
+        holder.mView.setBackgroundColor(color);
         holder.memberName.setText(memberList.get(position).getName());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -49,6 +52,13 @@ public class ActivityListAdapter extends RecyclerView.Adapter<ActivityListAdapte
     @Override
     public int getItemCount() {
         return memberList.size();
+    }
+
+    private int generateColor(){
+        int red = ((int) (Math.random() * 200));
+        int green = ((int) (Math.random() * 200));
+        int blue = ((int) (Math.random() * 200));
+        return Color.rgb(red, green, blue);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

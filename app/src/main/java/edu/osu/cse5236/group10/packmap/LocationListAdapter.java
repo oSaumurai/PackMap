@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import java.util.List;
 import edu.osu.cse5236.group10.packmap.data.model.LocationInfo;
@@ -19,12 +21,10 @@ public class LocationListAdapter extends RecyclerView.Adapter<LocationListAdapte
 
     private String userId;
     public List<LocationInfo> locationList;
-    private final LocationListFragment.OnLocationListFragmentInteractionListener mListener;
 
 
-    public LocationListAdapter(String userId, List<LocationInfo> locationList, LocationListFragment.OnLocationListFragmentInteractionListener listener){
+    public LocationListAdapter(String userId, List<LocationInfo> locationList){
         this.locationList = locationList;
-        this.mListener=listener;
         this.userId = userId;
     }
 
@@ -112,6 +112,9 @@ public class LocationListAdapter extends RecyclerView.Adapter<LocationListAdapte
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         View mView;
+        public ImageView mImage;
+        public LinearLayout container;
+
         public TextView locationName;
         public Button btnUpvote;
         public Button btnDownVote;
@@ -120,6 +123,8 @@ public class LocationListAdapter extends RecyclerView.Adapter<LocationListAdapte
         public ViewHolder(View itemView) {
             super(itemView);
             mView = itemView;
+            mImage = (ImageView) itemView.findViewById(R.id.item_image);
+
             locationName = itemView.findViewById(R.id.list_location_name);
             btnUpvote = itemView.findViewById(R.id.upvote_location);
             btnDownVote = itemView.findViewById(R.id.downvote_location);

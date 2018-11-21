@@ -46,6 +46,16 @@
 
     </RelativeLayout>
 
+    <ImageView
+        android:id="@+id/ic_my_location"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="65dp"
+        android:layout_marginRight="10dp"
+        android:layout_gravity="right"
+        android:src="@drawable/ic_locate"
+        />
+
     <!-- Content Bottom Sheet -->
     <include layout="@layout/content_bottom_sheet" />
 

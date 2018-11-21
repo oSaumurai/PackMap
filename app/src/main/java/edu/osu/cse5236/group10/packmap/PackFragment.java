@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -48,7 +49,7 @@ public class PackFragment extends Fragment implements View.OnClickListener{
     //recyclerview
     private RecyclerView mRecyclerView;
     //botton
-    private Button addActivityButton;
+    private FloatingActionButton addButton;
 
     public PackFragment() {
         // Required empty public constructor
@@ -80,7 +81,7 @@ public class PackFragment extends Fragment implements View.OnClickListener{
         activityInfoList=new ArrayList<>();
         activityListAdapter= new ActivityListAdapter(activityInfoList,mListener);
         mRecyclerView = v.findViewById(R.id.pack_activity_list);
-        addActivityButton=v.findViewById(R.id.add_activity);
+        addButton=v.findViewById(R.id.add_activity);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(activityListAdapter);
@@ -118,7 +119,7 @@ public class PackFragment extends Fragment implements View.OnClickListener{
             }
         });
 
-        addActivityButton.setOnClickListener(this);
+        addButton.setOnClickListener(this);
         return v;
     }
 

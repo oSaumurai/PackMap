@@ -1,8 +1,5 @@
 package edu.osu.cse5236.group10.packmap;
 
-import android.content.Context;
-import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,23 +8,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ListView;
-
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
-import edu.osu.cse5236.group10.packmap.data.model.ActivityInfo;
 import edu.osu.cse5236.group10.packmap.data.model.LocationInfo;
-import edu.osu.cse5236.group10.packmap.data.store.ActivityStore;
 
 public class LocationListFragment extends Fragment {
     private static final String TAG = "LocationListFragment";
@@ -40,8 +28,6 @@ public class LocationListFragment extends Fragment {
     private FirebaseFirestore db;
     //adapter
     private LocationListAdapter locationListAdapter;
-    //listener
-    private OnLocationListFragmentInteractionListener mListener;
     //recyclerview
     private RecyclerView mRecyclerView;
 
@@ -67,7 +53,7 @@ public class LocationListFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_location_list, container, false);
         locationInfoList = new ArrayList<>();
         locaitonUidList=new ArrayList<>();
-        locationListAdapter = new LocationListAdapter(mUserId, locationInfoList, mListener);
+        locationListAdapter = new LocationListAdapter(mUserId, locationInfoList);
 
         mRecyclerView = v.findViewById(R.id.location_list);
         mRecyclerView.setHasFixedSize(true);
@@ -126,15 +112,9 @@ public class LocationListFragment extends Fragment {
         super.onDetach();
 
         Log.d(TAG, "onDetach() called");
-
-        mListener = null;
     }
 
 
-    public interface OnLocationListFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onListFragmentInteraction(LocationInfo li);
-    }
 
 
 

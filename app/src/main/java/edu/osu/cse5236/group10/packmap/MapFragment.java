@@ -1,14 +1,17 @@
 package edu.osu.cse5236.group10.packmap;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
@@ -22,14 +25,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.app.Activity;
 
-import com.annimon.stream.Stream;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -51,11 +53,8 @@ import com.google.firebase.firestore.GeoPoint;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import edu.osu.cse5236.group10.packmap.data.model.ActivityInfo;
 import edu.osu.cse5236.group10.packmap.data.model.LocationInfo;
-import edu.osu.cse5236.group10.packmap.data.store.ActivityStore;
 import edu.osu.cse5236.group10.packmap.data.store.LocationInfoStore;
 
 
@@ -73,29 +72,26 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     private Activity mMapActivity;
     private BottomSheetBehavior bottomSheetBehavior;
     private TextView bottom_heading;
+    private ImageView locateButton;
     private Button selectButton;
     //vars
     private Boolean mLocationPermissionGranted=false;
+    private Boolean mGpsWorked=false;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private GoogleMap mMap;
     private PlaceAutoCompleteAdapter mPlaceAutoCompleteAdapter;
     private GeoDataClient mGeoDataClient;
     private Address currentSelectedAddress;
-    private ActivityStore mActivityStore;
     private LocationInfoStore mLocationStore;
-    private ActivityInfo mActivityInfo;
     private LocationInfo mLocationInfo;
-    private List<LocationInfo> mLocationInfoList;
-    private String mGroupId;
     private String mActivityId;
-    private String userId;
+    private LocationManager locationManager;
 
     Context context;
 
     private View v;
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
     }
 
 
@@ -103,29 +99,61 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mMapActivity=this.getActivity();
-
-        mGroupId=getActivity().getIntent().getStringExtra("groupId");
+        context=this.getActivity();
+        locationManager=(LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
         mActivityId=getActivity().getIntent().getStringExtra("activityId");
-        userId=getActivity().getIntent().getStringExtra("userId");
-        //Log.d(Tag, "onCreate: id    +++++" + mActivityId);
         getLocationPermission();
+        //checkGpsAndWifi();
+    }
+
+    private void checkGpsAndWifi(){
+        boolean gps_enabled = false;
+        boolean network_enabled = false;
+        try {
+            gps_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        } catch(Exception ex) {}
+
+        try {
+            network_enabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        } catch(Exception ex) {}
+
+        if(!gps_enabled && !network_enabled) {
+            // notify user
+            AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+            dialog.setMessage("need to enable the location servcices");
+            dialog.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                    //get gps
+                    Intent myIntent = new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    context.startActivity(myIntent);
+                }
+            });
+            dialog.setNegativeButton("discard", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                    // TODO Auto-generated method stub
+                }
+            });
+            dialog.show();
+        }else{
+            mGpsWorked=true;
+        }
+
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_map, container, false);
-        context = this.getActivity();
         //firebase
-        mActivityStore=ActivityStore.getInstance();
         mLocationStore=mLocationStore.getInstance();
         //TODO might need change
-        mActivityInfo=new ActivityInfo();
         mLocationInfo=new LocationInfo();
-        mLocationInfoList=new ArrayList<>();
         //register bottom sheet
         bottomSheetBehavior=BottomSheetBehavior.from(v.findViewById(R.id.bottom_Sheet_Layout));
         bottom_heading=v.findViewById(R.id.bottom_Sheet_Heading);
         selectButton=v.findViewById(R.id.select_button);
+        locateButton=v.findViewById(R.id.ic_my_location);
         //searchText UI
         mSearchText=(AutoCompleteTextView) v.findViewById(R.id.input_search);
         mGeoDataClient=Places.getGeoDataClient(context);
@@ -155,7 +183,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                 return false;
             }
         });
-
         hideSoftKeyboard();
     }
     //Search area UI
@@ -193,21 +220,29 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     public void onMapReady(GoogleMap googleMap) {
         Toast.makeText(this.getActivity(),"Map is ready",Toast.LENGTH_SHORT).show();
         Log.d(Tag,"onMapReady: map is ready");
-        mMap = googleMap;
-
-        if(mLocationPermissionGranted){
+        checkGpsAndWifi();
+        if(mLocationPermissionGranted&&mGpsWorked){
+            mMap = googleMap;
             getDeviceLocation();
             if(ActivityCompat.checkSelfPermission(mMapActivity,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                     && ActivityCompat.checkSelfPermission(mMapActivity,Manifest.permission.ACCESS_COARSE_LOCATION)!=PackageManager.PERMISSION_GRANTED){
                 return;
             }
             mMap.setMyLocationEnabled(true);
-            mMap.getUiSettings().setMyLocationButtonEnabled(false);
+            mMap.getUiSettings().setMyLocationButtonEnabled(true);
 
             mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                 @Override
                 public void onMapClick(LatLng latLng) {
+                    bottom_heading.setText("Address Information");
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                }
+            });
+            //get current device location
+            locateButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getDeviceLocation();
                 }
             });
 
@@ -233,7 +268,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
 
                 }
             });
-
             //marker listener
             mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                 @Override

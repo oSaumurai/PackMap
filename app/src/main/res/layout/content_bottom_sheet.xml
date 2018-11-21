@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/bottom_Sheet_Layout"
     android:layout_width="match_parent"
-    android:layout_height="300dp"
-    android:background="@android:color/holo_orange_light"
+    android:layout_height="200dp"
+    android:background="@color/lightorange"
     android:padding="@dimen/activity_vertical_margin"
     app:behavior_hideable="true"
     app:behavior_peekHeight="115dp"
@@ -14,8 +14,9 @@
         android:id="@+id/bottom_Sheet_Heading"
         android:layout_width="230dp"
         android:layout_height="wrap_content"
-        android:text="Address Info"
-        android:textAppearance="@android:style/TextAppearance.Large" />
+        android:text="Address Information"
+        android:textAppearance="@android:style/TextAppearance.Large"
+        android:fontFamily="@font/lo"/>
     <Button
         android:id="@+id/select_button"
         android:layout_width="100dp"
@@ -23,6 +24,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginTop="40dp"
         android:layout_marginEnd="15dp"
+        android:background="@drawable/button_style"
         android:textSize="15sp"
         android:text="@string/add_to_location"/>
 </RelativeLayout>
