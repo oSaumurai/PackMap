@@ -34,6 +34,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     private EditText mFirstName;
     private EditText mLastName;
     private EditText mPassword;
+    private EditText mConfirmPassword;
 
     private List<EditText> fieldList;
 
@@ -56,6 +57,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         mFirstName = v.findViewById(R.id.sign_up_first_name);
         mLastName = v.findViewById(R.id.sign_up_last_name);
         mPassword = v.findViewById(R.id.sign_up_password);
+        mConfirmPassword = v.findViewById(R.id.sign_up_reenter_password);
         mSubmitButton = v.findViewById(R.id.submit_sign_up);
 
         fieldList = new ArrayList<>();
@@ -63,6 +65,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         fieldList.add(mFirstName);
         fieldList.add(mLastName);
         fieldList.add(mPassword);
+        fieldList.add(mConfirmPassword);
 
         mSubmitButton.setOnClickListener(this);
         mSignUp = getActivity();
@@ -122,6 +125,11 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                 e.setError(getString(R.string.err_msg_empty));
                 check = true;
             }
+        }
+
+        if (!mPassword.getText().equals(mConfirmPassword.getText())) {
+            mConfirmPassword.setError(getString(R.string.err_msg_password));
+            check = true;
         }
 
         return check;

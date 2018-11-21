@@ -34,11 +34,13 @@
     <string name="err_msg_empty">This field can\'t be empty</string>
     <string name="err_msg_user_exist">User already exists</string>
     <string name="err_msg_user_login_failed">Wrong password or User not exist</string>
+    <string name="err_msg_password">Password not match</string>
 
     <string name="sign_up_phone">Phone Number:</string>
     <string name="sign_up_first_name">First Name:</string>
     <string name="sign_up_last_name">Last Name:</string>
     <string name="sign_up_password">Password:</string>
+    <string name="sign_up_reenter_password">Confirm Password:</string>
     <string name="submit">Submit</string>
     <string name="submit_change">Submit Change</string>
 
