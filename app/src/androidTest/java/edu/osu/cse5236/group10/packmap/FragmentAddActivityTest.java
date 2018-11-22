@@ -14,16 +14,11 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import edu.osu.cse5236.group10.packmap.data.model.LocationInfo;
-
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 
-public class MapFragmentTest extends AndroidJUnitRunner {
+public class FragmentAddActivityTest extends AndroidJUnitRunner {
 
-    private MapsActivity mMapActivity=null;
+    private CreateActivityActivity mCreateActivityActivity = null;
     private MapFragment mMapFragment;
     //widget
     private ConstraintLayout clContainder;
@@ -34,20 +29,20 @@ public class MapFragmentTest extends AndroidJUnitRunner {
     private Button selectButton;
 
     @Rule
-    public ActivityTestRule<MapsActivity> mapsActivityTestRule=new ActivityTestRule<MapsActivity>(MapsActivity.class);
+    public ActivityTestRule<CreateActivityActivity> mapsActivityTestRule=new ActivityTestRule<CreateActivityActivity>(CreateActivityActivity.class);
 
     @Before
     public void setUp(){
-        mMapActivity=mapsActivityTestRule.getActivity();
-        clContainder=(ConstraintLayout) mMapActivity.findViewById(R.id.map_fragment_container);
+        mCreateActivityActivity =mapsActivityTestRule.getActivity();
+        clContainder=(ConstraintLayout) mCreateActivityActivity.findViewById(R.id.map_fragment_container);
         mMapFragment=new MapFragment();
-        mMapActivity.getSupportFragmentManager().beginTransaction().add(clContainder.getId(),mMapFragment).commit();
+        mCreateActivityActivity.getSupportFragmentManager().beginTransaction().add(clContainder.getId(),mMapFragment).commit();
     }
 
     @Test
     public void testPreconditions()
     {
-        Assert.assertNotNull(mMapActivity);
+        Assert.assertNotNull(mCreateActivityActivity);
         Assert.assertNotNull(mMapFragment);
         Assert.assertNotNull(clContainder);
     }
@@ -56,7 +51,8 @@ public class MapFragmentTest extends AndroidJUnitRunner {
     public void testUI(){
         System.out.println("Thread ID in testUI:" + Thread.currentThread().getId());
         getInstrumentation().waitForIdleSync();
-        mMapActivity.runOnUiThread(new Runnable() {
+
+        mCreateActivityActivity.runOnUiThread(new Runnable() {
             public void run() {
                 System.out.println("Thread ID in TestUI.run:" + Thread.currentThread().getId());
 
