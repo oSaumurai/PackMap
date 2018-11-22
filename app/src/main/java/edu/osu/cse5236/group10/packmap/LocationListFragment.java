@@ -90,36 +90,17 @@ public class LocationListFragment extends Fragment {
                                 LocationInfo locationInfo=new LocationInfo(geoPoint,name,upVote,downVote);
                                 locationInfo.setUid(locationUid);
                                 locationInfoList.add(locationInfo);
-                                int currPos = locationInfoList.size() - 1, score = locationInfo.getIntScore();
-                                while (currPos > 0 && score > locationInfoList.get(currPos - 1).getIntScore())
-                                    currPos--;
+                                pos = locationInfoList.size() - 1;
 
-                                Log.d(TAG, "Insert.");
-                                Log.d(TAG, "score: " + score);
-                                Log.d(TAG, "topos: " + currPos);
-
-                                Collections.swap(locationInfoList, currPos, locationInfoList.size() - 1);
-                                locationListAdapter.notifyDataSetChanged();
                             } else {
                                 LocationInfo li = locationInfoList.get(pos);
                                 li.setUpvotes(upVote);
                                 li.setDownvotes(downVote);
-                                int score = li.getIntScore(), currPos = pos, size = locationInfoList.size();
-
-                                while (currPos > 0 && score > locationInfoList.get(currPos - 1).getIntScore())
-                                    currPos--;
-                                while (currPos < size - 1 && score < locationInfoList.get(currPos + 1).getIntScore())
-                                    currPos++;
-
-                                Log.d(TAG, "Swap.");
-                                Log.d(TAG, "score: " + score);
-                                Log.d(TAG, "from: " + pos);
-                                Log.d(TAG, "to: " + currPos);
-
-                                Collections.swap(locationInfoList, currPos, pos);
-                                // locationListAdapter.notifyItemMoved(pos, currPos);
-                                locationListAdapter.notifyDataSetChanged();
                             }
+
+                            sortItems(locationInfoList, pos);
+                            // locationListAdapter.notifyItemMoved(pos, currPos);
+                            locationListAdapter.notifyDataSetChanged();
                         }
                     });
                 }
@@ -132,6 +113,25 @@ public class LocationListFragment extends Fragment {
         });
 
         return v;
+    }
+
+    /**
+     * Sort a list that only is partially sorted
+     *
+     * @requires list without list[pos] to be sorted
+     *
+     * @param list          the list
+     * @param pos           the pos of the element that need to be sorted
+     */
+    public void sortItems(List<LocationInfo> list, int pos) {
+        int score = list.get(pos).getIntScore(), currPos = pos, size = list.size();
+
+        while (currPos > 0 && score > list.get(currPos - 1).getIntScore())
+            currPos--;
+        while (currPos < size - 1 && score < list.get(currPos + 1).getIntScore())
+            currPos++;
+
+        Collections.swap(list, currPos, pos);
     }
 
     @Override
