@@ -127,8 +127,9 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
             }
         }
 
-        if (!mPassword.getText().equals(mConfirmPassword.getText())) {
+        if (!getText(mPassword).equals(getText(mConfirmPassword))) {
             mConfirmPassword.setError(getString(R.string.err_msg_password));
+            Log.d(TAG, mPassword.getText() + " " + mConfirmPassword.getText());
             check = true;
         }
 

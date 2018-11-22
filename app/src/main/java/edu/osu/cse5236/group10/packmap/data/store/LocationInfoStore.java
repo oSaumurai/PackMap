@@ -34,14 +34,24 @@ public class LocationInfoStore extends AbstractStore {
         return _instance;
     }
 
-    public void updateUpVote(String locationId, List<String> upVote) {
+    public void addUpVote(String locationId, String userId) {
         DocumentReference dr = db.collection("locations").document(locationId);
-        dr.update("upvotes", upVote);
+        dr.update("upvotes", FieldValue.arrayUnion(userId));
 
     }
-    public void updateDownVote(String locationId, List<String> downVote){
+    public void addDownVote(String locationId, String userId){
         DocumentReference dr = db.collection("locations").document(locationId);
-        dr.update("downvotes",downVote);
+        dr.update("downvotes",FieldValue.arrayUnion(userId));
+    }
+
+    public void removeUpVote(String locationId, String userId) {
+        DocumentReference dr = db.collection("locations").document(locationId);
+        dr.update("upvotes", FieldValue.arrayRemove(userId));
+
+    }
+    public void removeDownVote(String locationId, String userId){
+        DocumentReference dr = db.collection("locations").document(locationId);
+        dr.update("downvotes",FieldValue.arrayRemove(userId));
     }
 
     public void addNewLocation(LocationInfo newlocation,String activityId){

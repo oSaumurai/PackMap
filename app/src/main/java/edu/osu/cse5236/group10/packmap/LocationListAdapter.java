@@ -76,30 +76,28 @@ public class LocationListAdapter extends RecyclerView.Adapter<LocationListAdapte
             if (uv.contains(userId)) {
                 uv.remove(userId);
                 holder.btnUpvote.setTextColor(Color.GRAY);
-                LocationInfoStore.getInstance().updateUpVote(li.getUid(),uv);
+                LocationInfoStore.getInstance().removeUpVote(li.getUid(),userId);
             } else if (!dv.contains(userId)) {
                 dv.add(userId);
                 holder.btnDownVote.setTextColor(Color.RED);
-                LocationInfoStore.getInstance().updateDownVote(li.getUid(),dv);
+                LocationInfoStore.getInstance().addDownVote(li.getUid(),userId);
             }
             holder.btnUpvote.setText(li.getUpVote());
             holder.btnDownVote.setText(li.getDownVote());
-            notifyDataSetChanged();
         });
 
         holder.btnUpvote.setOnClickListener(view -> {
             if (dv.contains(userId)) {
                 dv.remove(userId);
                 holder.btnDownVote.setTextColor(Color.GRAY);
-                LocationInfoStore.getInstance().updateDownVote(li.getUid(),dv);
+                LocationInfoStore.getInstance().removeDownVote(li.getUid(),userId);
             } else if (!uv.contains(userId)) {
                 uv.add(userId);
                 holder.btnUpvote.setTextColor(Color.GREEN);
-                LocationInfoStore.getInstance().updateUpVote(li.getUid(),uv);
+                LocationInfoStore.getInstance().addUpVote(li.getUid(),userId);
             }
             holder.btnUpvote.setText(li.getUpVote());
             holder.btnDownVote.setText(li.getDownVote());
-            notifyDataSetChanged();
         });
     }
 
