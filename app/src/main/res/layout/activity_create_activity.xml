@@ -42,12 +42,18 @@
         android:id="@+id/submit_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/button_style"
+        android:layout_margin="@dimen/text_margin"
+        android:layout_gravity="center_horizontal"
         android:text="@string/submit" />
 
     <Button
         android:id="@+id/back"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/button_style"
+        android:layout_margin="@dimen/text_margin"
+        android:layout_gravity="center_horizontal"
         android:text="@string/back" />
 
 </LinearLayout>

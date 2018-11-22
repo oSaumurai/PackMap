@@ -85,7 +85,7 @@
     <string name="downvote">Downvote</string>
     <string name="init_score">0</string>
 
-    <string name="menu_add_info">add information</string>
+    <string name="menu_add_info">Add Information</string>
     <!-- Creating new activity -->
     <string name="menu_add_activity">Add Activity</string>
 </resources>

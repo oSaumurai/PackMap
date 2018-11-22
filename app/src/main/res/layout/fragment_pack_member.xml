@@ -14,17 +14,20 @@
 
     <Button
         android:id="@+id/add_member"
-        android:layout_width="150dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/button_style"
+        android:layout_margin="@dimen/text_margin"
+        android:layout_gravity="center_horizontal"
         android:text="@string/menu_add_member" />
 
     <Button
         android:id="@+id/quit_group"
-        android:layout_width="150dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
         android:background="@drawable/button_style"
+        android:layout_margin="@dimen/text_margin"
+        android:layout_gravity="center_horizontal"
         android:text="@string/menu_quit_group" />
 
 </LinearLayout>
