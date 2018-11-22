@@ -126,12 +126,14 @@ public class LocationListFragment extends Fragment {
     public void sortItems(List<LocationInfo> list, int pos) {
         int score = list.get(pos).getIntScore(), currPos = pos, size = list.size();
 
-        while (currPos > 0 && score > list.get(currPos - 1).getIntScore())
+        while (currPos > 0 && score > list.get(currPos - 1).getIntScore()) {
+            Collections.swap(list, currPos, currPos - 1);
             currPos--;
-        while (currPos < size - 1 && score < list.get(currPos + 1).getIntScore())
+        }
+        while (currPos < size - 1 && score < list.get(currPos + 1).getIntScore()) {
+            Collections.swap(list, currPos, currPos + 1);
             currPos++;
-
-        Collections.swap(list, currPos, pos);
+        }
     }
 
     @Override
