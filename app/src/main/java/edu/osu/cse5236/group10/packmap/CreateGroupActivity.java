@@ -56,10 +56,10 @@ public class CreateGroupActivity extends AppCompatActivity implements View.OnCli
         switch(v.getId()) {
             case R.id.submit_group:
                 List<String> groupUsers = AddUserListContent.getSelectedsUserId();
-                if (mGroupName.getText().length() == 0) {
+                if (mGroupName.getText().length() == 0)
                     mGroupName.setError(getString(R.string.err_msg_empty));
-                //else if (groupUsers.isEmpty()) {
-                //    Toast.makeText(this, R.string.need_more_users, Toast.LENGTH_LONG).show();
+                else if (groupUsers.isEmpty()) {
+                    Toast.makeText(this, R.string.need_more_users, Toast.LENGTH_LONG).show();
                 } else {
                     Group newGroup = new Group();
                     newGroup.setName(mGroupName.getText().toString().trim());
