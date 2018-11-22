@@ -40,6 +40,7 @@ import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -86,12 +87,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     private LocationInfo mLocationInfo;
     private String mActivityId;
     private LocationManager locationManager;
-
+    private AlertDialog.Builder dialog;
     Context context;
 
     private View v;
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        dialog.setMessage("Google map connection failed");
     }
 
 
@@ -103,7 +105,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         locationManager=(LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
         mActivityId=getActivity().getIntent().getStringExtra("activityId");
         getLocationPermission();
-        //checkGpsAndWifi();
     }
 
     private void checkGpsAndWifi(){
@@ -119,7 +120,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
 
         if(!gps_enabled && !network_enabled) {
             // notify user
-            AlertDialog.Builder dialog = new AlertDialog.Builder(context);
             dialog.setMessage("need to enable the location servcices");
             dialog.setPositiveButton("ok", new DialogInterface.OnClickListener() {
                 @Override
@@ -158,6 +158,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         mSearchText=(AutoCompleteTextView) v.findViewById(R.id.input_search);
         mGeoDataClient=Places.getGeoDataClient(context);
         mPlaceAutoCompleteAdapter=new PlaceAutoCompleteAdapter(context, mGeoDataClient, LAT_LNG_BOUNDS,null);
+        dialog=new AlertDialog.Builder(context);
         mSearchText.setAdapter(mPlaceAutoCompleteAdapter);
         if(mSearchText==null){
             Log.d(Tag, "onCreateView: null returned");
@@ -167,7 +168,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         return v;
     }
     //Search area UI
-    private void init(){
+    private void initSearchText(){
         Log.d(Tag, "init: initializing");
 
         mSearchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -264,24 +265,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                         Toast.makeText(mMapActivity, "Need add activity to put location", Toast.LENGTH_SHORT).show();
                     }else {
                         mLocationStore.addNewLocation(mLocationInfo,mActivityId);
+                        Toast.makeText(mMapActivity, "location added", Toast.LENGTH_SHORT).show();
                     }
-
                 }
             });
-            //marker listener
-            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                @Override
-                public boolean onMarkerClick(Marker marker) {
-                    //TODO set info
-                    String temp=currentSelectedAddress.getAddressLine(0);
-                    bottom_heading.setText(temp);
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                    return true;
-                }
-            });
-
-
-            init();
+            initSearchText();
         }
     }
 
