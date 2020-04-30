@@ -1,2 +1,2 @@
 # PackMap
-Project for CSE 5236
+Social Mobile App
